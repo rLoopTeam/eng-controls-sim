@@ -1,6 +1,7 @@
 % Input: brakegap (mm), velocity (m/s)
 % Output: drag force (N)
 function F = Fdrag(brakegap,v)
+% Drag force
 	if v < 8
 		% A34 Eddy brake constants for <8 m/s
 		a = -175.92*exp(-0.21369*brakegap);
