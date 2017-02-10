@@ -12,7 +12,7 @@ function omega0 = omega0Calc(brakegap0, brakegapSet)
     % brakegapSet = 2.5;
     deltab = brakegapSet - brakegap0;
     
-    omega0 = real(-4.097062071*log(abs(deltab)) + 10.7849);             % Natural frequency approximation to produce a settling time of 1.5s for zeta = 1
+    omega0 = abs(real(-4.097062071*log(abs(deltab)) + 10.7849));             % Natural frequency approximation to produce a settling time of 1.5s for zeta = 1
 %     zeta = 1;
 %     
 %     % Stepper motor response dynamics for rotional kinematics
