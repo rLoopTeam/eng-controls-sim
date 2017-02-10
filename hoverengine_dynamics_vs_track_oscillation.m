@@ -37,6 +37,8 @@ for w_r = logspace(-1, log10(5), 5)
     plotno = 510+j;
     subplot(plotno)
     hold on
+    grid on
+    grid minor
     plot(t,r)
     plot(t,z)
     formatSpec = 'Input (track oscillation) @%0.2f rad/s';
