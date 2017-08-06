@@ -1,23 +1,50 @@
-% Input: brakegap (mm), velocity (m/s)
-% Output: drag force (N)
-function F = Fdrag(brakegap,v)
-% Drag force
-	if v < 8
-		% A34 Eddy brake constants for <8 m/s
-		a = -175.92*exp(-0.21369*brakegap);
-		b = 3050.8*exp(-0.21398*brakegap);
-		c = 0;
-    elseif v > 30
-		% A34 Eddy brake constants for >30 m/s
-		a = 0.24153*exp(-0.21654*brakegap);
-		b = -78.783*exp(-0.21665*brakegap);
-		c = 12950*exp(-0.21708*brakegap);
-    else
-		% A34 Eddy brake constants for 8-30 m/s
-		a = -3.1692*exp(-0.28239*brakegap);
-		b = -9.2684*exp(-0.05037*brakegap);
-		c = 13507*exp(-0.21091*brakegap);
+classdef Fdrag
+    ...
+    methods(Static)
+        
+        % Input: velocity (m/s), brakegap (mm), hover height (mm)
+        % Output: Drag force (N)
+        function F = aero(v,rho)
+            %%%% Aero Drag parameters %%%%
+            Cd = 1.1849;        % Drag coeff
+            Ap = 1.14;          % Projectet drag area
+
+            %%%% Compute aerodrag %%%%
+            F =  rho * Cd * Ap * v^2 / 2;
+        end
+        
+        % Input: velocity (m/s), brakegap (mm), hover height (mm)
+        % Output: Total brake drag force (N)
+        function F = brake(v,bg)
+            F = (5632 * exp(-202*bg*10^-3) * (-exp(-0.3*v) + 1) * (1.5*exp(-0.02*v) + 1) );
+        end
+        
+        % Input: velocity (m/s), brakegap (mm), hover height (m)
+        % Output: Total brake drag force (N)
+        function F = hover(v,z)
+
+            %%%% Hover Drag parameters %%%%
+            N_he = 8;           % No. of hover engines
+
+            F = 0.5 * N_he * (z*(-14166.667)+235) * (-exp(-0.16*v) + 1) * (1.6*exp(-0.02*v) + 1);
+%             F = 0.5 * N_he * (z*10^(-3)*(-14166.667)+235) * (-exp(-0.16*v) + 1) * (1.6*exp(-0.02*v) + 1);
+        %     F = 0.25*N_he*Fhoverlift(v,z,0);     % Total hover drag estimated as 1/4th hover lift at 0 rpm
+
+            if F < 0
+                F = 0;
+            end
+
+        %    F = 150 * (-exp(-0.16*v) + 1) * (1.6*exp(-0.02*v) + 1);
+        %    F = 0;
+
+        end
+        
+        % Input: velocity (m/s), hover height (m) (unused)
+        % Output: Total ski drag force (N)
+        function F = ski(v,z_nom)
+            F = 204.983 * exp(-0.004*v);
+        end
+        
     end
-	F = a*v^2 + b*v + c;
     
 end

@@ -1,14 +1,49 @@
 %%%% Pod Physical Parameters %%%%
-mpod = 360.;                                % Total pod mass (kg)
 g = 9.81;                                   % Gravitational constant
 
 %Input
-caseno = 020;
+caseno = 023;
 
 %%%% Trajectory & Simulation Constraints %%%%
 switch caseno
     
-    case 021    % Full track case for rPod v1 and constraints as per 2017_0207_Hyperloop_Tube_Specs
+    case 023    % Full track case for rPod v2 and constraints as per 2017_0207_Hyperloop_Tube_Specs
+        mpod = 441.;                % Total pod mass (kg)
+        dt = 0.001;                 % time step (s)
+        xf = 1250;                  % Target distance (m)
+        xdotf = 0.01;               % Target final velocity at xf (m/s)
+        gForce_pusher = 1.0;        % Pusher acceleration (g's)
+%         deltax_pusher = 487.68;     % Desired max push distance (max: 487.68m or 1600ft) (m)
+        vpod_max = 75.5;            % Constraint on max velocity (m/s)
+        deltat_cruising = 2;        % Cruising time between pusher and deceleration phase (minimum 2s required) (s)
+%         gForce_brakedrag = 1.0;     % Constraint on max braking force (g's)
+        brakegapNom = 3.0;          % Nominal brake gap during controlled braking phase (mm)
+        deltax_dangerzone = 50;     % Distance between final target and end of track (DANGER ZONE!!!) (m)
+        z_nom = 0.016;              % Nominal hover height (m) based on pod mass and 8 hover engines
+        
+        %%%% Pressure %%%%
+        Ppsi = 0.1250;                 
+        % Ppsi = 3.7188;
+        % Ppsi = 7.3125;
+        % Ppsi = 10.9063;
+        % Ppsi = 14.5;
+        
+        % Using ideal gas law, P = rho*RT, solve for rho 
+        P = 6894.76*Ppsi;           % PSI to Pa
+        R = 287.05;                 % Ideal gas constant (J/(kg*K))
+        T = 293.15;                 % Room temp (K)
+        rho = P/(R*T);              
+        %rho = 0.100098;             % Air density inside SpaceX test tube(kg/m^3)
+        %rho = 1.2754;               % Standard Air density at 20 degC, sealevel(kg/m^3)
+
+        %%%% Relative Error (eta is positive for under-estimated case; negative for over-estimated case)%%%%
+        eta_aerodrag = 0.0;        % Estimated aerodynamic drag relative error
+        eta_hoverdrag = 0.0;       % Estimated hover-engine drag relative error
+        eta_brakedrag = 0.0;       % Estimated brake drag relative error
+        eta_skidrag = 0.0;         % Estimated ski drag relative error
+        
+    case 022    % Full track case for rPod v2 and constraints as per 2017_0207_Hyperloop_Tube_Specs
+        mpod = 360.;                % Total pod mass (kg)
         dt = 0.001;                 % time step (s)
         xf = 1250;                  % Target distance (m)
         xdotf = 0.01;               % Target final velocity at xf (m/s)
@@ -18,6 +53,30 @@ switch caseno
 %         vpod_max = 75.5;            % Constraint on max velocity (m/s)
 %         vpod_max = 80;              % Constraint on max velocity (m/s)
         deltat_cruising = 2;        % Cruising time between pusher and deceleration phase (minimum 2s required) (s)
+%         deltat_LIM_max = 2;             % time during which LIM's are used for auxiliary propulsion (s)
+        gForce_brakedrag = 1.0;     % Constraint on max braking force (g's)
+        brakegapNom = 4.0;          % Nominal brake gap during controlled braking phase (mm)
+        deltax_dangerzone = 50;     % Distance between final target and end of track (DANGER ZONE!!!) (m)
+        
+        %%%% Pressure %%%%
+        Ppsi = 0.1250;                 
+        % Ppsi = 3.7188;
+        % Ppsi = 7.3125;
+        % Ppsi = 10.9063;
+        % Ppsi = 14.5;
+        
+    case 021    % Full track case for rPod v1 and constraints as per 2017_0207_Hyperloop_Tube_Specs
+        mpod = 360.;                % Total pod mass (kg)
+        dt = 0.001;                 % time step (s)
+        xf = 1250;                  % Target distance (m)
+        xdotf = 0.01;               % Target final velocity at xf (m/s)
+        gForce_pusher = 1.0;        % Pusher acceleration (g's)
+%         deltax_pusher = 487.68;     % Desired max push distance (max: 487.68m or 1600ft) (m)
+        deltax_pusher_max = 487.68;     % Max push distance (max: 487.68m or 1600ft) (m)
+%         vpod_max = 75.5;            % Constraint on max velocity (m/s)
+%         vpod_max = 80;              % Constraint on max velocity (m/s)
+        deltat_cruising = 2;        % Cruising time between pusher and deceleration phase (minimum 2s required) (s)
+        deltat_LIM = 2;             % time during which LIM's are used for auxiliary propulsion (s)
         gForce_brakedrag = 1.0;     % Constraint on max braking force (g's)
         brakegapNom = 4.0;          % Nominal brake gap during controlled braking phase (mm)
         deltax_dangerzone = 50;     % Distance between final target and end of track (DANGER ZONE!!!) (m)
@@ -31,6 +90,7 @@ switch caseno
 %         Ppsi = 14.5;
         
     case 020    % Full track case for rPod v1 and constraints as per 2017_0207_Hyperloop_Tube_Specs
+        mpod = 360.;                % Total pod mass (kg)
         dt = 0.001;                 % time step (s)
         xf = 1250;                  % Target distance (m)
         xdotf = 0.01;               % Target final velocity at xf (m/s)
@@ -40,6 +100,7 @@ switch caseno
 %         vpod_max = 75.5;            % Constraint on max velocity (m/s)
 %         vpod_max = 80;              % Constraint on max velocity (m/s)
         deltat_cruising = 2;        % Cruising time between pusher and deceleration phase (minimum 2s required) (s)
+        deltat_LIM = 2;             % time during which LIM's are used for auxiliary propulsion (s)
         gForce_brakedrag = 1.0;     % Constraint on max braking force (g's)
         brakegapNom = 4.0;          % Nominal brake gap during controlled braking phase (mm)
         deltax_dangerzone = 50;     % Distance between final target and end of track (DANGER ZONE!!!) (m)
@@ -53,6 +114,8 @@ switch caseno
 %         Ppsi = 14.5;
         
     case 019    % Full track case for rPod v1 and constraints as per 2017_0207_Hyperloop_Tube_Specs
+        mpod = 360.;                % Total pod mass (kg)
+
         dt = 0.001;                 % time step (s)
         xf = 1250;                  % Target distance (m)
         xdotf = 0.01;               % Target final velocity at xf (m/s)
@@ -62,6 +125,7 @@ switch caseno
 %         vpod_max = 75.5;            % Constraint on max velocity (m/s)
 %         vpod_max = 80;              % Constraint on max velocity (m/s)
         deltat_cruising = 2;        % Cruising time between pusher and deceleration phase (minimum 2s required) (s)
+        deltat_LIM = 2;             % time during which LIM's are used for auxiliary propulsion (s)
         gForce_brakedrag = 1.0;     % Constraint on max braking force (g's)
         brakegapNom = 4.0;          % Nominal brake gap during controlled braking phase (mm)
         deltax_dangerzone = 50;     % Distance between final target and end of track (DANGER ZONE!!!) (m)
@@ -83,6 +147,7 @@ switch caseno
 %         vpod_max = 75.5;            % Constraint on max velocity (m/s)
 %         vpod_max = 80;              % Constraint on max velocity (m/s)
         deltat_cruising = 2;        % Cruising time between pusher and deceleration phase (minimum 2s required) (s)
+        deltat_LIM = 2;             % time during which LIM's are used for auxiliary propulsion (s)
         gForce_brakedrag = 1.0;     % Constraint on max braking force (g's)
         brakegapNom = 4.0;          % Nominal brake gap during controlled braking phase (mm)
         deltax_dangerzone = 50;     % Distance between final target and end of track (DANGER ZONE!!!) (m)
@@ -213,15 +278,6 @@ switch caseno
 end
 
 
-%% Using ideal gas law, P = rho*RT, solve for rho 
-P = 6894.76*Ppsi;           % PSI to Pa
-R = 287.05;                 % Ideal gas constant (J/(kg*K))
-T = 293.15;                 % Room temp (K)
-rho = P/(R*T);              
-
-%rho = 0.100098;             % Air density inside SpaceX test tube(kg/m^3)
-%rho = 1.2754;               % Standard Air density at 20 degC, sealevel(kg/m^3)
-
 %% Output Sim Constraints Header file to csv
 % formatSpec = 'Sim Constraints for Trajectory case no. %0.f.csv';
 % filename = sprintf(formatSpec,caseno);
@@ -276,8 +332,8 @@ rho = P/(R*T);
 % k_rpm = 0.0093200503;                           % Constant relating rpm to velocity
 % k_rel = atan(k_rel1*(vpod_max+k_rpm*RPM_he));   % Proportionality constant scaling hover force based on RPM & pod velocity
 % %k_h = 91615.3;                                 % Approximate "hovering stiffness" for 2x hover-engine in parallel @10mm hover height (N/m) (see: https://docs.google.com/spreadsheets/d/1-igstFK75UQpAWvdLb4wZ0dIGP5MEFUwVvNvnC70Wyg/edit)
-HE_load = mpod*9.81/8;                          % Load per hover engine (N)
-z_nom = 0.031*exp(-0.0024*HE_load);             % Nominal hover height (m) based on pod mass and 8 hover engines
+% HE_load = mpod*9.81/8;                          % Load per hover engine (N)
+% z_nom = 0.031*exp(-0.0024*HE_load);             % Nominal hover height (m) based on pod mass and 8 hover engines
 % %z_nom = 0.01207;                               % Nominal hover height (m) based on pod mass (320kg) and 8 hover engines
 % %z_nom = 0.008;                                 % Nominal hover height (m) based on pod mass (320kg) and 8 hover engines
 % k_h1 = 1237.395;                                % Constant used in nonlinear hover force equation (see: https://docs.google.com/spreadsheets/d/1-igstFK75UQpAWvdLb4wZ0dIGP5MEFUwVvNvnC70Wyg/edit)
