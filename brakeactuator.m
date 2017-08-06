@@ -10,10 +10,10 @@
 %
 % notes: 
 % -response dynamics assumes...
-% -load conditions
+% -no load conditions
 % -constant max velocity of 6mm/s
 % -constant acceleration of 4mm/s^2
-% -code output undershoots target within 0.0533%
+% -code output undershoots target within 0.0533% (fixed)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %     ts = 4.8;     % Estimated settling time for full brake deployment
