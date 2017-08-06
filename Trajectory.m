@@ -181,7 +181,6 @@ for brakegapNom = 9:-0.5:2.5;    % Determine optimal brakegapNom
             n3 = n;
             x3 = x(n);
             t3 = t(n);
-            brakegap(end) = brakegapNom;    % Overwrite last brakegap value with bSet (to account for undershoot in code)
         end
 
         % Constrain brakegap to limit switches

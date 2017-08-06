@@ -103,12 +103,14 @@ function [t,b] = brakeactuator(b0,bset,dt)
 
             t(n) = t(n-1) + dt;
         end
+        b(end) = bset;	% Overwrite last brakegap value with bSet (to account for undershoot in code)
         
     %% Travel distance too short to accelerate to max speed    
     else
         %% Generate acceleration phase
         % Compute new max speed based on required travel distance
         bdotmax = sqrt(abs(deltab)*bddotmax);
+        %% Generate acceleration phase
         while bdotmax - abs(bdot(n)) > 0.001* abs(bdotmax)
 
             n = n + 1;
@@ -118,15 +120,19 @@ function [t,b] = brakeactuator(b0,bset,dt)
             if abs(bdot(n)) > abs(bdotmax)
                 bdot(n) = bdotmax;
             end
+            
+            % Compute time-step
+            t(n) = t(n-1) + dt;
 
             % Calculate position
             b(n) = b(n-1) + bdot(n-1)*dt + 0.5*bddotmax*dt^2;
             if deltab < 0
                 b(n) = b(n-1) - bdot(n-1)*dt - 0.5*bddotmax*dt^2;
             end
-
-            t(n) = t(n-1) + dt;
-
+            % if half target distance is overshot, break acceleration phase
+            if abs(b(n) - b(1)) >= abs(deltab)/2
+                break
+            end
         end
         t1= t(end);
         %% Generate deceleration phase
@@ -139,17 +145,21 @@ function [t,b] = brakeactuator(b0,bset,dt)
                 bdot(n) = 0;
             end
 
+            % Compute time-step
+            t(n) = t(n-1) + dt;
+
             % Calculate position
             b(n) = b(n-1) + bdot(n-1)*dt + 0.5*bddotmax*dt^2;
             if deltab < 0
                 b(n) = b(n-1) - bdot(n-1)*dt - 0.5*bddotmax*dt^2;
             end
-
-            t(n) = t(n-1) + dt;
+            % if target distance is overshot, break deceleration phase
+            if abs(b(n) - b(1)) >= abs(deltab)
+                break
+            end
         end
-        
+        b(end) = bset;	% Overwrite last brakegap value with bSet (to account for undershoot in code)        
     end
-    
 end
 %     figure(1)
 %     plot(t,b)
