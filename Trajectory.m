@@ -11,7 +11,7 @@
 % Dependencies:
 % simParameters.m
 % Fdrag.m
-% brakegapcurve.m
+% brakeactuator.m
 %
 % Note: Fload_brakes neglects magnetic load due to force of brakes acting on eachother.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -146,15 +146,15 @@ xdot2 = xdot(n);     % pod velocity at beginning of cruising phase (m/s)
 b0 = brakegap(n);    % store initial brakegap position
 
 % Determine nominal brake gap value, such that pod reaches target distance at desired final velocity
-% Empirical data needed for validating brake actuator response dynamics, see brakegapcurve.m.
+% Empirical data needed for validating brake actuator response dynamics, see brakeactuator.m.
 for brakegapNom = 9:-0.5:2.5;    % Determine optimal brakegapNom
 
     % generate curve for syncronized brake deployment until setpoint brakegap distance is reached
-    [t_brake, b] = brakegapcurve(b0,brakegapNom,dt);
+    [t_brake, b] = brakeactuator(b0,brakegapNom,dt);
     i = 0;
     while xdot(n) - xdotf > 0.001
         n = n + 1;      % counter for simulation time step
-        i = i + 1;      % counter for brakegapcurve array
+        i = i + 1;      % counter for brakeactuator array
 
         % Compute Forces
         Fdrag_aero(n) = Fdrag.aero(xdot(n-1),rho) / (1 - eta_aerodrag);

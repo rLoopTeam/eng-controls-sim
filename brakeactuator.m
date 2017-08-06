@@ -1,4 +1,5 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% filename: brakeactuator.m 
 % author: dr. briefs
 % date: 2017/8/5
 %
@@ -20,7 +21,7 @@
 % bset = 5;
 % dt = 0.001;
 
-function [t,b] = brakegapcurve(b0,bset,dt)
+function [t,b] = brakeactuator(b0,bset,dt)
     deltab = bset - b0;
     bddotmax = 4.0;
     bdotmax = 6.0;
