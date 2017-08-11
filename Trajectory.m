@@ -23,7 +23,7 @@ simParameters
 
 formatSpec = 'Generating case no. %0.f...\n\n';
 str = sprintf(formatSpec, caseno);
-fprintf(str)
+fprintf(str,'\n')
 
 %% Generate multiple trajectory scenarios: two for +/- max relative error, and one for nominal case.
 % Fdrag_actual = Fdrag_approx/(1 - eta)
@@ -47,7 +47,7 @@ t0 = t(n);                      % Store time Stamp
 x0 = x(n);                      % pod distance at beginning of push phase (m/s)
 xdot0 = xdot(n);                % pod velocity at beginning of push phase (m/s)
 while xdot < vpod_max %       % pusher phase constrained by velocity
-%     while x(n) < deltax_pusher      % pusher phase constrained by distance
+% while x(n) < deltax_pusher      % pusher phase constrained by distance
     n = n + 1;
 
     % Compute Forces
@@ -72,7 +72,7 @@ while xdot < vpod_max %       % pusher phase constrained by velocity
     Fload_brakes(n) = Fbrakelift(xdot(n),brakegap(n))*sin(17*pi()/180) - Fdrag_brake(n)*cos(17*pi()/180)/2;
 
     % If max pusher distance reached, exit pusher phase
-    if x(n) >= deltax_pusher
+    if x(n) >= deltax_pusher_max
         break;
     end
 end
@@ -147,10 +147,9 @@ b0 = brakegap(n);    % store initial brakegap position
 
 % Determine nominal brake gap value, such that pod reaches target distance at desired final velocity
 % Empirical data needed for validating brake actuator response dynamics, see brakeactuator.m.
+fprintf('Calculating optimal nominal brake gap...\n')
 for brakegapNom = 9:-0.5:2.5;    % Determine optimal brakegapNom
 
-    % generate curve for syncronized brake deployment until setpoint brakegap distance is reached
-    [t_brake, b] = brakeactuator(b0,brakegapNom,dt);
     i = 0;
     while xdot(n) - xdotf > 0.001
         n = n + 1;      % counter for simulation time step
@@ -172,12 +171,10 @@ for brakegapNom = 9:-0.5:2.5;    % Determine optimal brakegapNom
         x(n) = x(n-1) + xdot(n)*dt + 0.5*xddot(n)*dt^2;
         t(n) = t(n-1) + dt;
 
-        % brakegap profile
-        brakegap(n) = brakegap(n-1);
-        if i < length(b)
-            brakegap(n) = b(i);
-        elseif i == length(b)
-            % brake actuator settling time reached. PID controller engaged.
+        % Calculate current brake gap distance
+        [b,ts] = brakeactuator(b0,brakegapNom, t(n) - t2 );
+        brakegap(n) = b;
+        if (t(n) - t2) - ts < 0.001 % brake actuator settling time reached. PID controller engaged.
             n3 = n;
             x3 = x(n);
             t3 = t(n);
@@ -221,9 +218,10 @@ for brakegapNom = 9:-0.5:2.5;    % Determine optimal brakegapNom
         Fload_brakes = Fload_brakes(1:n2);
     end
 end
-    
 
 %% Time-dependent Trajectory Graphs
+fprintf('Generating plots...\n')
+
 figure(1)
 subplot(411)
 hold on
@@ -233,7 +231,7 @@ axis([0 1.2*t(length(t)) 0 1.2*xf])
 
 grid on
 grid minor    
-title(['Trajectory case no. ' num2str(caseno) ': ' num2str(mpod) '(kg) pod mass | ' num2str(P/1000,4) '(kPa) | ' num2str(T,4) '(K) | ' num2str(x1,4) '(m) push @' num2str(gForce_pusher,2) '(g) | ' num2str(xdot1,4) '(m/s) max velocity | ' num2str(deltat_cruising,2) '(s) cruising | ' num2str(brakegapNom) '(mm) nominal brakegap'])
+title(['Trajectory case no. ' num2str(caseno) ': ' num2str(mpod) 'kg pod mass | ' num2str(P/1000,4) 'kPa @' num2str(T,4) 'K | ' num2str(x1,4) 'm push @' num2str(gForce_pusher,2) 'g | ' num2str(xdot1,4) 'm/s max velocity | ' num2str(deltat_cruising,2) 's cruising | ' num2str(brakegapNom) 'mm nominal brakegap'])
 ylabel('Distance (m)')
 legend('Pod travel','Target distance');
 
@@ -286,7 +284,7 @@ plot([xf+deltax_dangerzone xf+deltax_dangerzone],[0 1.1*xdot2],'r')
 axis([0 1.2*xf 0 1.1*xdot2])
 grid on
 grid minor
-title(['Trajectory case no. ' num2str(caseno) ': ' num2str(mpod) '(kg) pod mass | ' num2str(P/1000,4) '(kPa) | ' num2str(T,4) '(K) | ' num2str(x1,4) '(m) push @' num2str(gForce_pusher,2) '(g) | ' num2str(xdot1,4) '(m/s) max velocity | ' num2str(deltat_cruising,2) '(s) cruising | ' num2str(brakegapNom) '(mm) nominal brakegap'])
+title(['Trajectory case no. ' num2str(caseno) ': ' num2str(mpod) 'kg pod mass | ' num2str(P/1000,4) 'kPa @' num2str(T,4) 'K | ' num2str(x1,4) 'm push @' num2str(gForce_pusher,2) 'g | ' num2str(xdot1,4) 'm/s max velocity | ' num2str(deltat_cruising,2) 's cruising | ' num2str(brakegapNom) 'mm nominal brakegap'])
 %     formatSpec = 'PID Override Trigger for deltax_{dangerzone} = %0.fm';
 %formatSpec = 'PID Override Trigger';
 %str = sprintf(formatSpec,deltax_dangerzone);
@@ -312,20 +310,113 @@ ylabel('Brake load (N)')
 xlabel('Distance (m)')
 legend('load along leadscrew');
 
-%% Output Trajectory to csv
-% header = {'time (s)', 'Distance (m)', 'Velocity (m/s)', 'Acceleration (m/s^2)', 'Aerodrag (gs)', 'Hoverdrag (gs)', 'Brakedrag (gs)', 'brakegap (mm)'};
-data = [t; x; xdot; xddot; -Fdrag_aero/(mpod*g); -Fdrag_hover/(mpod*g); -Fdrag_brake/(mpod*g); -Fdrag_ski/(mpod*g); brakegap; Fload_brakes]';
-% data = [t; x; xdot; xddot; Fthrust/(mpod*g); -Fdrag_aero/(mpod*g); -Fdrag_hover/(mpod*g); -Fdrag_brake/(mpod*g); brakegap; caseno*ones(size(x))]';
+%% Output Trajectory data to csv
+fprintf('Saving trajectory data to csv...\n')
 
-formatSpec = 'Trajectory for case no. %0.f.csv';
-%     filename = sprintf(formatSpec,caseno);
-filename = sprintf(formatSpec,caseno);
-csvwrite(filename,data);
+header = {'t', 'x', 'xdot', 'xddot', 'drag_aero', 'drag_hover', 'drag_brake', 'drag_ski', 'brakegap', 'Fload_brakes'};
 
-%% Output Trajectory Header file to csv
-formatSpec = 'Trajectory Header for case no. %0.f.csv';
+data = table(t', x', xdot', xddot', -Fdrag_aero'/(mpod*g), -Fdrag_hover'/(mpod*g), -Fdrag_brake'/(mpod*g), -Fdrag_ski'/(mpod*g), brakegap', Fload_brakes');
+data.Properties.VariableNames = header;
+
+formatSpec = 'Trajectory_case_no_%0.f.csv';
 filename = sprintf(formatSpec,caseno);
-fid = fopen(filename,'w');
-fprintf(fid, 'time (s)\tDistance (m)\tVelocity (m/s)\tTotal Acceleration (m/s^2)\tPropulsion (gs)\tAerodrag (gs)\tHoverdrag (gs)\tBrakedrag (gs)\tSkidrag (gs)\tbrakegap (mm)\tbrakeload (N)');
-% fprintf(fid, 'time (s)\tDistance (m)\tVelocity (m/s)\tTotal Acceleration (m/s^2)\tPropulsion (gs)\tAerodrag (gs)\tHoverdrag (gs)\tBrakedrag (gs)\tbrakegap (mm)\tCase No.');
-fclose(fid);
+writetable(data,filename,'Delimiter',',')
+
+% %% Output Trajectory to csv
+% % header = {'time (s)', 'Distance (m)', 'Velocity (m/s)', 'Acceleration (m/s^2)', 'Aerodrag (gs)', 'Hoverdrag (gs)', 'Brakedrag (gs)', 'brakegap (mm)'};
+% data = [t; x; xdot; xddot; -Fdrag_aero/(mpod*g); -Fdrag_hover/(mpod*g); -Fdrag_brake/(mpod*g); -Fdrag_ski/(mpod*g); brakegap; Fload_brakes]';
+% % data = [t; x; xdot; xddot; Fthrust/(mpod*g); -Fdrag_aero/(mpod*g); -Fdrag_hover/(mpod*g); -Fdrag_brake/(mpod*g); brakegap; caseno*ones(size(x))]';
+% 
+% formatSpec = 'Trajectory_case_no_%0.f.csv';
+% filename = sprintf(formatSpec,caseno);
+% writetable(data,filename,'Delimiter',',')
+% 
+% %% Output Trajectory Header file to csv
+% formatSpec = 'Trajectory Header for case no. %0.f.csv';
+% filename = sprintf(formatSpec,caseno);
+% fid = fopen(filename,'w');
+% fprintf(fid, 'time (s)\tDistance (m)\tVelocity (m/s)\tTotal Acceleration (m/s^2)\tPropulsion (gs)\tAerodrag (gs)\tHoverdrag (gs)\tBrakedrag (gs)\tSkidrag (gs)\tbrakegap (mm)\tbrakeload (N)');
+% % fprintf(fid, 'time (s)\tDistance (m)\tVelocity (m/s)\tTotal Acceleration (m/s^2)\tPropulsion (gs)\tAerodrag (gs)\tHoverdrag (gs)\tBrakedrag (gs)\tbrakegap (mm)\tCase No.');
+% fclose(fid);
+
+%% Output Simulation Parameters to csv
+fprintf('Saving simulation parameters to csv...\n')
+
+parameternames = {   'mpod', 
+                    'dt', 
+                    'xf', 
+                    'xdotf', 
+                    'gForce_pusher',
+%                     'deltax_pusher'
+                    'deltax_pusher_max',
+                    'vpod_max',
+                    'deltat_cruising',
+%                     'gForce_brakedrag',
+                    'brakegapNom',
+                    'deltax_dangerzone',
+                    'z_nom',
+                    'Ppsi',
+                    'P',
+                    'T',
+                    'R',
+                    'rho'
+                    'eta_aerodrag',
+                    'eta_hoverdrag',
+                    'eta_brakedrag',
+                    'eta_skidrag'
+                    }
+
+value = [   mpod,
+            dt,
+            xf,
+            xdotf,
+            gForce_pusher,
+%             deltax_pusher,
+            deltax_pusher_max,
+            vpod_max,
+            deltat_cruising,
+%             gForce_brakedrag,
+            brakegapNom,
+            deltax_dangerzone,
+            z_nom,
+            Ppsi,
+            P,
+            T,
+            R,
+            rho,
+            eta_aerodrag,
+            eta_hoverdrag,
+            eta_brakedrag,
+            eta_skidrag
+            ]
+
+description = { 'Total pod mass (kg)',
+                'time step (s)',
+                'Target distance (m)',
+                'Target final velocity at xf (m/s)',
+                'Pusher acceleration (gs)',
+%                 'Desired max push distance (max: 487.68m or 1600ft) (m)'
+                'Max push distance (max: 487.68m or 1600ft) (m)',
+                'Constraint on max velocity (m/s)',
+                'Cruising time between pusher and deceleration phase (minimum 2s required) (s)',
+%                 'Constraint on max braking force (gs)',
+                'Nominal brake gap during controlled braking phase (mm)',
+                'Distance between final target and end of track (DANGER ZONE!!!) (m)'
+                'Nominal hover height (m)',
+                'Atmospheric air pressure inside SpaceX Hyperloop test tube (Psi)',
+                'Atmospheric air pressure inside SpaceX Hyperloop test tube (Pa)',
+                'Atmospheric air temperature inside SpaceX Hyperloop test tube (K)',
+                'Ideal gas constant (J/(kg*K)',
+                'Air density inside SpaceX Hyperloop test tube (kg/m^3)',
+                'Estimated aerodynamic drag relative error',
+                'Estimated hover-engine drag relative error',
+                'Estimated brake drag relative error',
+                'Estimated ski drag relative error'
+                }
+
+data = table(parameternames, value, description);
+
+formatSpec = 'SimParameters_case_no_%0.f.csv';
+filename = sprintf(formatSpec,caseno);
+writetable(data,filename,'Delimiter',',')
+
