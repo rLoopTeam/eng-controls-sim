@@ -17,13 +17,14 @@ op = operspec(mdl);
 % Set the value of output concentration C to be known
 op.Outputs.Known = true;                
 % Specify operating regions 
-C = xdotf:10:xdot0;
-%C = xdot0:-10:xdotf;
+xdotset_range = xdotf:10:xdot2;
+% xdotset_range = xdotf:10:xdot3;
+%xdotset_range = xdot0:-10:xdotf;
 % Initialize an array of state space systems
 Plants = rss(1,1,1,8);
-for ct = 1:length(C)
-    % Compute equilibrium operating point corresponding to the value of C
-    op.Outputs.y = C(ct);
+for ct = 1:length(xdotset_range)
+    % Compute equilibrium operating point corresponding to the value of xdotset_range
+    op.Outputs.y = xdotset_range(ct);
     opoint = findop(mdl,op,findopOptions('DisplayReport','off')); 
     % Linearize plant at this operating point
     Plants(:,:,ct) = linearize(mdl, opoint); 
@@ -42,7 +43,7 @@ isstable(Plants,'elem')'
 
 % Design controllers
 Controllers = pidtune(Plants,'pidf',pidtuneOptions('Crossover',1));
-% Display controller for C=4
+% Display controller for xdotset_range=4
 Controllers(:,:,4)
 
 %%
@@ -53,10 +54,10 @@ clsys = feedback(Plants*Controllers,1);
 % Plot closed-loop responses
 figure;
 hold on
-for ct = 1:length(C)
+for ct = 1:length(xdotset_range)
     % Select a system from the LTI array
     sys = clsys(:,:,ct);
-    sys.Name = ['C=',num2str(C(ct))];
+    sys.Name = ['xdotset_range=',num2str(xdotset_range(ct))];
     sys.InputName = 'Reference';
     % Plot step response
     stepplot(sys,20);
@@ -65,12 +66,12 @@ legend('show','location','southeast')
 
 %%
 % All the closed loops are stable but the overshoots of the loops with
-% unstable plants (C=4, 5, 6, and 7) are too large.  To improve the results, 
+% unstable plants (xdotset_range=4, 5, 6, and 7) are too large.  To improve the results, 
 % increase the target open loop bandwidth to 10 rad/sec.
 
 % Design controllers for unstable plant models
 Controllers = pidtune(Plants,'pidf',10);
-% Display controller for C=4
+% Display controller for xdotset_range=4
 Controllers(:,:,4)
 
 %%
@@ -81,10 +82,10 @@ clsys = feedback(Plants*Controllers,1);
 % Plot closed-loop responses
 figure;
 hold on
-for ct = 1:length(C)
+for ct = 1:length(xdotset_range)
     % Select a system from the LTI array
     sys = clsys(:,:,ct);
-    set(sys,'Name',['C=',num2str(C(ct))],'InputName','Reference');
+    set(sys,'Name',['xdotset_range=',num2str(xdotset_range(ct))],'InputName','Reference');
     % Plot step response
     stepplot(sys,20);
 end
@@ -93,12 +94,12 @@ legend('show','location','southeast')
 % All the closed loop responses are satisfactory now. For comparison,
 % examine the response when you use the same controller at all operating
 % points.  Create another set of closed-loop systems, where each one uses
-% the C = 2 controller.
+% the xdotset_range = 2 controller.
 clsys_flat = feedback(Plants*Controllers(:,:,1),1);
 
 figure;
 stepplot(clsys,clsys_flat,20)
-legend('C-dependent Controllers','Single Controller')
+legend('xdotset_range-dependent Controllers','Single Controller')
 %%
 % The array of PID controllers designed separately for each concentration
 % gives considerably better performance than a single controller.

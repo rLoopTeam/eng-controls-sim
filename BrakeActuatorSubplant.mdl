@@ -1,17 +1,23 @@
 Model {
-  Name			  "GainScheduledPIDBrakingSystem"
+  Name			  "BrakeActuatorSubplant"
   Version		  8.5
   MdlSubVersion		  0
   SavedCharacterEncoding  "windows-1252"
   GraphicalInterface {
-    NumRootInports	    0
-    NumRootOutports	    0
-    ParameterArgumentNames  ""
-    ComputedModelVersion    "1.37"
-    NumModelReferences	    1
-    ModelReference {
-      ModelRefBlockPath	      "GainScheduledPIDBrakingSystem/Plant Model|BrakingSystemPlant"
+    NumRootInports	    1
+    Inport {
+      Name		      "brake gap setpoint"
+      BusObject		      ""
     }
+    NumRootOutports	    1
+    Outport {
+      Name		      "brake gap"
+      BusObject		      ""
+      BusOutputAsStruct	      "off"
+    }
+    ParameterArgumentNames  ""
+    ComputedModelVersion    "1.130"
+    NumModelReferences	    0
     NumTestPointedSignals   0
   }
   ScopeRefreshTime	  0.035000
@@ -32,7 +38,7 @@ Model {
       $ObjectID		      2
       $ClassName	      "Simulink.WindowInfo"
       IsActive		      [1]
-      Location		      [-5.0, 27.0, 1256.0, 654.0]
+      Location		      [132.0, 0.0, 1083.0, 654.0]
       Object {
 	$PropName		"ModelBrowserInfo"
 	$ObjectID		3
@@ -56,21 +62,21 @@ Model {
 	IsActive		[1]
 	ViewObjType		"SimulinkTopLevel"
 	LoadSaveID		"0"
-	Extents			[1206.0, 480.0]
+	Extents			[1033.0, 480.0]
 	ZoomFactor		[1.0]
-	Offset			[0.0, -13.0]
+	Offset			[125.58650752223548, 122.68391495150297]
       }
     }
   }
-  Created		  "Sun Dec 25 03:59:09 2016"
+  Created		  "Sun Dec 25 13:19:46 2016"
   Creator		  "MrPiccolo"
   UpdateHistory		  "UpdateHistoryNever"
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "MrPiccolo"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Fri Aug 11 22:17:16 2017"
-  RTWModifiedTimeStamp	  424390634
-  ModelVersionFormat	  "1.%<AutoIncrement:37>"
+  LastModifiedDate	  "Fri Aug 11 21:09:45 2017"
+  RTWModifiedTimeStamp	  424386565
+  ModelVersionFormat	  "1.%<AutoIncrement:130>"
   ConfigurationManager	  "none"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -113,12 +119,12 @@ Model {
     $PropName		    "DataLoggingOverride"
     $ObjectID		    6
     $ClassName		    "Simulink.SimulationData.ModelLoggingInfo"
-    model_		    "GainScheduledPIDBrakingSystem"
+    model_		    "StepperMotorController"
     overrideMode_	    [0.0]
     Array {
       Type		      "Cell"
       Dimension		      1
-      Cell		      "GainScheduledPIDBrakingSystem"
+      Cell		      "StepperMotorController"
       PropName		      "logAsSpecifiedByModels_"
     }
     Array {
@@ -704,7 +710,7 @@ Model {
       }
       Name		      "Configuration"
       CurrentDlgPage	      "Solver"
-      ConfigPrmDlgPosition     [ 233, 107, 1313, 747 ] 
+      ConfigPrmDlgPosition     [ 225, 77, 1321, 755 ] 
     }
     PropName		    "ConfigurationSets"
   }
@@ -775,6 +781,30 @@ Model {
   }
   BlockParameterDefaults {
     Block {
+      BlockType		      Clock
+      DisplayTime	      off
+      Decimation	      "10"
+    }
+    Block {
+      BlockType		      Demux
+      Outputs		      "4"
+      DisplayOption	      "none"
+      BusSelectionMode	      off
+    }
+    Block {
+      BlockType		      EnablePort
+      StatesWhenEnabling      "held"
+      PropagateVarSize	      "Only when enabling"
+      ShowOutputPort	      off
+      ZeroCross		      on
+      PortDimensions	      "1"
+      SampleTime	      "-1"
+      OutMin		      "[]"
+      OutMax		      "[]"
+      OutDataTypeStr	      "double"
+      Interpolate	      on
+    }
+    Block {
       BlockType		      Inport
       Port		      "1"
       OutputFunctionCall      off
@@ -793,198 +823,6 @@ Model {
       Interpolate	      on
     }
     Block {
-      BlockType		      Integrator
-      ExternalReset	      "none"
-      InitialConditionSource  "internal"
-      InitialCondition	      "0"
-      LimitOutput	      off
-      UpperSaturationLimit    "inf"
-      LowerSaturationLimit    "-inf"
-      WrapState		      off
-      WrappedStateUpperValue  "pi"
-      WrappedStateLowerValue  "-pi"
-      ShowSaturationPort      off
-      ShowStatePort	      off
-      AbsoluteTolerance	      "auto"
-      IgnoreLimit	      off
-      ZeroCross		      on
-      ContinuousStateAttributes	"''"
-    }
-    Block {
-      BlockType		      Lookup_n-D
-      NumberOfTableDimensions "2"
-      BreakpointsForDimension1 "[10,22,31]"
-      BreakpointsForDimension2 "[10,22,31]"
-      BreakpointsForDimension3 "[1:3]"
-      BreakpointsForDimension4 "[1:3]"
-      BreakpointsForDimension5 "[1:3]"
-      BreakpointsForDimension6 "[1:3]"
-      BreakpointsForDimension7 "[1:3]"
-      BreakpointsForDimension8 "[1:3]"
-      BreakpointsForDimension9 "[1:3]"
-      BreakpointsForDimension10	"[1:3]"
-      BreakpointsForDimension11	"[1:3]"
-      BreakpointsForDimension12	"[1:3]"
-      BreakpointsForDimension13	"[1:3]"
-      BreakpointsForDimension14	"[1:3]"
-      BreakpointsForDimension15	"[1:3]"
-      BreakpointsForDimension16	"[1:3]"
-      BreakpointsForDimension17	"[1:3]"
-      BreakpointsForDimension18	"[1:3]"
-      BreakpointsForDimension19	"[1:3]"
-      BreakpointsForDimension20	"[1:3]"
-      BreakpointsForDimension21	"[1:3]"
-      BreakpointsForDimension22	"[1:3]"
-      BreakpointsForDimension23	"[1:3]"
-      BreakpointsForDimension24	"[1:3]"
-      BreakpointsForDimension25	"[1:3]"
-      BreakpointsForDimension26	"[1:3]"
-      BreakpointsForDimension27	"[1:3]"
-      BreakpointsForDimension28	"[1:3]"
-      BreakpointsForDimension29	"[1:3]"
-      BreakpointsForDimension30	"[1:3]"
-      BreakpointsForDimension1Min "[]"
-      BreakpointsForDimension2Min "[]"
-      BreakpointsForDimension3Min "[]"
-      BreakpointsForDimension4Min "[]"
-      BreakpointsForDimension5Min "[]"
-      BreakpointsForDimension6Min "[]"
-      BreakpointsForDimension7Min "[]"
-      BreakpointsForDimension8Min "[]"
-      BreakpointsForDimension9Min "[]"
-      BreakpointsForDimension10Min "[]"
-      BreakpointsForDimension11Min "[]"
-      BreakpointsForDimension12Min "[]"
-      BreakpointsForDimension13Min "[]"
-      BreakpointsForDimension14Min "[]"
-      BreakpointsForDimension15Min "[]"
-      BreakpointsForDimension16Min "[]"
-      BreakpointsForDimension17Min "[]"
-      BreakpointsForDimension18Min "[]"
-      BreakpointsForDimension19Min "[]"
-      BreakpointsForDimension20Min "[]"
-      BreakpointsForDimension21Min "[]"
-      BreakpointsForDimension22Min "[]"
-      BreakpointsForDimension23Min "[]"
-      BreakpointsForDimension24Min "[]"
-      BreakpointsForDimension25Min "[]"
-      BreakpointsForDimension26Min "[]"
-      BreakpointsForDimension27Min "[]"
-      BreakpointsForDimension28Min "[]"
-      BreakpointsForDimension29Min "[]"
-      BreakpointsForDimension30Min "[]"
-      BreakpointsForDimension1Max "[]"
-      BreakpointsForDimension2Max "[]"
-      BreakpointsForDimension3Max "[]"
-      BreakpointsForDimension4Max "[]"
-      BreakpointsForDimension5Max "[]"
-      BreakpointsForDimension6Max "[]"
-      BreakpointsForDimension7Max "[]"
-      BreakpointsForDimension8Max "[]"
-      BreakpointsForDimension9Max "[]"
-      BreakpointsForDimension10Max "[]"
-      BreakpointsForDimension11Max "[]"
-      BreakpointsForDimension12Max "[]"
-      BreakpointsForDimension13Max "[]"
-      BreakpointsForDimension14Max "[]"
-      BreakpointsForDimension15Max "[]"
-      BreakpointsForDimension16Max "[]"
-      BreakpointsForDimension17Max "[]"
-      BreakpointsForDimension18Max "[]"
-      BreakpointsForDimension19Max "[]"
-      BreakpointsForDimension20Max "[]"
-      BreakpointsForDimension21Max "[]"
-      BreakpointsForDimension22Max "[]"
-      BreakpointsForDimension23Max "[]"
-      BreakpointsForDimension24Max "[]"
-      BreakpointsForDimension25Max "[]"
-      BreakpointsForDimension26Max "[]"
-      BreakpointsForDimension27Max "[]"
-      BreakpointsForDimension28Max "[]"
-      BreakpointsForDimension29Max "[]"
-      BreakpointsForDimension30Max "[]"
-      BreakpointsForDimension1DataTypeStr "Inherit: Same as corresponding input"
-      BreakpointsForDimension2DataTypeStr "Inherit: Same as corresponding input"
-      BreakpointsForDimension3DataTypeStr "Inherit: Same as corresponding input"
-      BreakpointsForDimension4DataTypeStr "Inherit: Same as corresponding input"
-      BreakpointsForDimension5DataTypeStr "Inherit: Same as corresponding input"
-      BreakpointsForDimension6DataTypeStr "Inherit: Same as corresponding input"
-      BreakpointsForDimension7DataTypeStr "Inherit: Same as corresponding input"
-      BreakpointsForDimension8DataTypeStr "Inherit: Same as corresponding input"
-      BreakpointsForDimension9DataTypeStr "Inherit: Same as corresponding input"
-      BreakpointsForDimension10DataTypeStr "Inherit: Same as corresponding input"
-      BreakpointsForDimension11DataTypeStr "Inherit: Same as corresponding input"
-      BreakpointsForDimension12DataTypeStr "Inherit: Same as corresponding input"
-      BreakpointsForDimension13DataTypeStr "Inherit: Same as corresponding input"
-      BreakpointsForDimension14DataTypeStr "Inherit: Same as corresponding input"
-      BreakpointsForDimension15DataTypeStr "Inherit: Same as corresponding input"
-      BreakpointsForDimension16DataTypeStr "Inherit: Same as corresponding input"
-      BreakpointsForDimension17DataTypeStr "Inherit: Same as corresponding input"
-      BreakpointsForDimension18DataTypeStr "Inherit: Same as corresponding input"
-      BreakpointsForDimension19DataTypeStr "Inherit: Same as corresponding input"
-      BreakpointsForDimension20DataTypeStr "Inherit: Same as corresponding input"
-      BreakpointsForDimension21DataTypeStr "Inherit: Same as corresponding input"
-      BreakpointsForDimension22DataTypeStr "Inherit: Same as corresponding input"
-      BreakpointsForDimension23DataTypeStr "Inherit: Same as corresponding input"
-      BreakpointsForDimension24DataTypeStr "Inherit: Same as corresponding input"
-      BreakpointsForDimension25DataTypeStr "Inherit: Same as corresponding input"
-      BreakpointsForDimension26DataTypeStr "Inherit: Same as corresponding input"
-      BreakpointsForDimension27DataTypeStr "Inherit: Same as corresponding input"
-      BreakpointsForDimension28DataTypeStr "Inherit: Same as corresponding input"
-      BreakpointsForDimension29DataTypeStr "Inherit: Same as corresponding input"
-      BreakpointsForDimension30DataTypeStr "Inherit: Same as corresponding input"
-      IndexSearchMethod	      "Binary search"
-      BeginIndexSearchUsingPreviousIndexResult off
-      UseOneInputPortForAllInputData off
-      Table		      "[4 5 6;16 19 20;10 18 23]"
-      TableMin		      "[]"
-      TableMax		      "[]"
-      TableDataTypeStr	      "Inherit: Same as output"
-      IntermediateResultsDataTypeStr "Inherit: Same as output"
-      InterpMethod	      "Linear"
-      ExtrapMethod	      "Linear"
-      DiagnosticForOutOfRangeInput "None"
-      RemoveProtectionInput   off
-      UseLastTableValue	      off
-      SampleTime	      "-1"
-      InternalRulePriority    "Precision"
-      InputSameDT	      on
-      OutMin		      "[]"
-      OutMax		      "[]"
-      OutDataTypeStr	      "Inherit: Same as first input"
-      LockScale		      off
-      RndMeth		      "Floor"
-      SaturateOnIntegerOverflow	off
-      FractionDataTypeStr     "Inherit: Inherit via internal rule"
-      SupportTunableTableSize off
-      MaximumIndicesForEachDimension "[]"
-      LUTDesignTableMode      "Redesign Table"
-      LUTDesignDataSource     "Block Dialog"
-      LUTDesignFunctionName   "sqrt(x)"
-      LUTDesignUseExistingBP  on
-      LUTDesignRelError	      "0.01"
-      LUTDesignAbsError	      "1e-6"
-    }
-    Block {
-      BlockType		      ModelReference
-      ModelNameDialog	      "<Enter Model Name>"
-      SimulationMode	      "Accelerator"
-      CodeInterface	      "Model reference"
-      Variant		      off
-      GeneratePreprocessorConditionals off
-      ContentPreviewEnabled   off
-      CopyOfModelProtected    off
-      DefaultDataLogging      off
-    }
-    Block {
-      BlockType		      Mux
-      Inputs		      "4"
-      DisplayOption	      "none"
-      UseBusObject	      off
-      BusObject		      "BusObject"
-      NonVirtualBus	      off
-    }
-    Block {
       BlockType		      Outport
       Port		      "1"
       OutMin		      "[]"
@@ -1000,6 +838,29 @@ Model {
       SourceOfInitialOutputValue "Dialog"
       OutputWhenDisabled      "held"
       InitialOutput	      "[]"
+    }
+    Block {
+      BlockType		      S-Function
+      FunctionName	      "system"
+      SFunctionModules	      "''"
+      PortCounts	      "[]"
+      SFunctionDeploymentMode off
+      EnableBusSupport	      off
+    }
+    Block {
+      BlockType		      Saturate
+      UpperLimitSource	      "Dialog"
+      UpperLimit	      "0.5"
+      LowerLimitSource	      "Dialog"
+      LowerLimit	      "-0.5"
+      LinearizeAsGain	      on
+      ZeroCross		      on
+      SampleTime	      "-1"
+      OutMin		      "[]"
+      OutMax		      "[]"
+      OutDataTypeStr	      "Inherit: Same as input"
+      LockScale		      off
+      RndMeth		      "Floor"
     }
     Block {
       BlockType		      SubSystem
@@ -1050,14 +911,29 @@ Model {
       SampleTime	      "-1"
     }
     Block {
-      BlockType		      TimeScope
-      DefaultConfigurationName "Simulink.scopes.TimeScopeBlockCfg"
-      Floating		      off
+      BlockType		      Terminator
+    }
+    Block {
+      BlockType		      TransferFcn
+      Numerator		      "[1]"
+      Denominator	      "[1 2 1]"
+      AbsoluteTolerance	      "auto"
+      ContinuousStateAttributes	"''"
+      Realization	      "auto"
+    }
+    Block {
+      BlockType		      TransportDelay
+      DelayTime		      "1"
+      InitialOutput	      "0"
+      BufferSize	      "1024"
+      FixedBuffer	      off
+      TransDelayFeedthrough   off
+      PadeOrder		      "0"
     }
   }
   System {
-    Name		    "GainScheduledPIDBrakingSystem"
-    Location		    [-5, 27, 1251, 681]
+    Name		    "BrakeActuatorSubplant"
+    Location		    [132, 0, 1215, 654]
     Open		    on
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
@@ -1071,274 +947,27 @@ Model {
     ShowPageBoundaries	    off
     ZoomFactor		    "100"
     ReportName		    "simulink-default.rpt"
-    SIDHighWatermark	    "172"
+    SIDHighWatermark	    "125"
     Block {
-      BlockType		      Lookup_n-D
-      Name		      "D Lookup\nTable"
-      SID		      "25"
-      Ports		      [1, 1]
-      Position		      [390, 323, 455, 387]
-      ZOrder		      50
-      NumberOfTableDimensions "1"
-      BreakpointsForDimension1 "xdotset_range"
-      Table		      "Controllers.Kd"
-      ExtrapMethod	      "Clip"
-      UseLastTableValue	      on
-      InternalRulePriority    "Speed"
-      RndMeth		      "Simplest"
-    }
-    Block {
-      BlockType		      Lookup_n-D
-      Name		      "I Lookup\nTable"
-      SID		      "28"
-      Ports		      [1, 1]
-      Position		      [315, 248, 380, 312]
-      ZOrder		      49
-      NumberOfTableDimensions "1"
-      BreakpointsForDimension1 "xdotset_range"
-      Table		      "Controllers.Ki"
-      ExtrapMethod	      "Clip"
-      UseLastTableValue	      on
-      InternalRulePriority    "Speed"
-      RndMeth		      "Simplest"
-    }
-    Block {
-      BlockType		      Mux
-      Name		      "Mux"
+      BlockType		      Inport
+      Name		      "brake gap\nsetpoint"
       SID		      "29"
-      Ports		      [2, 1]
-      Position		      [1015, 251, 1020, 289]
-      ZOrder		      54
-      ShowName		      off
-      Inputs		      "2"
-      DisplayOption	      "bar"
-    }
-    Block {
-      BlockType		      Lookup_n-D
-      Name		      "N Lookup\nTable"
-      SID		      "30"
-      Ports		      [1, 1]
-      Position		      [470, 398, 535, 462]
-      ZOrder		      51
-      NumberOfTableDimensions "1"
-      BreakpointsForDimension1 "xdotset_range"
-      Table		      "1./(Controllers.Tf)"
-      ExtrapMethod	      "Clip"
-      UseLastTableValue	      on
-      InternalRulePriority    "Speed"
-      RndMeth		      "Simplest"
-    }
-    Block {
-      BlockType		      Lookup_n-D
-      Name		      "P Lookup\nTable"
-      SID		      "31"
-      Ports		      [1, 1]
-      Position		      [240, 173, 305, 237]
-      ZOrder		      48
-      NumberOfTableDimensions "1"
-      BreakpointsForDimension1 "xdotset_range"
-      Table		      "Controllers.Kp"
-      ExtrapMethod	      "Clip"
-      UseLastTableValue	      on
-      InternalRulePriority    "Speed"
-      RndMeth		      "Simplest"
-    }
-    Block {
-      BlockType		      Reference
-      Name		      "PID Controller"
-      SID		      "32"
-      Ports		      [5, 1]
-      Position		      [560, 96, 675, 464]
-      ZOrder		      46
-      LibraryVersion	      "1.356"
-      SourceBlock	      "simulink/Continuous/PID Controller"
-      SourceType	      "PID 1dof"
-      ContentPreviewEnabled   off
-      Controller	      "PID"
-      TimeDomain	      "Continuous-time"
-      SampleTime	      "-1"
-      IntegratorMethod	      "Forward Euler"
-      FilterMethod	      "Forward Euler"
-      Form		      "Parallel"
-      UseFilter		      on
-      ControllerParametersSource "external"
-      P			      "P(1)"
-      I			      "I(1)"
-      D			      "D(1)"
-      N			      "N(1)"
-      InitialConditionSource  "internal"
-      InitialConditionForIntegrator "0"
-      InitialConditionForFilter	"0"
-      ExternalReset	      "none"
-      IgnoreLimit	      off
-      ZeroCross		      on
-      LimitOutput	      off
-      UpperSaturationLimit    "350"
-      LowerSaturationLimit    "250"
-      LinearizeAsGain	      on
-      AntiWindupMode	      "none"
-      Kb		      "1"
-      TrackingMode	      off
-      Kt		      "1"
-      RndMeth		      "Floor"
-      SaturateOnIntegerOverflow	off
-      LockScale		      off
-      PParamMin		      "[]"
-      PParamMax		      "[]"
-      PParamDataTypeStr	      "Inherit: Inherit via internal rule"
-      IParamMin		      "[]"
-      IParamMax		      "[]"
-      IParamDataTypeStr	      "Inherit: Inherit via internal rule"
-      DParamMin		      "[]"
-      DParamMax		      "[]"
-      DParamDataTypeStr	      "Inherit: Inherit via internal rule"
-      NParamMin		      "[]"
-      NParamMax		      "[]"
-      NParamDataTypeStr	      "Inherit: Inherit via internal rule"
-      KbParamMin	      "[]"
-      KbParamMax	      "[]"
-      KbParamDataTypeStr      "Inherit: Inherit via internal rule"
-      KtParamMin	      "[]"
-      KtParamMax	      "[]"
-      KtParamDataTypeStr      "Inherit: Inherit via internal rule"
-      POutMin		      "[]"
-      POutMax		      "[]"
-      POutDataTypeStr	      "Inherit: Inherit via internal rule"
-      PGainOutDataTypeStr     "Inherit: Inherit via internal rule"
-      PProdOutDataTypeStr     "Inherit: Inherit via internal rule"
-      IOutMin		      "[]"
-      IOutMax		      "[]"
-      IOutDataTypeStr	      "Inherit: Inherit via internal rule"
-      IGainOutDataTypeStr     "Inherit: Inherit via internal rule"
-      IProdOutDataTypeStr     "Inherit: Inherit via internal rule"
-      DOutMin		      "[]"
-      DOutMax		      "[]"
-      DOutDataTypeStr	      "Inherit: Inherit via internal rule"
-      DGainOutDataTypeStr     "Inherit: Inherit via internal rule"
-      DProdOutDataTypeStr     "Inherit: Inherit via internal rule"
-      NOutMin		      "[]"
-      NOutMax		      "[]"
-      NOutDataTypeStr	      "Inherit: Inherit via internal rule"
-      NGainOutDataTypeStr     "Inherit: Inherit via internal rule"
-      NProdOutDataTypeStr     "Inherit: Inherit via internal rule"
-      KbOutMin		      "[]"
-      KbOutMax		      "[]"
-      KbOutDataTypeStr	      "Inherit: Inherit via internal rule"
-      KtOutMin		      "[]"
-      KtOutMax		      "[]"
-      KtOutDataTypeStr	      "Inherit: Inherit via internal rule"
-      IntegratorOutMin	      "[]"
-      IntegratorOutMax	      "[]"
-      IntegratorOutDataTypeStr "Inherit: Inherit via internal rule"
-      FilterOutMin	      "[]"
-      FilterOutMax	      "[]"
-      FilterOutDataTypeStr    "Inherit: Inherit via internal rule"
-      SumOutMin		      "[]"
-      SumOutMax		      "[]"
-      SumOutDataTypeStr	      "Inherit: Inherit via internal rule"
-      SumI1OutMin	      "[]"
-      SumI1OutMax	      "[]"
-      SumI1OutDataTypeStr     "Inherit: Inherit via internal rule"
-      SumI2OutMin	      "[]"
-      SumI2OutMax	      "[]"
-      SumI2OutDataTypeStr     "Inherit: Inherit via internal rule"
-      SumI3OutMin	      "[]"
-      SumI3OutMax	      "[]"
-      SumI3OutDataTypeStr     "Inherit: Inherit via internal rule"
-      SumDOutMin	      "[]"
-      SumDOutMax	      "[]"
-      SumDOutDataTypeStr      "Inherit: Inherit via internal rule"
-      SumAccumDataTypeStr     "Inherit: Inherit via internal rule"
-      SumI1AccumDataTypeStr   "Inherit: Inherit via internal rule"
-      SumI2AccumDataTypeStr   "Inherit: Inherit via internal rule"
-      SumI3AccumDataTypeStr   "Inherit: Inherit via internal rule"
-      SumDAccumDataTypeStr    "Inherit: Inherit via internal rule"
-      SaturationOutMin	      "[]"
-      SaturationOutMax	      "[]"
-      SaturationOutDataTypeStr "Inherit: Same as input"
-      IntegratorContinuousStateAttributes "''"
-      IntegratorStateMustResolveToSignalObject off
-      IntegratorRTWStateStorageClass "Auto"
-      FilterContinuousStateAttributes "''"
-      FilterStateMustResolveToSignalObject off
-      FilterRTWStateStorageClass "Auto"
-      DifferentiatorICPrevScaledInput "0"
-      DifferentiatorOutMin    "[]"
-      DifferentiatorOutMax    "[]"
-      DifferentiatorOutDataTypeStr "Inherit: Inherit via internal rule"
-    }
-    Block {
-      BlockType		      ModelReference
-      Name		      "Plant Model"
-      SID		      "158"
-      Ports		      [1, 1]
-      Position		      [755, 138, 905, 422]
-      ZOrder		      93
-      ModelNameDialog	      "BrakingSystemPlant.mdl"
-      SimulationMode	      "Normal"
-      ModelReferenceVersion   "1.223"
-      List {
-	ListType		InputPortNames
-	port0			"u"
-      }
-      List {
-	ListType		OutputPortNames
-	port0			"xdot"
-      }
-      List {
-	ListType		OutputPortOutputBusAsStructs
-	port0			"off"
-      }
-      List {
-	ListType		InputPortLatchByCopyingInsideSignal
-	port0			"off"
-      }
-      CopyOfModelName	      "BrakingSystemPlant.mdl"
-      DefaultDataLogging      on
-      List {
-	ListType		InputPortLatchByDelayingOutsideSignal
-	port0			"off"
-      }
-    }
-    Block {
-      BlockType		      TimeScope
-      Name		      "Scope"
-      SID		      "172"
-      Ports		      [1]
-      Position		      [1055, 254, 1085, 286]
-      ZOrder		      100
-      ScopeSpecificationString "Simulink.scopes.TimeScopeBlockCfg('CurrentConfiguration', extmgr.ConfigurationSet(extm"
-      "gr.Configuration('Core','General UI',true),extmgr.Configuration('Core','Source UI',true),extmgr.Configuration('S"
-      "ources','WiredSimulink',true,'DataLoggingLimitDataPoints',true,'DataLoggingDecimation','1','DataLoggingDecimateD"
-      "ata',true,'DataLoggingSaveFormat','Array'),extmgr.Configuration('Visuals','Time Domain',true,'SerializedDisplays"
-      "',{struct('MinYLimReal','0','MaxYLimReal','140','YLabelReal','','MinYLimMag','0','MaxYLimMag','10','LegendVisibi"
-      "lity','off','XGrid',true,'YGrid',true,'PlotMagPhase',false,'AxesColor',[0 0 0],'AxesTickColor',[0.68627450980392"
-      "2 0.686274509803922 0.686274509803922],'ColorOrder',[1 1 0.0666666666666667;0.0745098039215686 0.623529411764706"
-      " 1;1 0.411764705882353 0.16078431372549;0.392156862745098 0.831372549019608 0.0745098039215686;0.717647058823529"
-      " 0.274509803921569 1;0.0588235294117647 1 1;1 0.0745098039215686 0.650980392156863],'Title','%<SignalLabel>','Li"
-      "nePropertiesCache',{{}},'UserDefinedChannelNames',{{}},'NumLines',2,'LineNames',{{'Setpoint','Plant Model'}},'Sh"
-      "owContent',true,'Placement',1)},'DisplayPropertyDefaults',struct('MinYLimReal','0','MaxYLimReal','140','YLabelRe"
-      "al','','MinYLimMag','0','MaxYLimMag','10','LegendVisibility','off','XGrid',true,'YGrid',true,'PlotMagPhase',fals"
-      "e,'AxesColor',[0 0 0],'AxesTickColor',[0.686274509803922 0.686274509803922 0.686274509803922],'ColorOrder',[1 1 "
-      "0.0666666666666667;0.0745098039215686 0.623529411764706 1;1 0.411764705882353 0.16078431372549;0.392156862745098"
-      " 0.831372549019608 0.0745098039215686;0.717647058823529 0.274509803921569 1;0.0588235294117647 1 1;1 0.074509803"
-      "9215686 0.650980392156863],'Title','%<SignalLabel>','LinePropertiesCache',{{}},'UserDefinedChannelNames',{{}},'N"
-      "umLines',0,'LineNames',{{[]}},'ShowContent',true,'Placement',1),'TimeRangeSamples','20              '),extmgr.Co"
-      "nfiguration('Tools','Plot Navigation',true,'OnceAtStop',false),extmgr.Configuration('Tools','Measurements',true,"
-      "'Version','2015a')),'Version','2015a','Location',[51 83 993 672])"
-      NumInputPorts	      "1"
+      Position		      [180, 343, 210, 357]
+      ZOrder		      243
+      IconDisplay	      "Port number"
     }
     Block {
       BlockType		      SubSystem
-      Name		      "Setpoint"
-      SID		      "161"
-      Ports		      [1, 1]
-      Position		      [60, 109, 150, 151]
-      ZOrder		      96
+      Name		      "Hold b0"
+      SID		      "99"
+      Ports		      [1, 1, 1]
+      Position		      [530, 184, 630, 226]
+      ZOrder		      259
+      TreatAsAtomicUnit	      on
       RequestExecContextInheritance off
       System {
-	Name			"Setpoint"
-	Location		[-5, 27, 1251, 681]
+	Name			"Hold b0"
+	Location		[421, 301, 919, 601]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -1350,110 +979,208 @@ Model {
 	TiledPaperMargins	[0.500000, 0.500000, 0.500000, 0.500000]
 	TiledPageScale		1
 	ShowPageBoundaries	off
-	ZoomFactor		"150"
+	ZoomFactor		"100"
 	Block {
 	  BlockType		  Inport
-	  Name			  "xdot"
-	  SID			  "162"
-	  Position		  [215, 93, 245, 107]
+	  Name			  "In1"
+	  SID			  "100"
+	  Position		  [110, 103, 140, 117]
 	  ZOrder		  -1
 	  IconDisplay		  "Port number"
 	}
 	Block {
-	  BlockType		  Integrator
-	  Name			  "Integrator"
-	  SID			  "164"
-	  Ports			  [1, 1]
-	  Position		  [295, 84, 325, 116]
-	  ZOrder		  1
-	  InitialCondition	  "x2"
-	}
-	Block {
-	  BlockType		  Lookup_n-D
-	  Name			  "Velocity Setpoint\nLookup Table"
-	  SID			  "166"
-	  Ports			  [1, 1]
-	  Position		  [390, 68, 455, 132]
-	  ZOrder		  3
-	  NumberOfTableDimensions "1"
-	  BreakpointsForDimension1 "distanceSet"
-	  Table			  "velocitySet"
-	  InternalRulePriority	  "Speed"
-	  RndMeth		  "Simplest"
+	  BlockType		  EnablePort
+	  Name			  "Enable"
+	  SID			  "101"
+	  Ports			  []
+	  Position		  [235, 20, 255, 40]
+	  ZOrder		  -2
 	}
 	Block {
 	  BlockType		  Outport
-	  Name			  "xdot ref"
-	  SID			  "163"
-	  Position		  [510, 93, 540, 107]
-	  ZOrder		  -2
+	  Name			  "Out1"
+	  SID			  "102"
+	  Position		  [360, 103, 390, 117]
+	  ZOrder		  -3
 	  IconDisplay		  "Port number"
 	}
 	Line {
 	  ZOrder		  1
-	  SrcBlock		  "xdot"
+	  SrcBlock		  "In1"
 	  SrcPort		  1
-	  DstBlock		  "Integrator"
+	  DstBlock		  "Out1"
 	  DstPort		  1
-	}
-	Line {
-	  ZOrder		  4
-	  SrcBlock		  "Integrator"
-	  SrcPort		  1
-	  DstBlock		  "Velocity Setpoint\nLookup Table"
-	  DstPort		  1
-	}
-	Line {
-	  ZOrder		  5
-	  SrcBlock		  "Velocity Setpoint\nLookup Table"
-	  SrcPort		  1
-	  DstBlock		  "xdot ref"
-	  DstPort		  1
-	}
-	Annotation {
-	  SID			  "167"
-	  Name			  "x is the distance traveled since the beginning of deceleration period.\n\nNotes:\nLookup table contains v"
-	  "elocity setpoints for input x.\n(See: GainScheduledPIDTuner.m)"
-	  Position		  [191, 191, 515, 258]
-	  InternalMargins	  [0, 0, 0, 0]
-	  FixedHeight		  off
-	  FixedWidth		  off
-	  HorizontalAlignment	  "left"
-	  VerticalAlignment	  "top"
-	  ZOrder		  -1
-	}
-	Annotation {
-	  SID			  "165"
-	  Name			  "x"
-	  Position		  [338, 106, 345, 121]
-	  InternalMargins	  [0, 0, 0, 0]
-	  FixedHeight		  on
-	  FixedWidth		  on
-	  HorizontalAlignment	  "left"
-	  VerticalAlignment	  "top"
-	  ZOrder		  -2
-	}
-	Annotation {
-	  SID			  "171"
-	  Name			  "rPod Braking System\nVelocity Setpoint Lookup Table"
-	  Position		  [379, 18, 595, 52]
-	  InternalMargins	  [0, 0, 0, 0]
-	  FixedHeight		  off
-	  FixedWidth		  off
-	  ZOrder		  -1
-	  FontName		  "Arial"
-	  FontSize		  14
-	  FontWeight		  "bold"
 	}
       }
     }
     Block {
+      BlockType		      SubSystem
+      Name		      "Hold bset"
+      SID		      "93"
+      Ports		      [1, 1, 1]
+      Position		      [530, 329, 630, 371]
+      ZOrder		      255
+      TreatAsAtomicUnit	      on
+      RequestExecContextInheritance off
+      System {
+	Name			"Hold bset"
+	Location		[421, 301, 919, 601]
+	Open			off
+	ModelBrowserVisibility	off
+	ModelBrowserWidth	200
+	ScreenColor		"white"
+	PaperOrientation	"landscape"
+	PaperPositionMode	"auto"
+	PaperType		"usletter"
+	PaperUnits		"inches"
+	TiledPaperMargins	[0.500000, 0.500000, 0.500000, 0.500000]
+	TiledPageScale		1
+	ShowPageBoundaries	off
+	ZoomFactor		"100"
+	Block {
+	  BlockType		  Inport
+	  Name			  "In1"
+	  SID			  "94"
+	  Position		  [110, 103, 140, 117]
+	  ZOrder		  -1
+	  IconDisplay		  "Port number"
+	}
+	Block {
+	  BlockType		  EnablePort
+	  Name			  "Enable"
+	  SID			  "95"
+	  Ports			  []
+	  Position		  [235, 20, 255, 40]
+	  ZOrder		  -2
+	}
+	Block {
+	  BlockType		  Outport
+	  Name			  "Out1"
+	  SID			  "96"
+	  Position		  [360, 103, 390, 117]
+	  ZOrder		  -3
+	  IconDisplay		  "Port number"
+	}
+	Line {
+	  ZOrder		  1
+	  SrcBlock		  "In1"
+	  SrcPort		  1
+	  DstBlock		  "Out1"
+	  DstPort		  1
+	}
+      }
+    }
+    Block {
+      BlockType		      SubSystem
+      Name		      "Hold time reference"
+      SID		      "108"
+      Ports		      [1, 1, 1]
+      Position		      [485, 514, 585, 556]
+      ZOrder		      265
+      TreatAsAtomicUnit	      on
+      RequestExecContextInheritance off
+      System {
+	Name			"Hold time reference"
+	Location		[152, 4, 1210, 641]
+	Open			off
+	ModelBrowserVisibility	off
+	ModelBrowserWidth	200
+	ScreenColor		"white"
+	PaperOrientation	"landscape"
+	PaperPositionMode	"auto"
+	PaperType		"usletter"
+	PaperUnits		"inches"
+	TiledPaperMargins	[0.500000, 0.500000, 0.500000, 0.500000]
+	TiledPageScale		1
+	ShowPageBoundaries	off
+	ZoomFactor		"100"
+	Block {
+	  BlockType		  Inport
+	  Name			  "In1"
+	  SID			  "109"
+	  Position		  [110, 103, 140, 117]
+	  ZOrder		  -1
+	  IconDisplay		  "Port number"
+	}
+	Block {
+	  BlockType		  EnablePort
+	  Name			  "Enable"
+	  SID			  "110"
+	  Ports			  []
+	  Position		  [235, 20, 255, 40]
+	  ZOrder		  -2
+	}
+	Block {
+	  BlockType		  Outport
+	  Name			  "Out1"
+	  SID			  "111"
+	  Position		  [360, 103, 390, 117]
+	  ZOrder		  -3
+	  IconDisplay		  "Port number"
+	}
+	Line {
+	  ZOrder		  1
+	  SrcBlock		  "In1"
+	  SrcPort		  1
+	  DstBlock		  "Out1"
+	  DstPort		  1
+	}
+      }
+    }
+    Block {
+      BlockType		      TransferFcn
+      Name		      "LowPass Filter\nTransfer Fcn"
+      SID		      "116"
+      Position		      [375, 257, 435, 293]
+      ZOrder		      285
+      Denominator	      "[0.01 1]"
+    }
+    Block {
+      BlockType		      TransferFcn
+      Name		      "LowPass Filter\nTransfer Fcn1"
+      SID		      "123"
+      Position		      [375, 452, 435, 488]
+      ZOrder		      290
+      Denominator	      "[0.01 1]"
+    }
+    Block {
+      BlockType		      TransferFcn
+      Name		      "LowPass Filter\nTransfer Fcn2"
+      SID		      "118"
+      Position		      [375, 137, 435, 173]
+      ZOrder		      280
+      Denominator	      "[0.01 1]"
+    }
+    Block {
+      BlockType		      Sum
+      Name		      "Resets b0, bset, & \ntime reference when\nt-ts > 0"
+      SID		      "120"
+      Ports		      [2, 1]
+      Position		      [935, 407, 965, 438]
+      ZOrder		      282
+      Inputs		      "-+"
+      InputSameDT	      off
+      OutDataTypeStr	      "Inherit: Inherit via internal rule"
+      SaturateOnIntegerOverflow	off
+    }
+    Block {
+      BlockType		      Saturate
+      Name		      "Saturation\nlimits input\nfrom 25mm\nto 2.5mm)"
+      SID		      "18"
+      Ports		      [1, 1]
+      Position		      [390, 335, 420, 365]
+      ZOrder		      101
+      InputPortMap	      "u0"
+      UpperLimit	      "25"
+      LowerLimit	      "2.5"
+    }
+    Block {
       BlockType		      Sum
       Name		      "Sum"
-      SID		      "34"
+      SID		      "107"
       Ports		      [2, 1]
-      Position		      [210, 120, 230, 140]
-      ZOrder		      47
+      Position		      [625, 420, 645, 440]
+      ZOrder		      264
       ShowName		      off
       IconShape		      "round"
       Inputs		      "|+-"
@@ -1461,145 +1188,556 @@ Model {
       OutDataTypeStr	      "Inherit: Inherit via internal rule"
       SaturateOnIntegerOverflow	off
     }
+    Block {
+      BlockType		      TransportDelay
+      Name		      "Time Delay\ndue to stepper\ndriver lag"
+      SID		      "63"
+      Ports		      [1, 1]
+      Position		      [935, 325, 965, 355]
+      ZOrder		      270
+      DelayTime		      ".05"
+      InitialOutput	      "25"
+    }
+    Block {
+      BlockType		      SubSystem
+      Name		      "brakegap actuator"
+      SID		      "97"
+      Ports		      [3, 2]
+      Position		      [750, 326, 830, 374]
+      ZOrder		      256
+      LibraryVersion	      "1.32"
+      ErrorFcn		      "Stateflow.Translate.translate"
+      PermitHierarchicalResolution "ExplicitOnly"
+      TreatAsAtomicUnit	      on
+      RequestExecContextInheritance off
+      SFBlockType	      "MATLAB Function"
+      System {
+	Name			"brakegap actuator"
+	Location		[223, 338, 826, 833]
+	Open			off
+	ModelBrowserVisibility	off
+	ModelBrowserWidth	200
+	ScreenColor		"white"
+	PaperOrientation	"landscape"
+	PaperPositionMode	"auto"
+	PaperType		"usletter"
+	PaperUnits		"inches"
+	TiledPaperMargins	[0.500000, 0.500000, 0.500000, 0.500000]
+	TiledPageScale		1
+	ShowPageBoundaries	off
+	ZoomFactor		"100"
+	SIDHighWatermark	"21"
+	Block {
+	  BlockType		  Inport
+	  Name			  "b0"
+	  SID			  "97::1"
+	  Position		  [20, 101, 40, 119]
+	  ZOrder		  -1
+	  IconDisplay		  "Port number"
+	}
+	Block {
+	  BlockType		  Inport
+	  Name			  "bset"
+	  SID			  "97::19"
+	  Position		  [20, 136, 40, 154]
+	  ZOrder		  10
+	  Port			  "2"
+	  IconDisplay		  "Port number"
+	}
+	Block {
+	  BlockType		  Inport
+	  Name			  "t"
+	  SID			  "97::20"
+	  Position		  [20, 171, 40, 189]
+	  ZOrder		  11
+	  Port			  "3"
+	  IconDisplay		  "Port number"
+	}
+	Block {
+	  BlockType		  Demux
+	  Name			  " Demux "
+	  SID			  "97::17"
+	  Ports			  [1, 1]
+	  Position		  [270, 230, 320, 270]
+	  ZOrder		  8
+	  Outputs		  "1"
+	}
+	Block {
+	  BlockType		  S-Function
+	  Name			  " SFunction "
+	  SID			  "97::16"
+	  Tag			  "Stateflow S-Function BrakeActuatorSubplant 2"
+	  Ports			  [3, 3]
+	  Position		  [180, 100, 230, 180]
+	  ZOrder		  7
+	  FunctionName		  "sf_sfun"
+	  PortCounts		  "[3 3]"
+	  EnableBusSupport	  on
+	  Port {
+	    PortNumber		    2
+	    Name		    "b"
+	    RTWStorageClass	    "Auto"
+	    DataLoggingNameMode	    "SignalName"
+	  }
+	  Port {
+	    PortNumber		    3
+	    Name		    "ts"
+	    RTWStorageClass	    "Auto"
+	    DataLoggingNameMode	    "SignalName"
+	  }
+	}
+	Block {
+	  BlockType		  Terminator
+	  Name			  " Terminator "
+	  SID			  "97::18"
+	  Position		  [460, 241, 480, 259]
+	  ZOrder		  9
+	}
+	Block {
+	  BlockType		  Outport
+	  Name			  "b"
+	  SID			  "97::5"
+	  Position		  [460, 101, 480, 119]
+	  ZOrder		  -5
+	  IconDisplay		  "Port number"
+	}
+	Block {
+	  BlockType		  Outport
+	  Name			  "ts"
+	  SID			  "97::21"
+	  Position		  [460, 136, 480, 154]
+	  ZOrder		  12
+	  Port			  "2"
+	  IconDisplay		  "Port number"
+	}
+	Line {
+	  ZOrder		  1
+	  SrcBlock		  "b0"
+	  SrcPort		  1
+	  DstBlock		  " SFunction "
+	  DstPort		  1
+	}
+	Line {
+	  ZOrder		  2
+	  SrcBlock		  "bset"
+	  SrcPort		  1
+	  DstBlock		  " SFunction "
+	  DstPort		  2
+	}
+	Line {
+	  ZOrder		  3
+	  SrcBlock		  "t"
+	  SrcPort		  1
+	  DstBlock		  " SFunction "
+	  DstPort		  3
+	}
+	Line {
+	  Name			  "b"
+	  ZOrder		  4
+	  Labels		  [0, 0]
+	  SrcBlock		  " SFunction "
+	  SrcPort		  2
+	  DstBlock		  "b"
+	  DstPort		  1
+	}
+	Line {
+	  Name			  "ts"
+	  ZOrder		  5
+	  Labels		  [0, 0]
+	  SrcBlock		  " SFunction "
+	  SrcPort		  3
+	  DstBlock		  "ts"
+	  DstPort		  1
+	}
+	Line {
+	  ZOrder		  6
+	  SrcBlock		  " Demux "
+	  SrcPort		  1
+	  DstBlock		  " Terminator "
+	  DstPort		  1
+	}
+	Line {
+	  ZOrder		  7
+	  SrcBlock		  " SFunction "
+	  SrcPort		  1
+	  DstBlock		  " Demux "
+	  DstPort		  1
+	}
+      }
+    }
+    Block {
+      BlockType		      Clock
+      Name		      "tsim"
+      SID		      "115"
+      Position		      [185, 525, 205, 545]
+      ZOrder		      269
+    }
+    Block {
+      BlockType		      Outport
+      Name		      "brake gap"
+      SID		      "27"
+      Position		      [1090, 333, 1120, 347]
+      ZOrder		      155
+      IconDisplay	      "Port number"
+    }
     Line {
-      ZOrder		      16
-      SrcBlock		      "Sum"
+      ZOrder		      482
+      SrcBlock		      "brake gap\nsetpoint"
       SrcPort		      1
-      DstBlock		      "PID Controller"
+      DstBlock		      "Saturation\nlimits input\nfrom 25mm\nto 2.5mm)"
       DstPort		      1
     }
     Line {
-      ZOrder		      17
-      SrcBlock		      "P Lookup\nTable"
+      ZOrder		      574
+      SrcBlock		      "Saturation\nlimits input\nfrom 25mm\nto 2.5mm)"
       SrcPort		      1
-      DstBlock		      "PID Controller"
+      DstBlock		      "Hold bset"
+      DstPort		      1
+    }
+    Line {
+      ZOrder		      609
+      SrcBlock		      "LowPass Filter\nTransfer Fcn"
+      SrcPort		      1
+      Points		      [140, 0]
+      DstBlock		      "Hold bset"
+      DstPort		      enable
+    }
+    Line {
+      ZOrder		      467
+      SrcBlock		      "Hold bset"
+      SrcPort		      1
+      DstBlock		      "brakegap actuator"
       DstPort		      2
     }
     Line {
-      ZOrder		      18
-      SrcBlock		      "I Lookup\nTable"
+      ZOrder		      469
+      SrcBlock		      "brakegap actuator"
       SrcPort		      1
-      DstBlock		      "PID Controller"
-      DstPort		      3
+      DstBlock		      "Time Delay\ndue to stepper\ndriver lag"
+      DstPort		      1
     }
     Line {
-      ZOrder		      19
-      SrcBlock		      "D Lookup\nTable"
+      ZOrder		      580
+      SrcBlock		      "LowPass Filter\nTransfer Fcn2"
       SrcPort		      1
-      DstBlock		      "PID Controller"
-      DstPort		      4
+      Points		      [140, 0]
+      DstBlock		      "Hold b0"
+      DstPort		      enable
     }
     Line {
-      ZOrder		      20
-      SrcBlock		      "N Lookup\nTable"
+      ZOrder		      472
+      SrcBlock		      "Hold b0"
       SrcPort		      1
-      DstBlock		      "PID Controller"
-      DstPort		      5
+      Points		      [48, 0; 0, 130]
+      DstBlock		      "brakegap actuator"
+      DstPort		      1
     }
     Line {
-      ZOrder		      192
-      SrcBlock		      "Setpoint"
+      ZOrder		      596
+      SrcBlock		      "Resets b0, bset, & \ntime reference when\nt-ts > 0"
       SrcPort		      1
-      Points		      [30, 0]
+      Points		      [50, 0; 0, 155; -722, 0; 0, -110]
       Branch {
-	ZOrder			189
-	Points			[0, -67; 785, 0; 0, 197]
-	DstBlock		"Mux"
+	ZOrder			608
+	Points			[0, -195]
+	Branch {
+	  ZOrder		  614
+	  Points		  [0, -120]
+	  DstBlock		  "LowPass Filter\nTransfer Fcn2"
+	  DstPort		  1
+	}
+	Branch {
+	  ZOrder		  610
+	  DstBlock		  "LowPass Filter\nTransfer Fcn"
+	  DstPort		  1
+	}
+      }
+      Branch {
+	ZOrder			605
+	DstBlock		"LowPass Filter\nTransfer Fcn1"
+	DstPort			1
+      }
+    }
+    Line {
+      ZOrder		      528
+      SrcBlock		      "Hold time reference"
+      SrcPort		      1
+      Points		      [45, 0]
+      DstBlock		      "Sum"
+      DstPort		      2
+    }
+    Line {
+      ZOrder		      568
+      SrcBlock		      "tsim"
+      SrcPort		      1
+      Points		      [61, 0]
+      Branch {
+	ZOrder			600
+	DstBlock		"Hold time reference"
 	DstPort			1
       }
       Branch {
-	ZOrder			187
+	ZOrder			570
+	Points			[0, -105]
 	DstBlock		"Sum"
 	DstPort			1
       }
     }
     Line {
-      ZOrder		      24
-      SrcBlock		      "Mux"
+      ZOrder		      613
+      SrcBlock		      "Time Delay\ndue to stepper\ndriver lag"
       SrcPort		      1
-      DstBlock		      "Scope"
-      DstPort		      1
-    }
-    Line {
-      ZOrder		      128
-      SrcBlock		      "PID Controller"
-      SrcPort		      1
-      DstBlock		      "Plant Model"
-      DstPort		      1
-    }
-    Line {
-      ZOrder		      174
-      SrcBlock		      "Plant Model"
-      SrcPort		      1
-      Points		      [60, 0]
+      Points		      [56, 0]
       Branch {
-	ZOrder			201
-	DstBlock		"Mux"
+	ZOrder			615
+	DstBlock		"brake gap"
+	DstPort			1
+      }
+      Branch {
+	ZOrder			541
+	Points			[0, -87; -539, 0; 0, -48]
+	DstBlock		"Hold b0"
+	DstPort			1
+      }
+    }
+    Line {
+      ZOrder		      591
+      SrcBlock		      "brakegap actuator"
+      SrcPort		      2
+      Points		      [29, 0; 0, 50]
+      DstBlock		      "Resets b0, bset, & \ntime reference when\nt-ts > 0"
+      DstPort		      1
+    }
+    Line {
+      ZOrder		      598
+      SrcBlock		      "LowPass Filter\nTransfer Fcn1"
+      SrcPort		      1
+      Points		      [95, 0]
+      DstBlock		      "Hold time reference"
+      DstPort		      enable
+    }
+    Line {
+      ZOrder		      603
+      SrcBlock		      "Sum"
+      SrcPort		      1
+      Points		      [35, 0]
+      Branch {
+	ZOrder			617
+	DstBlock		"Resets b0, bset, & \ntime reference when\nt-ts > 0"
 	DstPort			2
       }
       Branch {
-	ZOrder			198
-	Points			[0, 228; -750, 0]
-	Branch {
-	  ZOrder		  200
-	  Points		  [-201, 0; 0, -378]
-	  DstBlock		  "Setpoint"
-	  DstPort		  1
-	}
-	Branch {
-	  ZOrder		  199
-	  Points		  [0, -78]
-	  Branch {
-	    ZOrder		    172
-	    Points		    [0, -75]
-	    Branch {
-	      ZOrder		      171
-	      Points		      [0, -75]
-	      Branch {
-		ZOrder			170
-		Points			[0, -75]
-		Branch {
-		  ZOrder		  169
-		  DstBlock		  "Sum"
-		  DstPort		  2
-		}
-		Branch {
-		  ZOrder		  7
-		  DstBlock		  "P Lookup\nTable"
-		  DstPort		  1
-		}
-	      }
-	      Branch {
-		ZOrder			6
-		DstBlock		"I Lookup\nTable"
-		DstPort			1
-	      }
-	    }
-	    Branch {
-	      ZOrder		      5
-	      DstBlock		      "D Lookup\nTable"
-	      DstPort		      1
-	    }
-	  }
-	  Branch {
-	    ZOrder		    4
-	    DstBlock		    "N Lookup\nTable"
-	    DstPort		    1
-	  }
-	}
+	ZOrder			592
+	Points			[0, -65]
+	DstBlock		"brakegap actuator"
+	DstPort			3
       }
     }
-    Annotation {
-      SID		      "36"
-      Name		      "rPod Braking System\nwith Gain-Scheduled PID Control"
-      Position		      [549, 18, 779, 52]
-      InternalMargins	      [0, 0, 0, 0]
-      FixedHeight	      off
-      FixedWidth	      off
-      ZOrder		      -9
-      FontName		      "Arial"
-      FontSize		      14
-      FontWeight	      "bold"
+  }
+}
+#Finite State Machines
+#
+#   Stateflow 80000005
+#
+#
+Stateflow {
+  machine {
+    id			    1
+    name		    "BrakeActuatorSubplant"
+    created		    "07-Aug-2017 22:40:29"
+    isLibrary		    0
+    firstTarget		    12
+    sfVersion		    80000005
+  }
+  chart {
+    id			    2
+    name		    "brakegap actuator"
+    windowPosition	    [422 539.941 189 413]
+    viewLimits		    [0 156.75 0 153.75]
+    screen		    [1 1 3600 1200 1.180555555555556]
+    treeNode		    [0 3 0 0]
+    firstTransition	    10
+    firstJunction	    9
+    viewObj		    2
+    machine		    1
+    ssIdHighWaterMark	    8
+    decomposition	    CLUSTER_CHART
+    type		    EML_CHART
+    firstData		    4
+    chartFileNumber	    2
+    disableImplicitCasting  1
+    eml {
+      name		      "fcn"
     }
+  }
+  state {
+    id			    3
+    labelString		    "eML_blk_kernel()"
+    position		    [18 64.5 118 66]
+    fontSize		    12
+    chart		    2
+    treeNode		    [2 0 0 0]
+    superState		    SUBCHART
+    subviewer		    2
+    ssIdNumber		    1
+    type		    FUNC_STATE
+    decomposition	    CLUSTER_STATE
+    eml {
+      isEML		      1
+      script		      "function [b,ts] = fcn(b0,bset,t)\n%#codegen\n\n% Calculate settling time and read brakegap at tim"
+      "e t\n[b,ts] = brakeactuator(b0,bset,t);\n"
+      editorLayout	      "100 M4x1[10 5 700 500]"
+    }
+  }
+  data {
+    id			    4
+    ssIdNumber		    4
+    name		    "b0"
+    linkNode		    [2 0 5]
+    scope		    INPUT_DATA
+    machine		    1
+    props {
+      array {
+	size			"-1"
+      }
+      type {
+	method			SF_INHERITED_TYPE
+	primitive		SF_DOUBLE_TYPE
+      }
+      complexity	      SF_COMPLEX_INHERITED
+    }
+    dataType		    "Inherit: Same as Simulink"
+  }
+  data {
+    id			    5
+    ssIdNumber		    5
+    name		    "b"
+    linkNode		    [2 4 6]
+    scope		    OUTPUT_DATA
+    machine		    1
+    props {
+      array {
+	size			"-1"
+      }
+      type {
+	method			SF_INHERITED_TYPE
+	primitive		SF_DOUBLE_TYPE
+      }
+      complexity	      SF_COMPLEX_INHERITED
+      frame		      SF_FRAME_NO
+    }
+    dataType		    "Inherit: Same as Simulink"
+  }
+  data {
+    id			    6
+    ssIdNumber		    6
+    name		    "bset"
+    linkNode		    [2 5 7]
+    scope		    INPUT_DATA
+    machine		    1
+    props {
+      array {
+	size			"-1"
+      }
+      type {
+	method			SF_INHERITED_TYPE
+	primitive		SF_DOUBLE_TYPE
+	isSigned		1
+	wordLength		"16"
+      }
+      complexity	      SF_COMPLEX_INHERITED
+      frame		      SF_FRAME_INHERITED
+    }
+    dataType		    "Inherit: Same as Simulink"
+  }
+  data {
+    id			    7
+    ssIdNumber		    7
+    name		    "t"
+    linkNode		    [2 6 8]
+    scope		    INPUT_DATA
+    machine		    1
+    props {
+      array {
+	size			"-1"
+      }
+      type {
+	method			SF_INHERITED_TYPE
+	primitive		SF_DOUBLE_TYPE
+	isSigned		1
+	wordLength		"16"
+      }
+      complexity	      SF_COMPLEX_INHERITED
+      frame		      SF_FRAME_INHERITED
+    }
+    dataType		    "Inherit: Same as Simulink"
+  }
+  data {
+    id			    8
+    ssIdNumber		    8
+    name		    "ts"
+    linkNode		    [2 7 0]
+    scope		    OUTPUT_DATA
+    machine		    1
+    props {
+      array {
+	size			"-1"
+      }
+      type {
+	method			SF_INHERITED_TYPE
+	primitive		SF_DOUBLE_TYPE
+	isSigned		1
+	wordLength		"16"
+      }
+      complexity	      SF_COMPLEX_INHERITED
+      frame		      SF_FRAME_NO
+    }
+    dataType		    "Inherit: Same as Simulink"
+  }
+  junction {
+    id			    9
+    position		    [23.5747 49.5747 7]
+    chart		    2
+    linkNode		    [2 0 0]
+    subviewer		    2
+    ssIdNumber		    3
+    type		    CONNECTIVE_JUNCTION
+  }
+  transition {
+    id			    10
+    labelString		    "{eML_blk_kernel();}"
+    labelPosition	    [28.125 13.875 102.544 14.964]
+    fontSize		    12
+    src {
+      intersection	      [0 0 1 0 23.5747 14.625 0 0]
+    }
+    dst {
+      id		      9
+      intersection	      [1 0 -1 0 23.5747 42.5747 0 0]
+    }
+    midPoint		    [23.5747 24.9468]
+    chart		    2
+    linkNode		    [2 0 0]
+    dataLimits		    [21.175 25.975 14.625 42.575]
+    subviewer		    2
+    drawStyle		    SMART
+    slide {
+      sticky		      BOTH_STICK
+    }
+    executionOrder	    1
+    ssIdNumber		    2
+  }
+  instance {
+    id			    11
+    name		    "brakegap actuator"
+    machine		    1
+    chart		    2
+  }
+  target {
+    id			    12
+    name		    "sfun"
+    description		    "Default Simulink S-Function Target."
+    machine		    1
+    linkNode		    [1 0 0]
   }
 }

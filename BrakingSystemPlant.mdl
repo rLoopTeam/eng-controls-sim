@@ -16,13 +16,10 @@ Model {
       BusOutputAsStruct	      "off"
     }
     ParameterArgumentNames  ""
-    ComputedModelVersion    "1.147"
-    NumModelReferences	    2
+    ComputedModelVersion    "1.224"
+    NumModelReferences	    1
     ModelReference {
-      ModelRefBlockPath	      "BrakingSystemPlant/Eddy Brake Subplant|EddyBrakeDynamicsA34"
-    }
-    ModelReference {
-      ModelRefBlockPath	      "BrakingSystemPlant/Stepper Motor Subplant|StepperMotorController"
+      ModelRefBlockPath	      "BrakingSystemPlant/Brake Actuator Subplant|BrakeActuatorSubplant"
     }
     NumTestPointedSignals   0
   }
@@ -44,7 +41,7 @@ Model {
       $ObjectID		      2
       $ClassName	      "Simulink.WindowInfo"
       IsActive		      [1]
-      Location		      [162.0, 0.0, 1362.0, 724.0]
+      Location		      [0.0, 0.0, 1077.0, 630.0]
       Object {
 	$PropName		"ModelBrowserInfo"
 	$ObjectID		3
@@ -68,9 +65,9 @@ Model {
 	IsActive		[1]
 	ViewObjType		"SimulinkTopLevel"
 	LoadSaveID		"0"
-	Extents			[1312.0, 550.0]
-	ZoomFactor		[1.0]
-	Offset			[-2.4059153502885238, 131.6359955580283]
+	Extents			[1027.0, 456.0]
+	ZoomFactor		[0.8]
+	Offset			[220.49351826065265, 161.36785104265221]
       }
     }
   }
@@ -80,9 +77,9 @@ Model {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "MrPiccolo"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Sat Dec 31 16:37:38 2016"
-  RTWModifiedTimeStamp	  405103054
-  ModelVersionFormat	  "1.%<AutoIncrement:147>"
+  LastModifiedDate	  "Fri Aug 11 22:18:43 2017"
+  RTWModifiedTimeStamp	  424390715
+  ModelVersionFormat	  "1.%<AutoIncrement:224>"
   ConfigurationManager	  "none"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -125,12 +122,12 @@ Model {
     $PropName		    "DataLoggingOverride"
     $ObjectID		    6
     $ClassName		    "Simulink.SimulationData.ModelLoggingInfo"
-    model_		    "braking_systems_plant"
+    model_		    "BrakingSystemPlant"
     overrideMode_	    [0.0]
     Array {
       Type		      "Cell"
       Dimension		      1
-      Cell		      "braking_systems_plant"
+      Cell		      "BrakingSystemPlant"
       PropName		      "logAsSpecifiedByModels_"
     }
     Array {
@@ -197,7 +194,7 @@ Model {
 	  $ObjectID		  8
 	  Version		  "1.15.0"
 	  StartTime		  "0.0"
-	  StopTime		  "20"
+	  StopTime		  "25"
 	  AbsTol		  "auto"
 	  FixedStep		  "auto"
 	  InitialStep		  "auto"
@@ -787,6 +784,25 @@ Model {
   }
   BlockParameterDefaults {
     Block {
+      BlockType		      Constant
+      Value		      "1"
+      VectorParams1D	      on
+      SamplingMode	      "Sample based"
+      OutMin		      "[]"
+      OutMax		      "[]"
+      OutDataTypeStr	      "Inherit: Inherit from 'Constant value'"
+      LockScale		      off
+      SampleTime	      "inf"
+      FramePeriod	      "inf"
+      PreserveConstantTs      off
+    }
+    Block {
+      BlockType		      Demux
+      Outputs		      "4"
+      DisplayOption	      "none"
+      BusSelectionMode	      off
+    }
+    Block {
       BlockType		      Gain
       Gain		      "1"
       Multiplication	      "Element-wise(K.*u)"
@@ -866,6 +882,14 @@ Model {
       InitialOutput	      "[]"
     }
     Block {
+      BlockType		      S-Function
+      FunctionName	      "system"
+      SFunctionModules	      "''"
+      PortCounts	      "[]"
+      SFunctionDeploymentMode off
+      EnableBusSupport	      off
+    }
+    Block {
       BlockType		      Saturate
       UpperLimitSource	      "Dialog"
       UpperLimit	      "0.5"
@@ -901,13 +925,36 @@ Model {
       ScrollMode	      off
     }
     Block {
-      BlockType		      Step
-      Time		      "1"
-      Before		      "0"
-      After		      "1"
-      SampleTime	      "-1"
-      VectorParams1D	      on
-      ZeroCross		      on
+      BlockType		      SubSystem
+      ShowPortLabels	      "FromPortIcon"
+      Permissions	      "ReadWrite"
+      PermitHierarchicalResolution "All"
+      TreatAsAtomicUnit	      off
+      MinAlgLoopOccurrences   off
+      PropExecContextOutsideSubsystem off
+      CheckFcnCallInpInsideContextMsg off
+      SystemSampleTime	      "-1"
+      RTWSystemCode	      "Auto"
+      RTWFcnNameOpts	      "Auto"
+      RTWFileNameOpts	      "Auto"
+      FunctionInterfaceSpec   "void_void"
+      FunctionWithSeparateData off
+      RTWMemSecFuncInitTerm   "Inherit from model"
+      RTWMemSecFuncExecute    "Inherit from model"
+      RTWMemSecDataConstants  "Inherit from model"
+      RTWMemSecDataInternal   "Inherit from model"
+      RTWMemSecDataParameters "Inherit from model"
+      SimViewingDevice	      off
+      DataTypeOverride	      "UseLocalSettings"
+      DataTypeOverrideAppliesTo	"AllNumericTypes"
+      MinMaxOverflowLogging   "UseLocalSettings"
+      Opaque		      off
+      MaskHideContents	      off
+      SFBlockType	      "NONE"
+      Variant		      off
+      GeneratePreprocessorConditionals off
+      ContentPreviewEnabled   off
+      IsWebBlock	      off
     }
     Block {
       BlockType		      Sum
@@ -924,6 +971,9 @@ Model {
       RndMeth		      "Floor"
       SaturateOnIntegerOverflow	on
       SampleTime	      "-1"
+    }
+    Block {
+      BlockType		      Terminator
     }
     Block {
       BlockType		      TransferFcn
@@ -945,7 +995,7 @@ Model {
   }
   System {
     Name		    "BrakingSystemPlant"
-    Location		    [162, 0, 1524, 724]
+    Location		    [0, 0, 1077, 630]
     Open		    on
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
@@ -957,14 +1007,14 @@ Model {
     TiledPaperMargins	    [0.500000, 0.500000, 0.500000, 0.500000]
     TiledPageScale	    1
     ShowPageBoundaries	    off
-    ZoomFactor		    "100"
+    ZoomFactor		    "80"
     ReportName		    "simulink-default.rpt"
-    SIDHighWatermark	    "260"
+    SIDHighWatermark	    "334"
     Block {
       BlockType		      Inport
       Name		      "u"
       SID		      "215"
-      Position		      [20, 383, 50, 397]
+      Position		      [60, 383, 90, 397]
       ZOrder		      77
       IconDisplay	      "Port number"
     }
@@ -972,7 +1022,7 @@ Model {
       BlockType		      Gain
       Name		      " "
       SID		      "61"
-      Position		      [905, 346, 965, 394]
+      Position		      [1135, 346, 1195, 394]
       ZOrder		      27
       Gain		      "-1/mpod"
       ParamDataTypeStr	      "Inherit: Inherit via internal rule"
@@ -984,25 +1034,178 @@ Model {
       Name		      "Acceleration\nIntegrator"
       SID		      "51"
       Ports		      [1, 1]
-      Position		      [1055, 355, 1085, 385]
+      Position		      [1285, 355, 1315, 385]
       ZOrder		      20
-      InitialCondition	      "xdot0"
+      InitialCondition	      "xdot3"
+      LimitOutput	      on
+      LowerSaturationLimit    "0"
     }
     Block {
-      BlockType		      Step
-      Name		      "Aerodrag/\nhover-engine-drag/\nDisturbances (N)"
-      SID		      "59"
-      Position		      [645, 230, 675, 260]
-      ZOrder		      26
-      After		      "0"
-      SampleTime	      "0"
+      BlockType		      SubSystem
+      Name		      "Aerodrag"
+      SID		      "305"
+      Ports		      [2, 1]
+      Position		      [625, 195, 765, 275]
+      ZOrder		      212
+      LibraryVersion	      "1.32"
+      ErrorFcn		      "Stateflow.Translate.translate"
+      PermitHierarchicalResolution "ExplicitOnly"
+      TreatAsAtomicUnit	      on
+      RequestExecContextInheritance off
+      SFBlockType	      "MATLAB Function"
+      System {
+	Name			"Aerodrag"
+	Location		[223, 338, 826, 833]
+	Open			off
+	ModelBrowserVisibility	off
+	ModelBrowserWidth	200
+	ScreenColor		"white"
+	PaperOrientation	"landscape"
+	PaperPositionMode	"auto"
+	PaperType		"usletter"
+	PaperUnits		"inches"
+	TiledPaperMargins	[0.500000, 0.500000, 0.500000, 0.500000]
+	TiledPageScale		1
+	ShowPageBoundaries	off
+	ZoomFactor		"100"
+	SIDHighWatermark	"19"
+	Block {
+	  BlockType		  Inport
+	  Name			  "rho"
+	  SID			  "305::1"
+	  Position		  [20, 101, 40, 119]
+	  ZOrder		  -1
+	  IconDisplay		  "Port number"
+	}
+	Block {
+	  BlockType		  Inport
+	  Name			  "vpod"
+	  SID			  "305::19"
+	  Position		  [20, 136, 40, 154]
+	  ZOrder		  10
+	  Port			  "2"
+	  IconDisplay		  "Port number"
+	}
+	Block {
+	  BlockType		  Demux
+	  Name			  " Demux "
+	  SID			  "305::17"
+	  Ports			  [1, 1]
+	  Position		  [270, 230, 320, 270]
+	  ZOrder		  8
+	  Outputs		  "1"
+	}
+	Block {
+	  BlockType		  S-Function
+	  Name			  " SFunction "
+	  SID			  "305::16"
+	  Tag			  "Stateflow S-Function BrakingSystemPlant 1"
+	  Ports			  [2, 2]
+	  Position		  [180, 100, 230, 160]
+	  ZOrder		  7
+	  FunctionName		  "sf_sfun"
+	  PortCounts		  "[2 2]"
+	  EnableBusSupport	  on
+	  Port {
+	    PortNumber		    2
+	    Name		    "Fdrag_aero"
+	    RTWStorageClass	    "Auto"
+	    DataLoggingNameMode	    "SignalName"
+	  }
+	}
+	Block {
+	  BlockType		  Terminator
+	  Name			  " Terminator "
+	  SID			  "305::18"
+	  Position		  [460, 241, 480, 259]
+	  ZOrder		  9
+	}
+	Block {
+	  BlockType		  Outport
+	  Name			  "Fdrag_aero"
+	  SID			  "305::5"
+	  Position		  [460, 101, 480, 119]
+	  ZOrder		  -5
+	  IconDisplay		  "Port number"
+	}
+	Line {
+	  ZOrder		  6
+	  SrcBlock		  "rho"
+	  SrcPort		  1
+	  DstBlock		  " SFunction "
+	  DstPort		  1
+	}
+	Line {
+	  ZOrder		  7
+	  SrcBlock		  "vpod"
+	  SrcPort		  1
+	  DstBlock		  " SFunction "
+	  DstPort		  2
+	}
+	Line {
+	  Name			  "Fdrag_aero"
+	  ZOrder		  8
+	  Labels		  [0, 0]
+	  SrcBlock		  " SFunction "
+	  SrcPort		  2
+	  DstBlock		  "Fdrag_aero"
+	  DstPort		  1
+	}
+	Line {
+	  ZOrder		  9
+	  SrcBlock		  " Demux "
+	  SrcPort		  1
+	  DstBlock		  " Terminator "
+	  DstPort		  1
+	}
+	Line {
+	  ZOrder		  10
+	  SrcBlock		  " SFunction "
+	  SrcPort		  1
+	  DstBlock		  " Demux "
+	  DstPort		  1
+	}
+      }
+    }
+    Block {
+      BlockType		      ModelReference
+      Name		      "Brake Actuator Subplant"
+      SID		      "232"
+      Ports		      [1, 1]
+      Position		      [290, 356, 470, 424]
+      ZOrder		      71
+      ModelNameDialog	      "BrakeActuatorSubplant.mdl"
+      SimulationMode	      "Normal"
+      ModelReferenceVersion   "1.130"
+      List {
+	ListType		InputPortNames
+	port0			"brake gap setpoint"
+      }
+      List {
+	ListType		OutputPortNames
+	port0			"brake gap"
+      }
+      List {
+	ListType		OutputPortOutputBusAsStructs
+	port0			"off"
+      }
+      List {
+	ListType		InputPortLatchByCopyingInsideSignal
+	port0			"off"
+      }
+      CopyOfModelName	      "BrakeActuatorSubplant.mdl"
+      DefaultDataLogging      on
+      List {
+	ListType		InputPortLatchByDelayingOutsideSignal
+	port0			"off"
+      }
     }
     Block {
       BlockType		      Scope
       Name		      "Brake gap scope"
       SID		      "237"
       Ports		      [1]
-      Position		      [550, 464, 580, 496]
+      Position		      [605, 754, 635, 786]
       ZOrder		      76
       Floating		      off
       Location		      [142, 178, 1185, 538]
@@ -1028,39 +1231,130 @@ Model {
       SaveName		      "ScopeData6"
     }
     Block {
-      BlockType		      ModelReference
-      Name		      "Eddy Brake Subplant"
-      SID		      "243"
+      BlockType		      SubSystem
+      Name		      "Brakedrag"
+      SID		      "299"
       Ports		      [2, 1]
-      Position		      [550, 323, 705, 412]
-      ZOrder		      173
-      ModelNameDialog	      "EddyBrakeDynamicsA34.mdl"
-      SimulationMode	      "Normal"
-      ModelReferenceVersion   "1.5"
-      List {
-	ListType		InputPortNames
-	port0			"Pod velocity"
-	port1			"Brake gap"
-      }
-      List {
-	ListType		OutputPortNames
-	port0			"Drag Force"
-      }
-      List {
-	ListType		OutputPortOutputBusAsStructs
-	port0			"off"
-      }
-      List {
-	ListType		InputPortLatchByCopyingInsideSignal
-	port0			"off"
-	port1			"off"
-      }
-      CopyOfModelName	      "EddyBrakeDynamicsA34.mdl"
-      DefaultDataLogging      on
-      List {
-	ListType		InputPortLatchByDelayingOutsideSignal
-	port0			"off"
-	port1			"off"
+      Position		      [625, 330, 765, 410]
+      ZOrder		      210
+      LibraryVersion	      "1.32"
+      ErrorFcn		      "Stateflow.Translate.translate"
+      PermitHierarchicalResolution "ExplicitOnly"
+      TreatAsAtomicUnit	      on
+      RequestExecContextInheritance off
+      SFBlockType	      "MATLAB Function"
+      System {
+	Name			"Brakedrag"
+	Location		[223, 338, 826, 833]
+	Open			off
+	ModelBrowserVisibility	off
+	ModelBrowserWidth	200
+	ScreenColor		"white"
+	PaperOrientation	"landscape"
+	PaperPositionMode	"auto"
+	PaperType		"usletter"
+	PaperUnits		"inches"
+	TiledPaperMargins	[0.500000, 0.500000, 0.500000, 0.500000]
+	TiledPageScale		1
+	ShowPageBoundaries	off
+	ZoomFactor		"100"
+	SIDHighWatermark	"19"
+	Block {
+	  BlockType		  Inport
+	  Name			  "vpod"
+	  SID			  "299::19"
+	  Position		  [20, 101, 40, 119]
+	  ZOrder		  10
+	  IconDisplay		  "Port number"
+	}
+	Block {
+	  BlockType		  Inport
+	  Name			  "brakegap"
+	  SID			  "299::1"
+	  Position		  [20, 136, 40, 154]
+	  ZOrder		  -1
+	  Port			  "2"
+	  IconDisplay		  "Port number"
+	}
+	Block {
+	  BlockType		  Demux
+	  Name			  " Demux "
+	  SID			  "299::17"
+	  Ports			  [1, 1]
+	  Position		  [270, 230, 320, 270]
+	  ZOrder		  8
+	  Outputs		  "1"
+	}
+	Block {
+	  BlockType		  S-Function
+	  Name			  " SFunction "
+	  SID			  "299::16"
+	  Tag			  "Stateflow S-Function BrakingSystemPlant 2"
+	  Ports			  [2, 2]
+	  Position		  [180, 100, 230, 160]
+	  ZOrder		  7
+	  FunctionName		  "sf_sfun"
+	  PortCounts		  "[2 2]"
+	  EnableBusSupport	  on
+	  Port {
+	    PortNumber		    2
+	    Name		    "Fdrag_brake"
+	    RTWStorageClass	    "Auto"
+	    DataLoggingNameMode	    "SignalName"
+	  }
+	}
+	Block {
+	  BlockType		  Terminator
+	  Name			  " Terminator "
+	  SID			  "299::18"
+	  Position		  [460, 241, 480, 259]
+	  ZOrder		  9
+	}
+	Block {
+	  BlockType		  Outport
+	  Name			  "Fdrag_brake"
+	  SID			  "299::5"
+	  Position		  [460, 101, 480, 119]
+	  ZOrder		  -5
+	  IconDisplay		  "Port number"
+	}
+	Line {
+	  ZOrder		  1
+	  SrcBlock		  "vpod"
+	  SrcPort		  1
+	  DstBlock		  " SFunction "
+	  DstPort		  1
+	}
+	Line {
+	  ZOrder		  2
+	  SrcBlock		  "brakegap"
+	  SrcPort		  1
+	  DstBlock		  " SFunction "
+	  DstPort		  2
+	}
+	Line {
+	  Name			  "Fdrag_brake"
+	  ZOrder		  3
+	  Labels		  [0, 0]
+	  SrcBlock		  " SFunction "
+	  SrcPort		  2
+	  DstBlock		  "Fdrag_brake"
+	  DstPort		  1
+	}
+	Line {
+	  ZOrder		  4
+	  SrcBlock		  " Demux "
+	  SrcPort		  1
+	  DstBlock		  " Terminator "
+	  DstPort		  1
+	}
+	Line {
+	  ZOrder		  5
+	  SrcBlock		  " SFunction "
+	  SrcPort		  1
+	  DstBlock		  " Demux "
+	  DstPort		  1
+	}
       }
     }
     Block {
@@ -1068,10 +1362,10 @@ Model {
       Name		      "F scope"
       SID		      "135"
       Ports		      [1]
-      Position		      [890, 459, 920, 491]
+      Position		      [1040, 474, 1070, 506]
       ZOrder		      47
       Floating		      off
-      Location		      [188, 365, 963, 805]
+      Location		      [52, 112, 827, 717]
       Open		      off
       NumInputPorts	      "1"
       List {
@@ -1092,13 +1386,13 @@ Model {
     }
     Block {
       BlockType		      Scope
-      Name		      "Fdrag scope"
-      SID		      "242"
+      Name		      "F scope1"
+      SID		      "322"
       Ports		      [1]
-      Position		      [800, 459, 830, 491]
-      ZOrder		      82
+      Position		      [1015, 619, 1045, 651]
+      ZOrder		      227
       Floating		      off
-      Location		      [234, 339, 703, 697]
+      Location		      [47, 112, 827, 717]
       Open		      off
       NumInputPorts	      "1"
       List {
@@ -1117,59 +1411,280 @@ Model {
       }
     }
     Block {
+      BlockType		      SubSystem
+      Name		      "Hoverdrag"
+      SID		      "306"
+      Ports		      [2, 1]
+      Position		      [625, 485, 765, 565]
+      ZOrder		      213
+      LibraryVersion	      "1.32"
+      ErrorFcn		      "Stateflow.Translate.translate"
+      PermitHierarchicalResolution "ExplicitOnly"
+      TreatAsAtomicUnit	      on
+      RequestExecContextInheritance off
+      SFBlockType	      "MATLAB Function"
+      System {
+	Name			"Hoverdrag"
+	Location		[223, 338, 826, 833]
+	Open			off
+	ModelBrowserVisibility	off
+	ModelBrowserWidth	200
+	ScreenColor		"white"
+	PaperOrientation	"landscape"
+	PaperPositionMode	"auto"
+	PaperType		"usletter"
+	PaperUnits		"inches"
+	TiledPaperMargins	[0.500000, 0.500000, 0.500000, 0.500000]
+	TiledPageScale		1
+	ShowPageBoundaries	off
+	ZoomFactor		"100"
+	SIDHighWatermark	"19"
+	Block {
+	  BlockType		  Inport
+	  Name			  "vpod"
+	  SID			  "306::19"
+	  Position		  [20, 101, 40, 119]
+	  ZOrder		  10
+	  IconDisplay		  "Port number"
+	}
+	Block {
+	  BlockType		  Inport
+	  Name			  "brakegap"
+	  SID			  "306::1"
+	  Position		  [20, 136, 40, 154]
+	  ZOrder		  -1
+	  Port			  "2"
+	  IconDisplay		  "Port number"
+	}
+	Block {
+	  BlockType		  Demux
+	  Name			  " Demux "
+	  SID			  "306::17"
+	  Ports			  [1, 1]
+	  Position		  [270, 230, 320, 270]
+	  ZOrder		  8
+	  Outputs		  "1"
+	}
+	Block {
+	  BlockType		  S-Function
+	  Name			  " SFunction "
+	  SID			  "306::16"
+	  Tag			  "Stateflow S-Function BrakingSystemPlant 3"
+	  Ports			  [2, 2]
+	  Position		  [180, 100, 230, 160]
+	  ZOrder		  7
+	  FunctionName		  "sf_sfun"
+	  PortCounts		  "[2 2]"
+	  EnableBusSupport	  on
+	  Port {
+	    PortNumber		    2
+	    Name		    "Fdrag_hover"
+	    RTWStorageClass	    "Auto"
+	    DataLoggingNameMode	    "SignalName"
+	  }
+	}
+	Block {
+	  BlockType		  Terminator
+	  Name			  " Terminator "
+	  SID			  "306::18"
+	  Position		  [460, 241, 480, 259]
+	  ZOrder		  9
+	}
+	Block {
+	  BlockType		  Outport
+	  Name			  "Fdrag_hover"
+	  SID			  "306::5"
+	  Position		  [460, 101, 480, 119]
+	  ZOrder		  -5
+	  IconDisplay		  "Port number"
+	}
+	Line {
+	  ZOrder		  11
+	  SrcBlock		  "vpod"
+	  SrcPort		  1
+	  DstBlock		  " SFunction "
+	  DstPort		  1
+	}
+	Line {
+	  ZOrder		  12
+	  SrcBlock		  "brakegap"
+	  SrcPort		  1
+	  DstBlock		  " SFunction "
+	  DstPort		  2
+	}
+	Line {
+	  Name			  "Fdrag_hover"
+	  ZOrder		  13
+	  Labels		  [0, 0]
+	  SrcBlock		  " SFunction "
+	  SrcPort		  2
+	  DstBlock		  "Fdrag_hover"
+	  DstPort		  1
+	}
+	Line {
+	  ZOrder		  14
+	  SrcBlock		  " Demux "
+	  SrcPort		  1
+	  DstBlock		  " Terminator "
+	  DstPort		  1
+	}
+	Line {
+	  ZOrder		  15
+	  SrcBlock		  " SFunction "
+	  SrcPort		  1
+	  DstBlock		  " Demux "
+	  DstPort		  1
+	}
+      }
+    }
+    Block {
       BlockType		      Saturate
       Name		      "Saturation"
       SID		      "247"
       Ports		      [1, 1]
-      Position		      [1240, 355, 1270, 385]
+      Position		      [1470, 355, 1500, 385]
       ZOrder		      88
       InputPortMap	      "u0"
       UpperLimit	      "300"
       LowerLimit	      "0"
     }
     Block {
-      BlockType		      ModelReference
-      Name		      "Stepper Motor Subplant"
-      SID		      "232"
-      Ports		      [1, 1]
-      Position		      [220, 357, 400, 423]
-      ZOrder		      71
-      ModelNameDialog	      "StepperMotorController.mdl"
-      SimulationMode	      "Normal"
-      ModelReferenceVersion   "1.72"
-      List {
-	ListType		InputPortNames
-	port0			"brake gap setpoint"
-      }
-      List {
-	ListType		OutputPortNames
-	port0			"brake gap"
-      }
-      List {
-	ListType		OutputPortOutputBusAsStructs
-	port0			"off"
-      }
-      List {
-	ListType		InputPortLatchByCopyingInsideSignal
-	port0			"off"
-      }
-      CopyOfModelName	      "StepperMotorController.mdl"
-      DefaultDataLogging      on
-      List {
-	ListType		InputPortLatchByDelayingOutsideSignal
-	port0			"off"
+      BlockType		      SubSystem
+      Name		      "Skidrag"
+      SID		      "331"
+      Ports		      [2, 1]
+      Position		      [625, 630, 765, 710]
+      ZOrder		      231
+      LibraryVersion	      "1.32"
+      ErrorFcn		      "Stateflow.Translate.translate"
+      PermitHierarchicalResolution "ExplicitOnly"
+      TreatAsAtomicUnit	      on
+      RequestExecContextInheritance off
+      SFBlockType	      "MATLAB Function"
+      System {
+	Name			"Skidrag"
+	Location		[223, 338, 826, 833]
+	Open			off
+	ModelBrowserVisibility	off
+	ModelBrowserWidth	200
+	ScreenColor		"white"
+	PaperOrientation	"landscape"
+	PaperPositionMode	"auto"
+	PaperType		"usletter"
+	PaperUnits		"inches"
+	TiledPaperMargins	[0.500000, 0.500000, 0.500000, 0.500000]
+	TiledPageScale		1
+	ShowPageBoundaries	off
+	ZoomFactor		"100"
+	SIDHighWatermark	"19"
+	Block {
+	  BlockType		  Inport
+	  Name			  "vpod"
+	  SID			  "331::19"
+	  Position		  [20, 101, 40, 119]
+	  ZOrder		  10
+	  IconDisplay		  "Port number"
+	}
+	Block {
+	  BlockType		  Inport
+	  Name			  "z"
+	  SID			  "331::1"
+	  Position		  [20, 136, 40, 154]
+	  ZOrder		  -1
+	  Port			  "2"
+	  IconDisplay		  "Port number"
+	}
+	Block {
+	  BlockType		  Demux
+	  Name			  " Demux "
+	  SID			  "331::17"
+	  Ports			  [1, 1]
+	  Position		  [270, 230, 320, 270]
+	  ZOrder		  8
+	  Outputs		  "1"
+	}
+	Block {
+	  BlockType		  S-Function
+	  Name			  " SFunction "
+	  SID			  "331::16"
+	  Tag			  "Stateflow S-Function BrakingSystemPlant 5"
+	  Ports			  [2, 2]
+	  Position		  [180, 100, 230, 160]
+	  ZOrder		  7
+	  FunctionName		  "sf_sfun"
+	  PortCounts		  "[2 2]"
+	  EnableBusSupport	  on
+	  Port {
+	    PortNumber		    2
+	    Name		    "Fdrag_ski"
+	    RTWStorageClass	    "Auto"
+	    DataLoggingNameMode	    "SignalName"
+	  }
+	}
+	Block {
+	  BlockType		  Terminator
+	  Name			  " Terminator "
+	  SID			  "331::18"
+	  Position		  [460, 241, 480, 259]
+	  ZOrder		  9
+	}
+	Block {
+	  BlockType		  Outport
+	  Name			  "Fdrag_ski"
+	  SID			  "331::5"
+	  Position		  [460, 101, 480, 119]
+	  ZOrder		  -5
+	  IconDisplay		  "Port number"
+	}
+	Line {
+	  ZOrder		  1
+	  SrcBlock		  " SFunction "
+	  SrcPort		  1
+	  DstBlock		  " Demux "
+	  DstPort		  1
+	}
+	Line {
+	  ZOrder		  2
+	  SrcBlock		  " Demux "
+	  SrcPort		  1
+	  DstBlock		  " Terminator "
+	  DstPort		  1
+	}
+	Line {
+	  Name			  "Fdrag_ski"
+	  ZOrder		  3
+	  Labels		  [0, 0]
+	  SrcBlock		  " SFunction "
+	  SrcPort		  2
+	  DstBlock		  "Fdrag_ski"
+	  DstPort		  1
+	}
+	Line {
+	  ZOrder		  4
+	  SrcBlock		  "z"
+	  SrcPort		  1
+	  DstBlock		  " SFunction "
+	  DstPort		  2
+	}
+	Line {
+	  ZOrder		  5
+	  SrcBlock		  "vpod"
+	  SrcPort		  1
+	  DstBlock		  " SFunction "
+	  DstPort		  1
+	}
       }
     }
     Block {
       BlockType		      Sum
       Name		      "Sum"
       SID		      "58"
-      Ports		      [2, 1]
-      Position		      [820, 360, 840, 380]
+      Ports		      [3, 1]
+      Position		      [890, 360, 910, 380]
       ZOrder		      25
       ShowName		      off
       IconShape		      "round"
-      Inputs		      "++|"
+      Inputs		      "+++"
       InputSameDT	      off
       OutDataTypeStr	      "Inherit: Inherit via internal rule"
       SaturateOnIntegerOverflow	off
@@ -1179,8 +1694,22 @@ Model {
       Name		      "Sum1"
       SID		      "249"
       Ports		      [2, 1]
-      Position		      [170, 380, 190, 400]
+      Position		      [225, 380, 245, 400]
       ZOrder		      172
+      ShowName		      off
+      IconShape		      "round"
+      Inputs		      "|++"
+      InputSameDT	      off
+      OutDataTypeStr	      "Inherit: Inherit via internal rule"
+      SaturateOnIntegerOverflow	off
+    }
+    Block {
+      BlockType		      Sum
+      Name		      "Sum2"
+      SID		      "334"
+      Ports		      [2, 1]
+      Position		      [830, 515, 850, 535]
+      ZOrder		      233
       ShowName		      off
       IconShape		      "round"
       Inputs		      "|++"
@@ -1193,16 +1722,33 @@ Model {
       Name		      "Time Delay"
       SID		      "260"
       Ports		      [1, 1]
-      Position		      [435, 375, 465, 405]
+      Position		      [505, 375, 535, 405]
       ZOrder		      174
-      DelayTime		      ".01"
+      DelayTime		      ".05"
+      InitialOutput	      "brakegapNom"
+    }
+    Block {
+      BlockType		      Constant
+      Name		      "air density"
+      SID		      "307"
+      Position		      [505, 200, 535, 230]
+      ZOrder		      214
+      Value		      "rho"
+    }
+    Block {
+      BlockType		      Constant
+      Name		      "hover height"
+      SID		      "332"
+      Position		      [490, 675, 535, 705]
+      ZOrder		      232
+      Value		      "z_nom"
     }
     Block {
       BlockType		      TransferFcn
       Name		      "transfer function\nfor lowpass filter"
       SID		      "248"
-      Position		      [735, 224, 785, 266]
-      ZOrder		      171
+      Position		      [1030, 349, 1080, 391]
+      ZOrder		      211
       Denominator	      "[.01 1]"
     }
     Block {
@@ -1210,10 +1756,10 @@ Model {
       Name		      "u scope"
       SID		      "236"
       Ports		      [1]
-      Position		      [90, 464, 120, 496]
+      Position		      [130, 464, 160, 496]
       ZOrder		      75
       Floating		      off
-      Location		      [285, 180, 771, 540]
+      Location		      [285, 180, 1105, 540]
       Open		      off
       NumInputPorts	      "1"
       List {
@@ -1239,7 +1785,7 @@ Model {
       Name		      "xddot scope"
       SID		      "127"
       Ports		      [1]
-      Position		      [1055, 459, 1085, 491]
+      Position		      [1285, 459, 1315, 491]
       ZOrder		      44
       Floating		      off
       Location		      [577, 207, 1083, 667]
@@ -1264,12 +1810,12 @@ Model {
     Block {
       BlockType		      Scope
       Name		      "xdot scope"
-      SID		      "241"
+      SID		      "283"
       Ports		      [1]
-      Position		      [1205, 459, 1235, 491]
-      ZOrder		      81
+      Position		      [1425, 464, 1455, 496]
+      ZOrder		      191
       Floating		      off
-      Location		      [285, 180, 771, 540]
+      Location		      [285, 83, 1207, 697]
       Open		      off
       NumInputPorts	      "1"
       List {
@@ -1287,15 +1833,15 @@ Model {
 	MarkerStyles		"none|none|none|none|none|none"
       }
       TimeRange		      "40"
-      YMin		      "2.0991"
-      YMax		      "25.3146"
+      YMin		      "12.1094"
+      YMax		      "20.7376"
       SaveName		      "ScopeData2"
     }
     Block {
       BlockType		      Outport
       Name		      "xdot"
       SID		      "214"
-      Position		      [1310, 363, 1340, 377]
+      Position		      [1540, 363, 1570, 377]
       ZOrder		      69
       IconDisplay	      "Port number"
     }
@@ -1318,43 +1864,63 @@ Model {
     }
     Line {
       ZOrder		      252
-      SrcBlock		      "Stepper Motor Subplant"
+      SrcBlock		      "Brake Actuator Subplant"
       SrcPort		      1
       DstBlock		      "Time Delay"
-      DstPort		      1
-    }
-    Line {
-      ZOrder		      323
-      SrcBlock		      "Aerodrag/\nhover-engine-drag/\nDisturbances (N)"
-      SrcPort		      1
-      DstBlock		      "transfer function\nfor lowpass filter"
       DstPort		      1
     }
     Line {
       ZOrder		      121
       SrcBlock		      "Acceleration\nIntegrator"
       SrcPort		      1
-      Points		      [89, 0]
+      Points		      [70, 0]
       Branch {
-	ZOrder			274
-	Points			[26, 0]
+	ZOrder			430
+	Points			[0, 110]
+	DstBlock		"xdot scope"
+	DstPort			1
+      }
+      Branch {
+	ZOrder			401
+	Points			[45, 0]
 	Branch {
-	  ZOrder		  373
-	  Points		  [0, -153; -679, 0; 0, 128]
-	  DstBlock		  "Eddy Brake Subplant"
-	  DstPort		  1
+	  ZOrder		  590
+	  Points		  [0, -233; -849, 0; 0, 118]
+	  Branch {
+	    ZOrder		    636
+	    Points		    [0, 95]
+	    Branch {
+	      ZOrder		      759
+	      Points		      [0, 155]
+	      Branch {
+		ZOrder			850
+		Points			[0, 145]
+		DstBlock		"Skidrag"
+		DstPort			1
+	      }
+	      Branch {
+		ZOrder			849
+		DstBlock		"Hoverdrag"
+		DstPort			1
+	      }
+	    }
+	    Branch {
+	      ZOrder		      629
+	      DstBlock		      "Brakedrag"
+	      DstPort		      1
+	    }
+	  }
+	  Branch {
+	    ZOrder		    637
+	    DstBlock		    "Aerodrag"
+	    DstPort		    2
+	  }
 	}
 	Branch {
 	  ZOrder		  339
 	  DstBlock		  "Saturation"
 	  DstPort		  1
 	}
-      }
-      Branch {
-	ZOrder			270
-	Points			[0, 105]
-	DstBlock		"xdot scope"
-	DstPort			1
       }
     }
     Line {
@@ -1363,7 +1929,7 @@ Model {
       SrcPort		      1
       Points		      [14, 0]
       Branch {
-	ZOrder			361
+	ZOrder			702
 	DstBlock		"Sum1"
 	DstPort			1
       }
@@ -1375,23 +1941,6 @@ Model {
       }
     }
     Line {
-      ZOrder		      372
-      SrcBlock		      "Eddy Brake Subplant"
-      SrcPort		      1
-      Points		      [66, 0]
-      Branch {
-	ZOrder			297
-	Points			[0, 105]
-	DstBlock		"Fdrag scope"
-	DstPort			1
-      }
-      Branch {
-	ZOrder			296
-	DstBlock		"Sum"
-	DstPort			2
-      }
-    }
-    Line {
       ZOrder		      340
       SrcBlock		      "Saturation"
       SrcPort		      1
@@ -1399,67 +1948,138 @@ Model {
       DstPort		      1
     }
     Line {
-      ZOrder		      352
-      SrcBlock		      "Sum"
-      SrcPort		      1
-      Points		      [23, 0]
-      Branch {
-	ZOrder			135
-	Points			[0, 105]
-	DstBlock		"F scope"
-	DstPort			1
-      }
-      Branch {
-	ZOrder			134
-	DstBlock		" "
-	DstPort			1
-      }
-    }
-    Line {
-      ZOrder		      355
-      SrcBlock		      "transfer function\nfor lowpass filter"
-      SrcPort		      1
-      Points		      [40, 0]
-      DstBlock		      "Sum"
-      DstPort		      1
-    }
-    Line {
-      ZOrder		      359
-      SrcBlock		      "Sum1"
-      SrcPort		      1
-      DstBlock		      "Stepper Motor Subplant"
-      DstPort		      1
-    }
-    Line {
-      ZOrder		      396
+      ZOrder		      516
       SrcBlock		      "Time Delay"
       SrcPort		      1
-      Points		      [44, 0]
+      Points		      [24, 0]
       Branch {
-	ZOrder			374
-	DstBlock		"Eddy Brake Subplant"
+	ZOrder			633
+	DstBlock		"Brakedrag"
 	DstPort			2
       }
       Branch {
-	ZOrder			365
+	ZOrder			525
 	Points			[0, 90]
 	Branch {
-	  ZOrder		  366
-	  DstBlock		  "Brake gap scope"
-	  DstPort		  1
+	  ZOrder		  632
+	  Points		  [0, 65]
+	  Branch {
+	    ZOrder		    634
+	    DstBlock		    "Hoverdrag"
+	    DstPort		    2
+	  }
+	  Branch {
+	    ZOrder		    366
+	    Points		    [0, 225]
+	    DstBlock		    "Brake gap scope"
+	    DstPort		    1
+	  }
 	}
 	Branch {
 	  ZOrder		  364
-	  Points		  [-334, 0]
+	  Points		  [-329, 0]
 	  DstBlock		  "Sum1"
 	  DstPort		  2
 	}
       }
     }
+    Line {
+      ZOrder		      623
+      SrcBlock		      "Brakedrag"
+      SrcPort		      1
+      Points		      [100, 0]
+      Branch {
+	ZOrder			830
+	Points			[0, 265]
+	DstBlock		"F scope1"
+	DstPort			1
+      }
+      Branch {
+	ZOrder			823
+	DstBlock		"Sum"
+	DstPort			2
+      }
+    }
+    Line {
+      ZOrder		      638
+      SrcBlock		      "air density"
+      SrcPort		      1
+      DstBlock		      "Aerodrag"
+      DstPort		      1
+    }
+    Line {
+      ZOrder		      826
+      SrcBlock		      "Aerodrag"
+      SrcPort		      1
+      Points		      [130, 0]
+      DstBlock		      "Sum"
+      DstPort		      1
+    }
+    Line {
+      ZOrder		      686
+      SrcBlock		      "transfer function\nfor lowpass filter"
+      SrcPort		      1
+      DstBlock		      " "
+      DstPort		      1
+    }
+    Line {
+      ZOrder		      841
+      SrcBlock		      "Sum1"
+      SrcPort		      1
+      DstBlock		      "Brake Actuator Subplant"
+      DstPort		      1
+    }
+    Line {
+      ZOrder		      879
+      SrcBlock		      "Sum"
+      SrcPort		      1
+      Points		      [81, 0]
+      Branch {
+	ZOrder			829
+	Points			[0, 120]
+	DstBlock		"F scope"
+	DstPort			1
+      }
+      Branch {
+	ZOrder			827
+	DstBlock		"transfer function\nfor lowpass filter"
+	DstPort			1
+      }
+    }
+    Line {
+      ZOrder		      852
+      SrcBlock		      "hover height"
+      SrcPort		      1
+      DstBlock		      "Skidrag"
+      DstPort		      2
+    }
+    Line {
+      ZOrder		      881
+      SrcBlock		      "Hoverdrag"
+      SrcPort		      1
+      DstBlock		      "Sum2"
+      DstPort		      1
+    }
+    Line {
+      ZOrder		      882
+      SrcBlock		      "Sum2"
+      SrcPort		      1
+      Points		      [45, 0]
+      DstBlock		      "Sum"
+      DstPort		      3
+    }
+    Line {
+      ZOrder		      883
+      SrcBlock		      "Skidrag"
+      SrcPort		      1
+      Points		      [70, 0]
+      DstBlock		      "Sum2"
+      DstPort		      2
+    }
     Annotation {
       SID		      "48"
       Name		      "Fdrag (N)"
-      Position		      [715, 375, 760, 390]
+      Position		      [915, 375, 960, 390]
       InternalMargins	      [0, 0, 0, 0]
       FixedHeight	      off
       FixedWidth	      off
@@ -1470,7 +2090,7 @@ Model {
     Annotation {
       SID		      "52"
       Name		      "xddot (m/s^2)"
-      Position		      [950, 375, 1014, 390]
+      Position		      [1180, 375, 1244, 390]
       InternalMargins	      [0, 0, 0, 0]
       FixedHeight	      off
       FixedWidth	      off
@@ -1481,7 +2101,7 @@ Model {
     Annotation {
       SID		      "54"
       Name		      "xdot (m/s)"
-      Position		      [1090, 375, 1137, 390]
+      Position		      [1320, 375, 1367, 390]
       InternalMargins	      [0, 0, 0, 0]
       FixedHeight	      off
       FixedWidth	      off
@@ -1492,7 +2112,7 @@ Model {
     Annotation {
       SID		      "244"
       Name		      "rPod Braking System\nPlant Model"
-      Position		      [829, 183, 976, 217]
+      Position		      [894, 103, 1041, 137]
       InternalMargins	      [0, 0, 0, 0]
       FixedHeight	      off
       FixedWidth	      off
@@ -1503,8 +2123,8 @@ Model {
     }
     Annotation {
       SID		      "250"
-      Name		      "step increment"
-      Position		      [80, 395, 151, 410]
+      Name		      "step increment in \nbrake gap setpoint"
+      Position		      [120, 395, 208, 423]
       InternalMargins	      [0, 0, 0, 0]
       FixedHeight	      off
       FixedWidth	      off
@@ -1512,5 +2132,583 @@ Model {
       VerticalAlignment	      "top"
       ZOrder		      -3
     }
+  }
+}
+#Finite State Machines
+#
+#   Stateflow 80000005
+#
+#
+Stateflow {
+  machine {
+    id			    1
+    name		    "BrakingSystemPlant"
+    created		    "11-Jan-2017 15:58:22"
+    isLibrary		    0
+    firstTarget		    34
+    sfVersion		    80000005
+  }
+  chart {
+    id			    2
+    name		    "Aerodrag"
+    windowPosition	    [422 539.941 189 413]
+    viewLimits		    [0 156.75 0 153.75]
+    screen		    [1 1 3600 1200 1.180555555555556]
+    treeNode		    [0 3 0 0]
+    firstTransition	    8
+    firstJunction	    7
+    viewObj		    2
+    machine		    1
+    ssIdHighWaterMark	    6
+    decomposition	    CLUSTER_CHART
+    type		    EML_CHART
+    firstData		    4
+    chartFileNumber	    1
+    disableImplicitCasting  1
+    eml {
+      name		      "fcn"
+    }
+  }
+  state {
+    id			    3
+    labelString		    "eML_blk_kernel()"
+    position		    [18 64.5 118 66]
+    fontSize		    12
+    chart		    2
+    treeNode		    [2 0 0 0]
+    superState		    SUBCHART
+    subviewer		    2
+    ssIdNumber		    1
+    type		    FUNC_STATE
+    decomposition	    CLUSTER_STATE
+    eml {
+      isEML		      1
+      script		      "function Fdrag_aero = fcn(rho, vpod)\n%#codegen\n\nFdrag_aero = Fdrag.aero(vpod,rho);"
+      editorLayout	      "100 M4x1[10 5 700 500]"
+    }
+  }
+  data {
+    id			    4
+    ssIdNumber		    4
+    name		    "rho"
+    linkNode		    [2 0 5]
+    scope		    INPUT_DATA
+    machine		    1
+    props {
+      array {
+	size			"-1"
+      }
+      type {
+	method			SF_INHERITED_TYPE
+	primitive		SF_DOUBLE_TYPE
+      }
+      complexity	      SF_COMPLEX_INHERITED
+    }
+    dataType		    "Inherit: Same as Simulink"
+  }
+  data {
+    id			    5
+    ssIdNumber		    6
+    name		    "vpod"
+    linkNode		    [2 4 6]
+    scope		    INPUT_DATA
+    machine		    1
+    props {
+      array {
+	size			"-1"
+      }
+      type {
+	method			SF_INHERITED_TYPE
+	primitive		SF_DOUBLE_TYPE
+	isSigned		1
+	wordLength		"16"
+      }
+      complexity	      SF_COMPLEX_INHERITED
+      frame		      SF_FRAME_INHERITED
+    }
+    dataType		    "Inherit: Same as Simulink"
+  }
+  data {
+    id			    6
+    ssIdNumber		    5
+    name		    "Fdrag_aero"
+    linkNode		    [2 5 0]
+    scope		    OUTPUT_DATA
+    machine		    1
+    props {
+      array {
+	size			"-1"
+      }
+      type {
+	method			SF_INHERITED_TYPE
+	primitive		SF_DOUBLE_TYPE
+      }
+      complexity	      SF_COMPLEX_INHERITED
+      frame		      SF_FRAME_NO
+    }
+    dataType		    "Inherit: Same as Simulink"
+  }
+  junction {
+    id			    7
+    position		    [23.5747 49.5747 7]
+    chart		    2
+    linkNode		    [2 0 0]
+    subviewer		    2
+    ssIdNumber		    3
+    type		    CONNECTIVE_JUNCTION
+  }
+  transition {
+    id			    8
+    labelString		    "{eML_blk_kernel();}"
+    labelPosition	    [28.125 13.875 102.544 14.964]
+    fontSize		    12
+    src {
+      intersection	      [0 0 1 0 23.5747 14.625 0 0]
+    }
+    dst {
+      id		      7
+      intersection	      [1 0 -1 0 23.5747 42.5747 0 0]
+    }
+    midPoint		    [23.5747 24.9468]
+    chart		    2
+    linkNode		    [2 0 0]
+    dataLimits		    [21.175 25.975 14.625 42.575]
+    subviewer		    2
+    drawStyle		    SMART
+    slide {
+      sticky		      BOTH_STICK
+    }
+    executionOrder	    1
+    ssIdNumber		    2
+  }
+  instance {
+    id			    9
+    name		    "Aerodrag"
+    machine		    1
+    chart		    2
+  }
+  chart {
+    id			    10
+    name		    "Brakedrag"
+    windowPosition	    [422 539.941 189 413]
+    viewLimits		    [0 156.75 0 153.75]
+    screen		    [1 1 3600 1200 1.180555555555556]
+    treeNode		    [0 11 0 0]
+    firstTransition	    16
+    firstJunction	    15
+    viewObj		    10
+    machine		    1
+    ssIdHighWaterMark	    6
+    decomposition	    CLUSTER_CHART
+    type		    EML_CHART
+    firstData		    12
+    chartFileNumber	    2
+    disableImplicitCasting  1
+    eml {
+      name		      "fcn"
+    }
+  }
+  state {
+    id			    11
+    labelString		    "eML_blk_kernel()"
+    position		    [18 64.5 118 66]
+    fontSize		    12
+    chart		    10
+    treeNode		    [10 0 0 0]
+    superState		    SUBCHART
+    subviewer		    10
+    ssIdNumber		    1
+    type		    FUNC_STATE
+    decomposition	    CLUSTER_STATE
+    eml {
+      isEML		      1
+      script		      "function Fdrag_brake = fcn(vpod, brakegap)\n%#codegen\n\nFdrag_brake = Fdrag.brake(vpod, brakegap);"
+      editorLayout	      "100 M4x1[10 5 700 500]"
+    }
+  }
+  data {
+    id			    12
+    ssIdNumber		    6
+    name		    "vpod"
+    linkNode		    [10 0 13]
+    scope		    INPUT_DATA
+    machine		    1
+    props {
+      array {
+	size			"-1"
+      }
+      type {
+	method			SF_INHERITED_TYPE
+	primitive		SF_DOUBLE_TYPE
+	isSigned		1
+	wordLength		"16"
+      }
+      complexity	      SF_COMPLEX_INHERITED
+      frame		      SF_FRAME_INHERITED
+    }
+    dataType		    "Inherit: Same as Simulink"
+  }
+  data {
+    id			    13
+    ssIdNumber		    4
+    name		    "brakegap"
+    linkNode		    [10 12 14]
+    scope		    INPUT_DATA
+    machine		    1
+    props {
+      array {
+	size			"-1"
+      }
+      type {
+	method			SF_INHERITED_TYPE
+	primitive		SF_DOUBLE_TYPE
+      }
+      complexity	      SF_COMPLEX_INHERITED
+    }
+    dataType		    "Inherit: Same as Simulink"
+  }
+  data {
+    id			    14
+    ssIdNumber		    5
+    name		    "Fdrag_brake"
+    linkNode		    [10 13 0]
+    scope		    OUTPUT_DATA
+    machine		    1
+    props {
+      array {
+	size			"-1"
+      }
+      type {
+	method			SF_INHERITED_TYPE
+	primitive		SF_DOUBLE_TYPE
+      }
+      complexity	      SF_COMPLEX_INHERITED
+      frame		      SF_FRAME_NO
+    }
+    dataType		    "Inherit: Same as Simulink"
+  }
+  junction {
+    id			    15
+    position		    [23.5747 49.5747 7]
+    chart		    10
+    linkNode		    [10 0 0]
+    subviewer		    10
+    ssIdNumber		    3
+    type		    CONNECTIVE_JUNCTION
+  }
+  transition {
+    id			    16
+    labelString		    "{eML_blk_kernel();}"
+    labelPosition	    [28.125 13.875 102.544 14.964]
+    fontSize		    12
+    src {
+      intersection	      [0 0 1 0 23.5747 14.625 0 0]
+    }
+    dst {
+      id		      15
+      intersection	      [1 0 -1 0 23.5747 42.5747 0 0]
+    }
+    midPoint		    [23.5747 24.9468]
+    chart		    10
+    linkNode		    [10 0 0]
+    dataLimits		    [21.175 25.975 14.625 42.575]
+    subviewer		    10
+    drawStyle		    SMART
+    slide {
+      sticky		      BOTH_STICK
+    }
+    executionOrder	    1
+    ssIdNumber		    2
+  }
+  instance {
+    id			    17
+    name		    "Brakedrag"
+    machine		    1
+    chart		    10
+  }
+  chart {
+    id			    18
+    name		    "Hoverdrag"
+    windowPosition	    [422 539.941 189 413]
+    viewLimits		    [0 156.75 0 153.75]
+    screen		    [1 1 3600 1200 1.180555555555556]
+    treeNode		    [0 19 0 0]
+    firstTransition	    24
+    firstJunction	    23
+    viewObj		    18
+    machine		    1
+    ssIdHighWaterMark	    6
+    decomposition	    CLUSTER_CHART
+    type		    EML_CHART
+    firstData		    20
+    chartFileNumber	    3
+    disableImplicitCasting  1
+    eml {
+      name		      "fcn"
+    }
+  }
+  state {
+    id			    19
+    labelString		    "eML_blk_kernel()"
+    position		    [18 64.5 118 66]
+    fontSize		    12
+    chart		    18
+    treeNode		    [18 0 0 0]
+    superState		    SUBCHART
+    subviewer		    18
+    ssIdNumber		    1
+    type		    FUNC_STATE
+    decomposition	    CLUSTER_STATE
+    eml {
+      isEML		      1
+      script		      "function Fdrag_hover = fcn(vpod, brakegap)\n%#codegen\n\nFdrag_hover = Fdrag.hover(vpod, brakegap);"
+      editorLayout	      "100 M4x1[10 5 700 500]"
+    }
+  }
+  data {
+    id			    20
+    ssIdNumber		    6
+    name		    "vpod"
+    linkNode		    [18 0 21]
+    scope		    INPUT_DATA
+    machine		    1
+    props {
+      array {
+	size			"-1"
+      }
+      type {
+	method			SF_INHERITED_TYPE
+	primitive		SF_DOUBLE_TYPE
+	isSigned		1
+	wordLength		"16"
+      }
+      complexity	      SF_COMPLEX_INHERITED
+      frame		      SF_FRAME_INHERITED
+    }
+    dataType		    "Inherit: Same as Simulink"
+  }
+  data {
+    id			    21
+    ssIdNumber		    4
+    name		    "brakegap"
+    linkNode		    [18 20 22]
+    scope		    INPUT_DATA
+    machine		    1
+    props {
+      array {
+	size			"-1"
+      }
+      type {
+	method			SF_INHERITED_TYPE
+	primitive		SF_DOUBLE_TYPE
+      }
+      complexity	      SF_COMPLEX_INHERITED
+    }
+    dataType		    "Inherit: Same as Simulink"
+  }
+  data {
+    id			    22
+    ssIdNumber		    5
+    name		    "Fdrag_hover"
+    linkNode		    [18 21 0]
+    scope		    OUTPUT_DATA
+    machine		    1
+    props {
+      array {
+	size			"-1"
+      }
+      type {
+	method			SF_INHERITED_TYPE
+	primitive		SF_DOUBLE_TYPE
+      }
+      complexity	      SF_COMPLEX_INHERITED
+      frame		      SF_FRAME_NO
+    }
+    dataType		    "Inherit: Same as Simulink"
+  }
+  junction {
+    id			    23
+    position		    [23.5747 49.5747 7]
+    chart		    18
+    linkNode		    [18 0 0]
+    subviewer		    18
+    ssIdNumber		    3
+    type		    CONNECTIVE_JUNCTION
+  }
+  transition {
+    id			    24
+    labelString		    "{eML_blk_kernel();}"
+    labelPosition	    [28.125 13.875 102.544 14.964]
+    fontSize		    12
+    src {
+      intersection	      [0 0 1 0 23.5747 14.625 0 0]
+    }
+    dst {
+      id		      23
+      intersection	      [1 0 -1 0 23.5747 42.5747 0 0]
+    }
+    midPoint		    [23.5747 24.9468]
+    chart		    18
+    linkNode		    [18 0 0]
+    dataLimits		    [21.175 25.975 14.625 42.575]
+    subviewer		    18
+    drawStyle		    SMART
+    slide {
+      sticky		      BOTH_STICK
+    }
+    executionOrder	    1
+    ssIdNumber		    2
+  }
+  instance {
+    id			    25
+    name		    "Hoverdrag"
+    machine		    1
+    chart		    18
+  }
+  chart {
+    id			    26
+    name		    "Skidrag"
+    windowPosition	    [422 539.941 189 413]
+    viewLimits		    [0 156.75 0 153.75]
+    screen		    [1 1 3600 1200 1.180555555555556]
+    treeNode		    [0 27 0 0]
+    firstTransition	    32
+    firstJunction	    31
+    viewObj		    26
+    machine		    1
+    ssIdHighWaterMark	    6
+    decomposition	    CLUSTER_CHART
+    type		    EML_CHART
+    firstData		    28
+    chartFileNumber	    5
+    disableImplicitCasting  1
+    eml {
+      name		      "fcn"
+    }
+  }
+  state {
+    id			    27
+    labelString		    "eML_blk_kernel()"
+    position		    [18 64.5 118 66]
+    fontSize		    12
+    chart		    26
+    treeNode		    [26 0 0 0]
+    superState		    SUBCHART
+    subviewer		    26
+    ssIdNumber		    1
+    type		    FUNC_STATE
+    decomposition	    CLUSTER_STATE
+    eml {
+      isEML		      1
+      script		      "function Fdrag_ski = fcn(vpod,z)\n%#codegen\n\nFdrag_ski = Fdrag.ski(vpod,z);"
+      editorLayout	      "100 M4x1[10 5 700 500]"
+    }
+  }
+  data {
+    id			    28
+    ssIdNumber		    6
+    name		    "vpod"
+    linkNode		    [26 0 29]
+    scope		    INPUT_DATA
+    machine		    1
+    props {
+      array {
+	size			"-1"
+      }
+      type {
+	method			SF_INHERITED_TYPE
+	primitive		SF_DOUBLE_TYPE
+	isSigned		1
+	wordLength		"16"
+      }
+      complexity	      SF_COMPLEX_INHERITED
+      frame		      SF_FRAME_INHERITED
+    }
+    dataType		    "Inherit: Same as Simulink"
+  }
+  data {
+    id			    29
+    ssIdNumber		    4
+    name		    "z"
+    linkNode		    [26 28 30]
+    scope		    INPUT_DATA
+    machine		    1
+    props {
+      array {
+	size			"-1"
+      }
+      type {
+	method			SF_INHERITED_TYPE
+	primitive		SF_DOUBLE_TYPE
+      }
+      complexity	      SF_COMPLEX_INHERITED
+    }
+    dataType		    "Inherit: Same as Simulink"
+  }
+  data {
+    id			    30
+    ssIdNumber		    5
+    name		    "Fdrag_ski"
+    linkNode		    [26 29 0]
+    scope		    OUTPUT_DATA
+    machine		    1
+    props {
+      array {
+	size			"-1"
+      }
+      type {
+	method			SF_INHERITED_TYPE
+	primitive		SF_DOUBLE_TYPE
+      }
+      complexity	      SF_COMPLEX_INHERITED
+      frame		      SF_FRAME_NO
+    }
+    dataType		    "Inherit: Same as Simulink"
+  }
+  junction {
+    id			    31
+    position		    [23.5747 49.5747 7]
+    chart		    26
+    linkNode		    [26 0 0]
+    subviewer		    26
+    ssIdNumber		    3
+    type		    CONNECTIVE_JUNCTION
+  }
+  transition {
+    id			    32
+    labelString		    "{eML_blk_kernel();}"
+    labelPosition	    [28.125 13.875 102.544 14.964]
+    fontSize		    12
+    src {
+      intersection	      [0 0 1 0 23.5747 14.625 0 0]
+    }
+    dst {
+      id		      31
+      intersection	      [1 0 -1 0 23.5747 42.5747 0 0]
+    }
+    midPoint		    [23.5747 24.9468]
+    chart		    26
+    linkNode		    [26 0 0]
+    dataLimits		    [21.175 25.975 14.625 42.575]
+    subviewer		    26
+    drawStyle		    SMART
+    slide {
+      sticky		      BOTH_STICK
+    }
+    executionOrder	    1
+    ssIdNumber		    2
+  }
+  instance {
+    id			    33
+    name		    "Skidrag"
+    machine		    1
+    chart		    26
+  }
+  target {
+    id			    34
+    name		    "sfun"
+    description		    "Default Simulink S-Function Target."
+    machine		    1
+    linkNode		    [1 0 0]
   }
 }

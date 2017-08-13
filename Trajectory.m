@@ -36,18 +36,19 @@ xdot = [0];                 % Initialize velocity array (m/s)
 xddot = [0];                % Initialize acceleration array (m/s^2)
 brakegap = [25];            % Initialize brake Gap (mm)
 
+t0 = t(n);                      % Store time Stamp
+x0 = x(n);                      % pod distance at beginning of push phase (m/s)
+xdot0 = xdot(n);                % pod velocity at beginning of push phase (m/s)
+
 %     Fdrag_aero = [Fdrag.aero(xdot(1),rho) / (1 - eta)];              % Initialize array
 %     Fdrag_hover = [Fdrag.hover(xdot(1),z_nom*10^3) / (1 - eta)];     % Initialize array
 %     Fdrag_brake = [Fdrag.brake(xdot(1),brakegap(1)) / (1 - eta)];    % Initialize array
 %     Fthrust = [gForce_pusher*g];
 %     Flimprop = [0];
 
-%% Phase 0: Generate Trajectory profile for Pusher Phase
-t0 = t(n);                      % Store time Stamp
-x0 = x(n);                      % pod distance at beginning of push phase (m/s)
-xdot0 = xdot(n);                % pod velocity at beginning of push phase (m/s)
-while xdot < vpod_max %       % pusher phase constrained by velocity
-% while x(n) < deltax_pusher      % pusher phase constrained by distance
+%% Phase 1: Generate Trajectory profile for Pusher Phase
+while xdot(n) < vpod_max %       % pusher phase constrained by velocity
+% while x(n) < deltax_pusher_max      % pusher phase constrained by distance
     n = n + 1;
 
     % Compute Forces
@@ -63,7 +64,7 @@ while xdot < vpod_max %       % pusher phase constrained by velocity
     % Compute kinematics
     xddot(n) = (Fthrust(n) - Fdrag_net)/mpod;
     xdot(n) = xdot(n-1) + xddot(n)*dt;
-    x(n) = x(n-1) + xdot(n)*dt + 0.5*xddot(n)*dt^2;
+    x(n) = x(n-1) + xdot(n-1)*dt + 0.5*xddot(n)*dt^2;
     t(n) = t(n-1) + dt;
 
     brakegap(n) = brakegap(n-1);
@@ -77,10 +78,12 @@ while xdot < vpod_max %       % pusher phase constrained by velocity
     end
 end
 
-%% Phase 1: Generate Trajectory profile for Cruising Phase - constrained by time
+% Mark phase 1 final conditions
 t1 = t(n);                              % Store time Stamp
 x1 = x(n);                              % pod distance at beginning of cruising phase (m/s)
 xdot1 = xdot(n);                        % pod velocity at beginning of cruising phase (m/s)
+
+%% Phase 2: Generate Trajectory profile for Cruising Phase - constrained by time
 while t(n) < (t1 + deltat_cruising)     % Cruising phase constrained by time
     n = n + 1;
 
@@ -96,7 +99,7 @@ while t(n) < (t1 + deltat_cruising)     % Cruising phase constrained by time
     % Compute kinematics
     xddot(n) = (Fthrust(n) - Fdrag_net)/mpod;
     xdot(n) = xdot(n-1) + xddot(n)*dt;
-    x(n) = x(n-1) + xdot(n)*dt + 0.5*xddot(n)*dt^2;
+    x(n) = x(n-1) + xdot(n-1)*dt + 0.5*xddot(n)*dt^2;
     t(n) = t(n-1) + dt;
 
     brakegap(n) = brakegap(n-1);
@@ -104,6 +107,13 @@ while t(n) < (t1 + deltat_cruising)     % Cruising phase constrained by time
     % Compute load along brake actuator lead screw
     Fload_brakes(n) = Fbrakelift(xdot(n),brakegap(n))*sin(17*pi()/180) - Fdrag_brake(n)*cos(17*pi()/180)/2;
 end
+
+% Mark phase 2 final conditions
+n2 = n;
+t2 = t(n);           % Store time Stamp
+x2 = x(n);           % pod distance at beginning of cruising phase (m/s)
+xdot2 = xdot(n);     % pod velocity at beginning of cruising phase (m/s)
+b0 = brakegap(n);    % store initial brakegap position
 
 % %% Generate Trajectory profile for aux propulsion using LIM Phase
 %     tLIM = t(n);                              % Store time Stamp
@@ -132,26 +142,20 @@ end
 %         
 %     end
 
-%% Phase 2: Generate Deceleration Trajectory for Ideal Brake Deployment - constrained by final velocity
+%% Phase 3: Generate Deceleration Trajectory for Ideal Brake Deployment - constrained by final velocity
 % Deploy brakes to a "nominal" distance, prior to running PID
 % controlled braking, such that the nominal brake gap alone should
 % theoretically yield a perfect stop at target distance, where PID could 
 % still make course corrections after initial settling time, if need be.
 
-n2 = n;
-t2 = t(n);           % Store time Stamp
-x2 = x(n);           % pod distance at beginning of cruising phase (m/s)
-xdot2 = xdot(n);     % pod velocity at beginning of cruising phase (m/s)
-
-b0 = brakegap(n);    % store initial brakegap position
-
 % Determine nominal brake gap value, such that pod reaches target distance at desired final velocity
 % Empirical data needed for validating brake actuator response dynamics, see brakeactuator.m.
 fprintf('Calculating optimal nominal brake gap...\n')
-for brakegapNom = 9:-0.5:2.5;    % Determine optimal brakegapNom
+% for brakegapNom = 15:-0.5:2.5;    % Determine optimal brakegapNom
 
     i = 0;
-    while xdot(n) - xdotf > 0.001
+%     while xdot(n) - xdotf > 0.01
+    while xdot(n) > xdotf
         n = n + 1;      % counter for simulation time step
         i = i + 1;      % counter for brakeactuator array
 
@@ -168,15 +172,18 @@ for brakegapNom = 9:-0.5:2.5;    % Determine optimal brakegapNom
         % Compute kinematics
         xddot(n) = (Fthrust(n) - Fdrag_net)/mpod;
         xdot(n) = xdot(n-1) + xddot(n)*dt;
-        x(n) = x(n-1) + xdot(n)*dt + 0.5*xddot(n)*dt^2;
+        x(n) = x(n-1) + xdot(n-1)*dt + 0.5*xddot(n)*dt^2;
         t(n) = t(n-1) + dt;
 
         % Calculate current brake gap distance
         [b,ts] = brakeactuator(b0,brakegapNom, t(n) - t2 );
         brakegap(n) = b;
-        if (t(n) - t2) - ts < 0.001 % brake actuator settling time reached. PID controller engaged.
+        %% Phase 4: Generate Controlled Braking Trajectory - constrained by initial brake deployment settling time (~4.8s)
+        if (t(n) - t2) - ts < 0.01 % brake actuator settling time reached. PID controller engaged.
+            % Mark phase 3 final conditions
             n3 = n;
             x3 = x(n);
+            xdot3 = xdot(n);
             t3 = t(n);
         end
 
@@ -192,32 +199,36 @@ for brakegapNom = 9:-0.5:2.5;    % Determine optimal brakegapNom
         Fload_brakes(n) = Fbrakelift(xdot(n),brakegap(n))*sin(17*pi()/180) - Fdrag_brake(n)*cos(17*pi()/180)/2;
     end
 
-    % if total distance traveled is within 0.1% of target, break for loop
-    if abs(x(end) - xf) < 0.005*xf %&& xdotf - xdot(n) < 0.0001*xdotf
-        break
-    else	% else, reset arrays and try again
-        n = n2;
+%     % if total distance traveled is within 0.05m of target, break for loop
+%     if abs(x(end) - xf) < 0.01 %&& xdotf - xdot(end) < 0.01
+%         break
+%     else	% else, reset arrays and try again
+%         n = n2;
+% 
+%         % reset force profile
+%         Fdrag_aero = Fdrag_aero(1:n2);
+%         Fdrag_hover = Fdrag_hover(1:n2);
+%         Fdrag_brake = Fdrag_brake(1:n2);            
+%         Fdrag_ski = Fdrag_ski(1:n2);
+%         Fthrust = Fthrust(1:n2);
+% 
+%         % reset kinematics
+%         xddot = xddot(1:n2);
+%         xdot = xdot(1:n2);
+%         x = x(1:n2);
+%         t = t(1:n2);
+% 
+%         % reset brakegap profile
+%         brakegap = brakegap(1:n2);
+% 
+%         % Compute load along brake actuator lead screw
+%         Fload_brakes = Fload_brakes(1:n2);
+%     end
+% end
 
-        % reset force profile
-        Fdrag_aero = Fdrag_aero(1:n2);
-        Fdrag_hover = Fdrag_hover(1:n2);
-        Fdrag_brake = Fdrag_brake(1:n2);            
-        Fdrag_ski = Fdrag_ski(1:n2);
-        Fthrust = Fthrust(1:n2);
-
-        % reset kinematics
-        xddot = xddot(1:n2);
-        xdot = xdot(1:n2);
-        x = x(1:n2);
-        t = t(1:n2);
-
-        % reset brakegap profile
-        brakegap = brakegap(1:n2);
-
-        % Compute load along brake actuator lead screw
-        Fload_brakes = Fload_brakes(1:n2);
-    end
-end
+%% Save Distance and Velocity setpoints to be used for PID controlled braking (see 'GainScheduledPIDBrakingSystem.m')
+velocitySet = xdot(n2:end);
+distanceSet = x(n2:end);
 
 %% Time-dependent Trajectory Graphs
 fprintf('Generating plots...\n')
@@ -303,7 +314,7 @@ legend('Braking profile');
 
 subplot(313)
 plot(x,Fload_brakes)
-axis([0 1.2*xf -1500 1500])
+axis([0 1.2*xf 1.1*min(Fload_brakes) 1.1*max(Fload_brakes)])
 grid on
 grid minor
 ylabel('Brake load (N)')
