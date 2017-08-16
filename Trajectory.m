@@ -243,7 +243,7 @@ axis([0 1.2*t(length(t)) 0 1.2*xf])
 
 grid on
 grid minor    
-title(['Trajectory case no. ' num2str(caseno) ': ' num2str(mpod) 'kg pod mass | ' num2str(P/1000,4) 'kPa @' num2str(T,4) 'K | pusher jettisoned @' num2str(x1,4) 'm for ' num2str(t1,2) 's @' num2str(gForce_pusher,2) 'g | ' num2str(xdot1,4) 'm/s max velocity | ' num2str(deltat_cruising,2) 's cruising | ' num2str(brakegapNom) 'mm nominal brakegap'])
+title(['Trajectory case no. ' num2str(caseno) ': ' num2str(mpod) 'kg pod mass | ' num2str(P/1000,4) 'kPa @' num2str(T,4) 'K | ' num2str(gForce_pusher,2) 'g acceleration for ' num2str(t1,2) 's ' num2str(x1,4) 'm | ' num2str(xdot1,4) 'm/s max velocity | ' num2str(deltat_cruising,2) 's cruising | ' num2str(brakegapNom) 'mm nominal brakegap'])
 ylabel('Distance (m)')
 legend('Pod travel','Target distance');
 
@@ -296,7 +296,7 @@ plot([xf+deltax_dangerzone xf+deltax_dangerzone],[0 1.1*xdot2],'r')
 axis([0 1.2*xf 0 1.1*xdot2])
 grid on
 grid minor
-title(['Trajectory case no. ' num2str(caseno) ': ' num2str(mpod) 'kg pod mass | ' num2str(P/1000,4) 'kPa @' num2str(T,4) 'K | pusher jettisoned @' num2str(x1,4) 'm for ' num2str(t1,2) 's @' num2str(gForce_pusher,2) 'g | ' num2str(xdot1,4) 'm/s max velocity | ' num2str(deltat_cruising,2) 's cruising | ' num2str(brakegapNom) 'mm nominal brakegap'])
+title(['Trajectory case no. ' num2str(caseno) ': ' num2str(mpod) 'kg pod mass | ' num2str(P/1000,4) 'kPa @' num2str(T,4) 'K | ' num2str(gForce_pusher,2) 'g acceleration for ' num2str(t1,2) 's ' num2str(x1,4) 'm | ' num2str(xdot1,4) 'm/s max velocity | ' num2str(deltat_cruising,2) 's cruising | ' num2str(brakegapNom) 'mm nominal brakegap'])
 %     formatSpec = 'PID Override Trigger for deltax_{dangerzone} = %0.fm';
 %formatSpec = 'PID Override Trigger';
 %str = sprintf(formatSpec,deltax_dangerzone);
