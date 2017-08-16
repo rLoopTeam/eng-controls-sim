@@ -73,10 +73,10 @@ while t(n) < deltat_pusher      % pusher phase constrained by time
     % Compute load along brake actuator lead screw
     Fload_brakes(n) = Fbrakelift(xdot(n),brakegap(n))*sin(17*pi()/180) - Fdrag_brake(n)*cos(17*pi()/180)/2;
 
-    % If max pusher distance reached, exit pusher phase
-    if x(n) >= deltax_pusher_max
-        break;
-    end
+%     % If max pusher distance reached, exit pusher phase
+%     if x(n) >= deltax_pusher_max
+%         break;
+%     end
 end
 
 % Mark phase 1 final conditions
@@ -243,7 +243,7 @@ axis([0 1.2*t(length(t)) 0 1.2*xf])
 
 grid on
 grid minor    
-title(['Trajectory case no. ' num2str(caseno) ': ' num2str(mpod) 'kg pod mass | ' num2str(P/1000,4) 'kPa @' num2str(T,4) 'K | ' num2str(gForce_pusher,2) 'g acceleration for ' num2str(t1,2) 's ' num2str(x1,4) 'm | ' num2str(xdot1,4) 'm/s max velocity | ' num2str(deltat_cruising,2) 's cruising | ' num2str(brakegapNom) 'mm nominal brakegap'])
+title(['Trajectory case no. ' num2str(caseno) ': ' num2str(mpod) 'kg pod mass | ' num2str(P/1000,4) 'kPa @' num2str(T,4) 'K | ' num2str(gForce_pusher,2) 'g acceleration for ' num2str(t1,3) 's ' num2str(x1,4) 'm | ' num2str(xdot1,4) 'm/s max velocity | ' num2str(deltat_cruising,2) 's cruising | ' num2str(brakegapNom) 'mm nominal brakegap'])
 ylabel('Distance (m)')
 legend('Pod travel','Target distance');
 
@@ -296,7 +296,7 @@ plot([xf+deltax_dangerzone xf+deltax_dangerzone],[0 1.1*xdot2],'r')
 axis([0 1.2*xf 0 1.1*xdot2])
 grid on
 grid minor
-title(['Trajectory case no. ' num2str(caseno) ': ' num2str(mpod) 'kg pod mass | ' num2str(P/1000,4) 'kPa @' num2str(T,4) 'K | ' num2str(gForce_pusher,2) 'g acceleration for ' num2str(t1,2) 's ' num2str(x1,4) 'm | ' num2str(xdot1,4) 'm/s max velocity | ' num2str(deltat_cruising,2) 's cruising | ' num2str(brakegapNom) 'mm nominal brakegap'])
+title(['Trajectory case no. ' num2str(caseno) ': ' num2str(mpod) 'kg pod mass | ' num2str(P/1000,4) 'kPa @' num2str(T,4) 'K | ' num2str(gForce_pusher,2) 'g acceleration for ' num2str(t1,3) 's ' num2str(x1,4) 'm | ' num2str(xdot1,4) 'm/s max velocity | ' num2str(deltat_cruising,2) 's cruising | ' num2str(brakegapNom) 'mm nominal brakegap'])
 %     formatSpec = 'PID Override Trigger for deltax_{dangerzone} = %0.fm';
 %formatSpec = 'PID Override Trigger';
 %str = sprintf(formatSpec,deltax_dangerzone);

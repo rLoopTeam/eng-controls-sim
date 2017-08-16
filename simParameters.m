@@ -16,13 +16,12 @@ switch caseno
 %         deltax_pusher = 312;     % Desired max push distance (max: 487.68m or 1600ft) (m)
         deltax_pusher_max = 487.68; % Max push distance (max: 487.68m or 1600ft) (m)
 %         vpod_max = 90.;            % Constraint on max velocity (m/s)
-        deltat_pusher = 20;     % Desired max push distance (max: 487.68m or 1600ft) (m)
+        deltat_pusher = 17.8;     % Desired max push distance (max: 487.68m or 1600ft) (m)
         deltat_cruising = 2;        % Cruising time between pusher and deceleration phase (minimum 2s required) (s)
 %         gForce_brakedrag = 1.0;     % Constraint on max braking force (g's)
         brakegapNom = 2.5;          % Nominal brake gap during controlled braking phase (mm)
         deltax_dangerzone = 50;     % Distance between final target and end of track (DANGER ZONE!!!) (m)
         z_nom = 0.016;              % Nominal hover height (m) based on pod mass and 8 hover engines
-        brakesmoving = false;       % booleam initial condition for brakes used in simulink code
 
         %%%% Pressure %%%%
         Ppsi = 0.4;              % Atmospheric air pressure inside SpaceX test tube (Psi)
@@ -61,7 +60,6 @@ switch caseno
         brakegapNom = 2.5;          % Nominal brake gap during controlled braking phase (mm)
         deltax_dangerzone = 50;     % Distance between final target and end of track (DANGER ZONE!!!) (m)
         z_nom = 0.016;              % Nominal hover height (m) based on pod mass and 8 hover engines
-        brakesmoving = false;       % booleam initial condition for brakes used in simulink code
 
         %%%% Pressure %%%%
         Ppsi = 0.4;              % Atmospheric air pressure inside SpaceX test tube (Psi)
@@ -99,7 +97,6 @@ switch caseno
         brakegapNom = 8.0;          % Nominal brake gap during controlled braking phase (mm)
         deltax_dangerzone = 50;     % Distance between final target and end of track (DANGER ZONE!!!) (m)
         z_nom = 0.016;              % Nominal hover height (m) based on pod mass and 8 hover engines
-        brakesmoving = false;       % booleam initial condition for brakes used in simulink code
 
         %%%% Pressure %%%%
         Ppsi = 0.1250;              % Atmospheric air pressure inside SpaceX test tube (Psi)
