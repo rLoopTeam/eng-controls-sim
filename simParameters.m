@@ -2,29 +2,31 @@
 g = 9.81;                                   % Gravitational constant
 
 %Input
-caseno = 023;
+caseno = 024;
 
 %%%% Trajectory & Simulation Constraints %%%%
 switch caseno
     
-    case 024    % 
+    case 024    % Run as deltat_pusher constrained
         mpod = 441.;                % Total pod mass (kg)
         dt = 0.001;                 % time step (s)
         xf = 1250;                  % Target distance (m)
         xdotf = 0.01;               % Target final velocity at xf (m/s)
-        gForce_pusher = 1.5;        % Pusher acceleration (g's)
-%         deltax_pusher = 487.68;     % Desired max push distance (max: 487.68m or 1600ft) (m)
-        deltax_pusher_max = 312.2; % Max push distance (max: 487.68m or 1600ft) (m)
-        vpod_max = 90.;            % Constraint on max velocity (m/s)
+        gForce_pusher = 1.0;        % Pusher acceleration (g's)
+%         deltax_pusher = 312;     % Desired max push distance (max: 487.68m or 1600ft) (m)
+        deltax_pusher_max = 487.68; % Max push distance (max: 487.68m or 1600ft) (m)
+%         vpod_max = 90.;            % Constraint on max velocity (m/s)
+        deltat_pusher = 10;     % Desired max push distance (max: 487.68m or 1600ft) (m)
         deltat_cruising = 2;        % Cruising time between pusher and deceleration phase (minimum 2s required) (s)
 %         gForce_brakedrag = 1.0;     % Constraint on max braking force (g's)
-        brakegapNom = 3.0;          % Nominal brake gap during controlled braking phase (mm)
+        brakegapNom = 2.5;          % Nominal brake gap during controlled braking phase (mm)
         deltax_dangerzone = 50;     % Distance between final target and end of track (DANGER ZONE!!!) (m)
         z_nom = 0.016;              % Nominal hover height (m) based on pod mass and 8 hover engines
         brakesmoving = false;       % booleam initial condition for brakes used in simulink code
 
         %%%% Pressure %%%%
-        Ppsi = 0.1250;              % Atmospheric air pressure inside SpaceX test tube (Psi)
+        Ppsi = 0.4;              % Atmospheric air pressure inside SpaceX test tube (Psi)
+%         Ppsi = 0.1250;              % Atmospheric air pressure inside SpaceX test tube (Psi)
 %         Ppsi = 3.7188;              % Atmospheric air pressure inside SpaceX test tube (Psi)
 %         Ppsi = 7.3125;              % Atmospheric air pressure inside SpaceX test tube (Psi)
 %         Ppsi = 10.9063;             % Atmospheric air pressure inside SpaceX test tube (Psi)
@@ -44,13 +46,13 @@ switch caseno
         eta_brakedrag = 0.0;       % Estimated brake drag relative error
         eta_skidrag = 0.0;         % Estimated ski drag relative error
         
-    case 023    % Full track case for rPod (as of 8/01) and constraints as per 2017_0207_Hyperloop_Tube_Specs
+    case 023    % (Run as deltat_pusher constrained) Full track case for rPod (as of 8/01) and constraints as per 2017_0207_Hyperloop_Tube_Specs
         mpod = 441.;                % Total pod mass (kg)
         dt = 0.001;                 % time step (s)
         xf = 1250;                  % Target distance (m)
         xdotf = 0.01;               % Target final velocity at xf (m/s)
         gForce_pusher = 1.0;        % Pusher acceleration (g's)
-%         deltax_pusher = 487.68;     % Desired max push distance (max: 487.68m or 1600ft) (m)
+%         deltax_pusher = 312.2;     % Desired max push distance (max: 487.68m or 1600ft) (m)
         deltax_pusher_max = 487.68; % Max push distance (max: 487.68m or 1600ft) (m)
         vpod_max = 75.5;            % Constraint on max velocity (m/s)
         deltat_cruising = 2;        % Cruising time between pusher and deceleration phase (minimum 2s required) (s)

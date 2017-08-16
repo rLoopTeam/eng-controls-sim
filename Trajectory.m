@@ -47,8 +47,9 @@ xdot0 = xdot(n);                % pod velocity at beginning of push phase (m/s)
 %     Flimprop = [0];
 
 %% Phase 1: Generate Trajectory profile for Pusher Phase
-while xdot(n) < vpod_max %       % pusher phase constrained by velocity
-% while x(n) < deltax_pusher_max      % pusher phase constrained by distance
+while t(n) < deltat_pusher      % pusher phase constrained by time
+% while xdot(n) < vpod_max %       % pusher phase constrained by velocity
+% while x(n) < deltax_pusher      % pusher phase constrained by distance
     n = n + 1;
 
     % Compute Forces
@@ -242,7 +243,7 @@ axis([0 1.2*t(length(t)) 0 1.2*xf])
 
 grid on
 grid minor    
-title(['Trajectory case no. ' num2str(caseno) ': ' num2str(mpod) 'kg pod mass | ' num2str(P/1000,4) 'kPa @' num2str(T,4) 'K | ' num2str(x1,4) 'm push @' num2str(gForce_pusher,2) 'g | ' num2str(xdot1,4) 'm/s max velocity | ' num2str(deltat_cruising,2) 's cruising | ' num2str(brakegapNom) 'mm nominal brakegap'])
+title(['Trajectory case no. ' num2str(caseno) ': ' num2str(mpod) 'kg pod mass | ' num2str(P/1000,4) 'kPa @' num2str(T,4) 'K | pusher jettisoned @' num2str(x1,4) 'm for ' num2str(t1,2) 's @' num2str(gForce_pusher,2) 'g | ' num2str(xdot1,4) 'm/s max velocity | ' num2str(deltat_cruising,2) 's cruising | ' num2str(brakegapNom) 'mm nominal brakegap'])
 ylabel('Distance (m)')
 legend('Pod travel','Target distance');
 
@@ -289,18 +290,18 @@ plot(x,xdot)
 %     plot(x,v_override)
 plot([x1 x1],[0 1.1*xdot2])
 plot([x2 x2],[0 1.1*xdot2])
-plot([x3 x3],[0 1.1*xdot2])
+% plot([x3 x3],[0 1.1*xdot2])
 plot([xf xf],[0 1.1*xdot2])
 plot([xf+deltax_dangerzone xf+deltax_dangerzone],[0 1.1*xdot2],'r')
 axis([0 1.2*xf 0 1.1*xdot2])
 grid on
 grid minor
-title(['Trajectory case no. ' num2str(caseno) ': ' num2str(mpod) 'kg pod mass | ' num2str(P/1000,4) 'kPa @' num2str(T,4) 'K | ' num2str(x1,4) 'm push @' num2str(gForce_pusher,2) 'g | ' num2str(xdot1,4) 'm/s max velocity | ' num2str(deltat_cruising,2) 's cruising | ' num2str(brakegapNom) 'mm nominal brakegap'])
+title(['Trajectory case no. ' num2str(caseno) ': ' num2str(mpod) 'kg pod mass | ' num2str(P/1000,4) 'kPa @' num2str(T,4) 'K | pusher jettisoned @' num2str(x1,4) 'm for ' num2str(t1,2) 's @' num2str(gForce_pusher,2) 'g | ' num2str(xdot1,4) 'm/s max velocity | ' num2str(deltat_cruising,2) 's cruising | ' num2str(brakegapNom) 'mm nominal brakegap'])
 %     formatSpec = 'PID Override Trigger for deltax_{dangerzone} = %0.fm';
 %formatSpec = 'PID Override Trigger';
 %str = sprintf(formatSpec,deltax_dangerzone);
-%legend('PID Setpoint Curve',str,'Target Distance');
-legend('rPod Trajectory','Pusher Jettisoned','Braking Engaged','PID Controller Engaged','Target Distance','Danger Zone');
+% legend('rPod Trajectory','Pusher Jettisoned','Braking Engaged','PID Controller Engaged','Target Distance','Danger Zone');
+legend('rPod Trajectory','Pusher Jettisoned','Braking Engaged','Target Distance','Danger Zone');
 ylabel('Velocity (m/s)')
 
 subplot(312)
@@ -359,8 +360,8 @@ parameternames = {   'mpod',
                     'xdotf', 
                     'gForce_pusher',
 %                     'deltax_pusher'
-                    'deltax_pusher_max',
-                    'vpod_max',
+                    'deltat_pusher',
+%                     'vpod_max',
                     'deltat_cruising',
 %                     'gForce_brakedrag',
                     'brakegapNom',
@@ -383,8 +384,8 @@ value = [   mpod,
             xdotf,
             gForce_pusher,
 %             deltax_pusher,
-            deltax_pusher_max,
-            vpod_max,
+            deltat_pusher,
+%             vpod_max,
             deltat_cruising,
 %             gForce_brakedrag,
             brakegapNom,
@@ -407,8 +408,9 @@ description = { 'Total pod mass (kg)',
                 'Target final velocity at xf (m/s)',
                 'Pusher acceleration (gs)',
 %                 'Desired max push distance (max: 487.68m or 1600ft) (m)'
-                'Max push distance (max: 487.68m or 1600ft) (m)',
-                'Constraint on max velocity (m/s)',
+%                 'Max push distance (max: 487.68m or 1600ft) (m)',
+                'Push time (s)',
+%                 'Constraint on max velocity (m/s)',
                 'Cruising time between pusher and deceleration phase (minimum 2s required) (s)',
 %                 'Constraint on max braking force (gs)',
                 'Nominal brake gap during controlled braking phase (mm)',
