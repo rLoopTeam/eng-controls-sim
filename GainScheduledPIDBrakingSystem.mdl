@@ -7,7 +7,7 @@ Model {
     NumRootInports	    0
     NumRootOutports	    0
     ParameterArgumentNames  ""
-    ComputedModelVersion    "1.37"
+    ComputedModelVersion    "1.39"
     NumModelReferences	    1
     ModelReference {
       ModelRefBlockPath	      "GainScheduledPIDBrakingSystem/Plant Model|BrakingSystemPlant"
@@ -32,7 +32,7 @@ Model {
       $ObjectID		      2
       $ClassName	      "Simulink.WindowInfo"
       IsActive		      [1]
-      Location		      [-5.0, 27.0, 1256.0, 654.0]
+      Location		      [0.0, 0.0, 1119.0, 619.0]
       Object {
 	$PropName		"ModelBrowserInfo"
 	$ObjectID		3
@@ -49,16 +49,28 @@ Model {
 	$ClassName		"Simulink.ExplorerBarInfo"
 	Visible			[1]
       }
-      Object {
-	$PropName		"EditorsInfo"
-	$ObjectID		5
-	$ClassName		"Simulink.EditorInfo"
-	IsActive		[1]
-	ViewObjType		"SimulinkTopLevel"
-	LoadSaveID		"0"
-	Extents			[1206.0, 480.0]
-	ZoomFactor		[1.0]
-	Offset			[0.0, -13.0]
+      Array {
+	Type			"Simulink.EditorInfo"
+	Dimension		2
+	Object {
+	  $ObjectID		  5
+	  IsActive		  [1]
+	  ViewObjType		  "SimulinkTopLevel"
+	  LoadSaveID		  "0"
+	  Extents		  [1069.0, 442.0]
+	  ZoomFactor		  [0.8]
+	  Offset		  [-98.0, -8.5]
+	}
+	Object {
+	  $ObjectID		  6
+	  IsActive		  [0]
+	  ViewObjType		  "SimulinkSubsys"
+	  LoadSaveID		  "32"
+	  Extents		  [1190.0, 442.0]
+	  ZoomFactor		  [1.0]
+	  Offset		  [0.0, 30.0]
+	}
+	PropName		"EditorsInfo"
       }
     }
   }
@@ -66,11 +78,11 @@ Model {
   Creator		  "MrPiccolo"
   UpdateHistory		  "UpdateHistoryNever"
   ModifiedByFormat	  "%<Auto>"
-  LastModifiedBy	  "MrPiccolo"
+  LastModifiedBy	  "Krillin"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Fri Aug 11 22:17:16 2017"
-  RTWModifiedTimeStamp	  424390634
-  ModelVersionFormat	  "1.%<AutoIncrement:37>"
+  LastModifiedDate	  "Wed Aug 16 18:15:36 2017"
+  RTWModifiedTimeStamp	  424807931
+  ModelVersionFormat	  "1.%<AutoIncrement:39>"
   ConfigurationManager	  "none"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -111,7 +123,7 @@ Model {
   TryForcingSFcnDF	  off
   Object {
     $PropName		    "DataLoggingOverride"
-    $ObjectID		    6
+    $ObjectID		    7
     $ClassName		    "Simulink.SimulationData.ModelLoggingInfo"
     model_		    "GainScheduledPIDBrakingSystem"
     overrideMode_	    [0.0]
@@ -176,13 +188,13 @@ Model {
     Type		    "Handle"
     Dimension		    1
     Simulink.ConfigSet {
-      $ObjectID		      7
+      $ObjectID		      8
       Version		      "1.15.0"
       Array {
 	Type			"Handle"
 	Dimension		8
 	Simulink.SolverCC {
-	  $ObjectID		  8
+	  $ObjectID		  9
 	  Version		  "1.15.0"
 	  StartTime		  "0.0"
 	  StopTime		  "20"
@@ -217,7 +229,7 @@ Model {
 	  InsertRTBMode		  "Whenever possible"
 	}
 	Simulink.DataIOCC {
-	  $ObjectID		  9
+	  $ObjectID		  10
 	  Version		  "1.15.0"
 	  Decimation		  "1"
 	  ExternalInput		  "[t, u]"
@@ -250,7 +262,7 @@ Model {
 	  Refine		  "1"
 	}
 	Simulink.OptimizationCC {
-	  $ObjectID		  10
+	  $ObjectID		  11
 	  Version		  "1.15.0"
 	  Array {
 	    Type		    "Cell"
@@ -307,7 +319,7 @@ Model {
 	  AccelVerboseBuild	  off
 	}
 	Simulink.DebuggingCC {
-	  $ObjectID		  11
+	  $ObjectID		  12
 	  Version		  "1.15.0"
 	  RTPrefix		  "error"
 	  ConsistencyChecking	  "none"
@@ -396,7 +408,7 @@ Model {
 	  IntegerSaturationMsg	  "warning"
 	}
 	Simulink.HardwareCC {
-	  $ObjectID		  12
+	  $ObjectID		  13
 	  Version		  "1.15.0"
 	  ProdBitPerChar	  8
 	  ProdBitPerShort	  16
@@ -436,7 +448,7 @@ Model {
 	  ProdEqTarget		  on
 	}
 	Simulink.ModelReferenceCC {
-	  $ObjectID		  13
+	  $ObjectID		  14
 	  Version		  "1.15.0"
 	  UpdateModelReferenceTargets "IfOutOfDateOrStructuralChange"
 	  CheckModelReferenceTargetMessage "error"
@@ -451,7 +463,7 @@ Model {
 	  SupportModelReferenceSimTargetCustomCode off
 	}
 	Simulink.SFSimCC {
-	  $ObjectID		  14
+	  $ObjectID		  15
 	  Version		  "1.15.0"
 	  SFSimOverflowDetection  on
 	  SFSimEcho		  on
@@ -464,7 +476,7 @@ Model {
 	}
 	Simulink.RTWCC {
 	  $BackupClass		  "Simulink.RTWCC"
-	  $ObjectID		  15
+	  $ObjectID		  16
 	  Version		  "1.15.0"
 	  Array {
 	    Type		    "Cell"
@@ -544,7 +556,7 @@ Model {
 	    Type		    "Handle"
 	    Dimension		    2
 	    Simulink.CodeAppCC {
-	      $ObjectID		      16
+	      $ObjectID		      17
 	      Version		      "1.15.0"
 	      Array {
 		Type			"Cell"
@@ -616,7 +628,7 @@ Model {
 	    }
 	    Simulink.GRTTargetCC {
 	      $BackupClass	      "Simulink.TargetCC"
-	      $ObjectID		      17
+	      $ObjectID		      18
 	      Version		      "1.15.0"
 	      Array {
 		Type			"Cell"
@@ -710,11 +722,11 @@ Model {
   }
   Simulink.ConfigSet {
     $PropName		    "ActiveConfigurationSet"
-    $ObjectID		    7
+    $ObjectID		    8
   }
   Object {
     $PropName		    "DataTransfer"
-    $ObjectID		    18
+    $ObjectID		    19
     $ClassName		    "Simulink.GlobalDataTransfer"
     DefaultTransitionBetweenSyncTasks "Ensure deterministic transfer (maximum delay)"
     DefaultTransitionBetweenAsyncTasks "Ensure data integrity only"
@@ -1054,10 +1066,19 @@ Model {
       DefaultConfigurationName "Simulink.scopes.TimeScopeBlockCfg"
       Floating		      off
     }
+    Block {
+      BlockType		      TransportDelay
+      DelayTime		      "1"
+      InitialOutput	      "0"
+      BufferSize	      "1024"
+      FixedBuffer	      off
+      TransDelayFeedthrough   off
+      PadeOrder		      "0"
+    }
   }
   System {
     Name		    "GainScheduledPIDBrakingSystem"
-    Location		    [-5, 27, 1251, 681]
+    Location		    [0, 0, 1119, 619]
     Open		    on
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
@@ -1069,9 +1090,9 @@ Model {
     TiledPaperMargins	    [0.500000, 0.500000, 0.500000, 0.500000]
     TiledPageScale	    1
     ShowPageBoundaries	    off
-    ZoomFactor		    "100"
+    ZoomFactor		    "80"
     ReportName		    "simulink-default.rpt"
-    SIDHighWatermark	    "172"
+    SIDHighWatermark	    "173"
     Block {
       BlockType		      Lookup_n-D
       Name		      "D Lookup\nTable"
@@ -1107,7 +1128,7 @@ Model {
       Name		      "Mux"
       SID		      "29"
       Ports		      [2, 1]
-      Position		      [1015, 251, 1020, 289]
+      Position		      [1080, 251, 1085, 289]
       ZOrder		      54
       ShowName		      off
       Inputs		      "2"
@@ -1276,7 +1297,7 @@ Model {
       ZOrder		      93
       ModelNameDialog	      "BrakingSystemPlant.mdl"
       SimulationMode	      "Normal"
-      ModelReferenceVersion   "1.223"
+      ModelReferenceVersion   "1.228"
       List {
 	ListType		InputPortNames
 	port0			"u"
@@ -1305,7 +1326,7 @@ Model {
       Name		      "Scope"
       SID		      "172"
       Ports		      [1]
-      Position		      [1055, 254, 1085, 286]
+      Position		      [1120, 254, 1150, 286]
       ZOrder		      100
       ScopeSpecificationString "Simulink.scopes.TimeScopeBlockCfg('CurrentConfiguration', extmgr.ConfigurationSet(extm"
       "gr.Configuration('Core','General UI',true),extmgr.Configuration('Core','Source UI',true),extmgr.Configuration('S"
@@ -1338,7 +1359,7 @@ Model {
       RequestExecContextInheritance off
       System {
 	Name			"Setpoint"
-	Location		[-5, 27, 1251, 681]
+	Location		[-5, 27, 1235, 681]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -1461,6 +1482,16 @@ Model {
       OutDataTypeStr	      "Inherit: Inherit via internal rule"
       SaturateOnIntegerOverflow	off
     }
+    Block {
+      BlockType		      TransportDelay
+      Name		      "Time Delay"
+      SID		      "173"
+      Ports		      [1, 1]
+      Position		      [970, 265, 1000, 295]
+      ZOrder		      175
+      DelayTime		      ".05"
+      InitialOutput	      "xdot3"
+    }
     Line {
       ZOrder		      16
       SrcBlock		      "Sum"
@@ -1503,7 +1534,7 @@ Model {
       Points		      [30, 0]
       Branch {
 	ZOrder			189
-	Points			[0, -67; 785, 0; 0, 197]
+	Points			[0, -67; 853, 0; 0, 197]
 	DstBlock		"Mux"
 	DstPort			1
       }
@@ -1531,7 +1562,14 @@ Model {
       ZOrder		      174
       SrcBlock		      "Plant Model"
       SrcPort		      1
-      Points		      [60, 0]
+      DstBlock		      "Time Delay"
+      DstPort		      1
+    }
+    Line {
+      ZOrder		      214
+      SrcBlock		      "Time Delay"
+      SrcPort		      1
+      Points		      [30, 0]
       Branch {
 	ZOrder			201
 	DstBlock		"Mux"
@@ -1539,7 +1577,7 @@ Model {
       }
       Branch {
 	ZOrder			198
-	Points			[0, 228; -750, 0]
+	Points			[0, 228; -815, 0]
 	Branch {
 	  ZOrder		  200
 	  Points		  [-201, 0; 0, -378]
