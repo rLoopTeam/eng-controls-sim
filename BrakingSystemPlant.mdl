@@ -16,7 +16,7 @@ Model {
       BusOutputAsStruct	      "off"
     }
     ParameterArgumentNames  ""
-    ComputedModelVersion    "1.224"
+    ComputedModelVersion    "1.228"
     NumModelReferences	    1
     ModelReference {
       ModelRefBlockPath	      "BrakingSystemPlant/Brake Actuator Subplant|BrakeActuatorSubplant"
@@ -67,7 +67,7 @@ Model {
 	LoadSaveID		"0"
 	Extents			[1027.0, 456.0]
 	ZoomFactor		[0.8]
-	Offset			[220.49351826065265, 161.36785104265221]
+	Offset			[103.08462325814014, 319.28614623291537]
       }
     }
   }
@@ -75,11 +75,11 @@ Model {
   Creator		  "MrPiccolo"
   UpdateHistory		  "UpdateHistoryNever"
   ModifiedByFormat	  "%<Auto>"
-  LastModifiedBy	  "MrPiccolo"
+  LastModifiedBy	  "Krillin"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Fri Aug 11 22:18:43 2017"
-  RTWModifiedTimeStamp	  424390715
-  ModelVersionFormat	  "1.%<AutoIncrement:224>"
+  LastModifiedDate	  "Wed Aug 16 18:03:11 2017"
+  RTWModifiedTimeStamp	  424806524
+  ModelVersionFormat	  "1.%<AutoIncrement:228>"
   ConfigurationManager	  "none"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -1009,7 +1009,7 @@ Model {
     ShowPageBoundaries	    off
     ZoomFactor		    "80"
     ReportName		    "simulink-default.rpt"
-    SIDHighWatermark	    "334"
+    SIDHighWatermark	    "335"
     Block {
       BlockType		      Inport
       Name		      "u"
@@ -1201,36 +1201,6 @@ Model {
       }
     }
     Block {
-      BlockType		      Scope
-      Name		      "Brake gap scope"
-      SID		      "237"
-      Ports		      [1]
-      Position		      [605, 754, 635, 786]
-      ZOrder		      76
-      Floating		      off
-      Location		      [142, 178, 1185, 538]
-      Open		      off
-      NumInputPorts	      "1"
-      List {
-	ListType		AxesTitles
-	axes1			"%<SignalLabel>"
-      }
-      List {
-	ListType		ScopeGraphics
-	FigureColor		"[0.5 0.5 0.5]"
-	AxesColor		"[0 0 0]"
-	AxesTickColor		"[1 1 1]"
-	LineColors		"[1 1 0;1 0 1;0 1 1;1 0 0;0 1 0;0 0 1]"
-	LineStyles		"-|-|-|-|-|-"
-	LineWidths		"[0.5 0.5 0.5 0.5 0.5 0.5]"
-	MarkerStyles		"none|none|none|none|none|none"
-      }
-      TimeRange		      "20"
-      YMin		      "0"
-      YMax		      "25"
-      SaveName		      "ScopeData6"
-    }
-    Block {
       BlockType		      SubSystem
       Name		      "Brakedrag"
       SID		      "299"
@@ -1389,7 +1359,7 @@ Model {
       Name		      "F scope1"
       SID		      "322"
       Ports		      [1]
-      Position		      [1015, 619, 1045, 651]
+      Position		      [1015, 614, 1045, 646]
       ZOrder		      227
       Floating		      off
       Location		      [47, 112, 827, 717]
@@ -1415,7 +1385,7 @@ Model {
       Name		      "Hoverdrag"
       SID		      "306"
       Ports		      [2, 1]
-      Position		      [625, 485, 765, 565]
+      Position		      [625, 480, 765, 560]
       ZOrder		      213
       LibraryVersion	      "1.32"
       ErrorFcn		      "Stateflow.Translate.translate"
@@ -1449,7 +1419,7 @@ Model {
 	}
 	Block {
 	  BlockType		  Inport
-	  Name			  "brakegap"
+	  Name			  "z"
 	  SID			  "306::1"
 	  Position		  [20, 136, 40, 154]
 	  ZOrder		  -1
@@ -1507,7 +1477,7 @@ Model {
 	}
 	Line {
 	  ZOrder		  12
-	  SrcBlock		  "brakegap"
+	  SrcBlock		  "z"
 	  SrcPort		  1
 	  DstBlock		  " SFunction "
 	  DstPort		  2
@@ -1553,7 +1523,7 @@ Model {
       Name		      "Skidrag"
       SID		      "331"
       Ports		      [2, 1]
-      Position		      [625, 630, 765, 710]
+      Position		      [625, 625, 765, 705]
       ZOrder		      231
       LibraryVersion	      "1.32"
       ErrorFcn		      "Stateflow.Translate.translate"
@@ -1708,7 +1678,7 @@ Model {
       Name		      "Sum2"
       SID		      "334"
       Ports		      [2, 1]
-      Position		      [830, 515, 850, 535]
+      Position		      [830, 510, 850, 530]
       ZOrder		      233
       ShowName		      off
       IconShape		      "round"
@@ -1739,7 +1709,7 @@ Model {
       BlockType		      Constant
       Name		      "hover height"
       SID		      "332"
-      Position		      [490, 675, 535, 705]
+      Position		      [475, 525, 520, 555]
       ZOrder		      232
       Value		      "z_nom"
     }
@@ -1891,7 +1861,7 @@ Model {
 	    Points		    [0, 95]
 	    Branch {
 	      ZOrder		      759
-	      Points		      [0, 155]
+	      Points		      [0, 150]
 	      Branch {
 		ZOrder			850
 		Points			[0, 145]
@@ -1959,28 +1929,9 @@ Model {
       }
       Branch {
 	ZOrder			525
-	Points			[0, 90]
-	Branch {
-	  ZOrder		  632
-	  Points		  [0, 65]
-	  Branch {
-	    ZOrder		    634
-	    DstBlock		    "Hoverdrag"
-	    DstPort		    2
-	  }
-	  Branch {
-	    ZOrder		    366
-	    Points		    [0, 225]
-	    DstBlock		    "Brake gap scope"
-	    DstPort		    1
-	  }
-	}
-	Branch {
-	  ZOrder		  364
-	  Points		  [-329, 0]
-	  DstBlock		  "Sum1"
-	  DstPort		  2
-	}
+	Points			[0, 90; -329, 0]
+	DstBlock		"Sum1"
+	DstPort			2
       }
     }
     Line {
@@ -1990,7 +1941,7 @@ Model {
       Points		      [100, 0]
       Branch {
 	ZOrder			830
-	Points			[0, 265]
+	Points			[0, 260]
 	DstBlock		"F scope1"
 	DstPort			1
       }
@@ -2050,8 +2001,18 @@ Model {
       ZOrder		      852
       SrcBlock		      "hover height"
       SrcPort		      1
-      DstBlock		      "Skidrag"
-      DstPort		      2
+      Points		      [29, 0]
+      Branch {
+	ZOrder			887
+	DstBlock		"Hoverdrag"
+	DstPort			2
+      }
+      Branch {
+	ZOrder			886
+	Points			[0, 145]
+	DstBlock		"Skidrag"
+	DstPort			2
+      }
     }
     Line {
       ZOrder		      881
@@ -2461,7 +2422,7 @@ Stateflow {
     decomposition	    CLUSTER_STATE
     eml {
       isEML		      1
-      script		      "function Fdrag_hover = fcn(vpod, brakegap)\n%#codegen\n\nFdrag_hover = Fdrag.hover(vpod, brakegap);"
+      script		      "function Fdrag_hover = fcn(vpod, z)\n%#codegen\n\nFdrag_hover = Fdrag.hover(vpod, z);"
       editorLayout	      "100 M4x1[10 5 700 500]"
     }
   }
@@ -2490,7 +2451,7 @@ Stateflow {
   data {
     id			    21
     ssIdNumber		    4
-    name		    "brakegap"
+    name		    "z"
     linkNode		    [18 20 22]
     scope		    INPUT_DATA
     machine		    1
