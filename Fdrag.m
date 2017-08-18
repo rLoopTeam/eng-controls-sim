@@ -2,6 +2,7 @@ classdef Fdrag
     ...
     methods(Static)
         
+        %% Aero drag
         % Input: velocity (m/s), brakegap (mm), hover height (mm)
         % Output: Drag force (N)
         function F = aero(v,rho)
@@ -19,6 +20,7 @@ classdef Fdrag
             F = (5632 * exp(-202*bg*10^-3) * (-exp(-0.3*v) + 1) * (1.5*exp(-0.02*v) + 1) );
         end
         
+        %% Hover drag for hover engines rotating at 2000 rpm
         % Input: velocity (m/s), brakegap (mm), hover height (m)
         % Output: Total brake drag force (N)
         function F = hover(v,z)
@@ -39,6 +41,7 @@ classdef Fdrag
 
         end
         
+        %% Ski drag at 16mm hover height
         % Input: velocity (m/s), hover height (m) (unused)
         % Output: Total ski drag force (N)
         function F = ski(v,z_nom)
