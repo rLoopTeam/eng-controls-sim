@@ -17,7 +17,7 @@ switch caseno
         deltax_pusher_max = 487.68;  % Max push distance (max: 487.68m or 1600ft) (m)
 %         vpod_max = 90.;              % Constraint on max velocity (m/s)
         deltat_pusher = 10;          % Desired max push distance (max: 487.68m or 1600ft) (m)
-        deltat_cruising = 2;         % Cruising time between pusher and deceleration phase (minimum 2s required) (s)
+        deltat_cruising = 5.2;         % Cruising time between pusher and deceleration phase (minimum 2s required) (s)
 %         gForce_brakedrag = 1.0;      % Constraint on max braking force (g's)
         brakegapNom = 2.5;           % Nominal brake gap during controlled braking phase (mm)
         deltax_dangerzone = 50;      % Distance between final target and end of track (DANGER ZONE!!!) (m)
