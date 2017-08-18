@@ -11,6 +11,7 @@
 % Dependencies:
 % simParameters.m
 % Fdrag.m
+% Fbrake_lift.m
 % brakeactuator.m
 %
 % Note: Fload_brakes neglects magnetic load due to force of brakes acting on eachother.
@@ -56,14 +57,18 @@ while t(n) < deltat_pusher      % pusher phase constrained by time
     Fdrag_aero(n) = Fdrag.aero(xdot(n-1),rho) / (1 - eta_aerodrag);
     Fdrag_hover(n) = Fdrag.hover(xdot(n-1),z_nom) / (1 - eta_hoverdrag);
     Fdrag_brake(n) = Fdrag.brake(xdot(n-1),brakegap(n-1)) / (1 - eta_brakedrag);
-    Fdrag_ski(n) = Fdrag.ski(xdot(n-1),z_nom) / (1 - eta_skidrag);
-
-    Fdrag_net = Fdrag_aero(n) + Fdrag_hover(n) + Fdrag_brake(n) + Fdrag_ski(n);
+    
+    if ski_option == true
+        Fdrag_ski(n) = Fdrag.ski(xdot(n-1),z_nom) / (1 - eta_skidrag);
+        Fdrag_net(n) = Fdrag_aero(n) + Fdrag_hover(n) + Fdrag_brake(n) + Fdrag_ski(n);
+    else
+        Fdrag_net(n) = Fdrag_aero(n) + Fdrag_hover(n) + Fdrag_brake(n);
+    end
 
     Fthrust(n) = mpod*gForce_pusher*g;
 
     % Compute kinematics
-    xddot(n) = (Fthrust(n) - Fdrag_net)/mpod;
+    xddot(n) = (Fthrust(n) - Fdrag_net(n))/mpod;
     xdot(n) = xdot(n-1) + xddot(n)*dt;
     x(n) = x(n-1) + xdot(n-1)*dt + 0.5*xddot(n)*dt^2;
     t(n) = t(n-1) + dt;
@@ -92,13 +97,18 @@ while t(n) < (t1 + deltat_cruising)     % Cruising phase constrained by time
     Fdrag_aero(n) = Fdrag.aero(xdot(n-1),rho) / (1 - eta_aerodrag);
     Fdrag_hover(n) = Fdrag.hover(xdot(n-1),z_nom) / (1 - eta_hoverdrag);
     Fdrag_brake(n) = Fdrag.brake(xdot(n-1),brakegap(n-1)) / (1 - eta_brakedrag);
-    Fdrag_ski(n) = Fdrag.ski(xdot(n-1),z_nom) / (1 - eta_skidrag);
 
-    Fdrag_net = Fdrag_aero(n) + Fdrag_hover(n) + Fdrag_brake(n) + Fdrag_ski(n);
+    if ski_option == true
+        Fdrag_ski(n) = Fdrag.ski(xdot(n-1),z_nom) / (1 - eta_skidrag);
+        Fdrag_net(n) = Fdrag_aero(n) + Fdrag_hover(n) + Fdrag_brake(n) + Fdrag_ski(n);
+    else
+        Fdrag_net(n) = Fdrag_aero(n) + Fdrag_hover(n) + Fdrag_brake(n);
+    end
+
     Fthrust(n) = 0;
 
     % Compute kinematics
-    xddot(n) = (Fthrust(n) - Fdrag_net)/mpod;
+    xddot(n) = (Fthrust(n) - Fdrag_net(n))/mpod;
     xdot(n) = xdot(n-1) + xddot(n)*dt;
     x(n) = x(n-1) + xdot(n-1)*dt + 0.5*xddot(n)*dt^2;
     t(n) = t(n-1) + dt;
@@ -131,11 +141,11 @@ b0 = brakegap(n);    % store initial brakegap position
 %         Fdrag_brake(n) = Fbrakedrag(xdot(n-1),brakegap(n-1));
 %         Flimprop(n) = Flimthrust(xdot(n-1));
 %         
-%         Fdrag_net = Fdrag_aero(n) + Fdrag_hover(n) + Fdrag_brake(n);
+%         Fdrag_net(n) = Fdrag_aero(n) + Fdrag_hover(n) + Fdrag_brake(n);
 %         Fthrust(n) = Flimprop(n);     % Auxiliary thrust using LIM
 %         
 %         % Compute kinematics
-%         xddot(n) = (Fthrust(n) - Fdrag_net)/mpod;
+%         xddot(n) = (Fthrust(n) - Fdrag_net(n))/mpod;
 %         xdot(n) = xdot(n-1) + xddot(n)*dt;
 %         x(n) = x(n-1) + xdot(n)*dt;
 %         brakegap(n) = brakegap(n-1);
@@ -143,7 +153,7 @@ b0 = brakegap(n);    % store initial brakegap position
 %         
 %     end
 
-%% Phase 3: Generate Deceleration Trajectory for Ideal Brake Deployment - constrained by final velocity
+%% Phase 3: Generate Deceleration Trajectory for Initial Brake Deployment - constrained by final velocity
 % Deploy brakes to a "nominal" distance, prior to running PID
 % controlled braking, such that the nominal brake gap alone should
 % theoretically yield a perfect stop at target distance, where PID could 
@@ -156,49 +166,93 @@ fprintf('Calculating optimal nominal brake gap...\n')
 
     i = 0;
 %     while xdot(n) - xdotf > 0.01
-    while xdot(n) > xdotf
-        n = n + 1;      % counter for simulation time step
-        i = i + 1;      % counter for brakeactuator array
+while xdot(n) > xdotf
+    n = n + 1;      % counter for simulation time step
+    i = i + 1;      % counter for brakeactuator array
 
-        % Compute Forces
-        Fdrag_aero(n) = Fdrag.aero(xdot(n-1),rho) / (1 - eta_aerodrag);
-        Fdrag_hover(n) = Fdrag.hover(xdot(n-1),z_nom) / (1 - eta_hoverdrag);
-        Fdrag_brake(n) = Fdrag.brake(xdot(n-1),brakegap(n-1)) / (1 - eta_brakedrag);
+    % Compute Forces
+    Fdrag_aero(n) = Fdrag.aero(xdot(n-1),rho) / (1 - eta_aerodrag);
+    Fdrag_hover(n) = Fdrag.hover(xdot(n-1),z_nom) / (1 - eta_hoverdrag);
+    Fdrag_brake(n) = Fdrag.brake(xdot(n-1),brakegap(n-1)) / (1 - eta_brakedrag);
+
+    if ski_option == true
         Fdrag_ski(n) = Fdrag.ski(xdot(n-1),z_nom) / (1 - eta_skidrag);
+        Fdrag_net(n) = Fdrag_aero(n) + Fdrag_hover(n) + Fdrag_brake(n) + Fdrag_ski(n);
+    else
+        Fdrag_net(n) = Fdrag_aero(n) + Fdrag_hover(n) + Fdrag_brake(n);
+    end
 
-        Fdrag_net = Fdrag_aero(n) + Fdrag_hover(n) + Fdrag_brake(n) + Fdrag_ski(n);
+    Fthrust(n) = 0;
 
-        Fthrust(n) = 0;
+    % Compute kinematics
+    xddot(n) = (Fthrust(n) - Fdrag_net(n))/mpod;
+    xdot(n) = xdot(n-1) + xddot(n)*dt;
+    x(n) = x(n-1) + xdot(n-1)*dt + 0.5*xddot(n)*dt^2;
+    t(n) = t(n-1) + dt;
 
-        % Compute kinematics
-        xddot(n) = (Fthrust(n) - Fdrag_net)/mpod;
-        xdot(n) = xdot(n-1) + xddot(n)*dt;
-        x(n) = x(n-1) + xdot(n-1)*dt + 0.5*xddot(n)*dt^2;
-        t(n) = t(n-1) + dt;
-
-        % Calculate current brake gap distance
+    % Calculate current brake gap distance
+    if instant_braking == true
+        ts = 0; % settling time is 0 for instant braking
+        brakegap(n) = brakegapNom;
+    else
         [b,ts] = brakeactuator(b0,brakegapNom, t(n) - t2 );
         brakegap(n) = b;
-        %% Phase 4: Generate Controlled Braking Trajectory - constrained by initial brake deployment settling time (~4.8s)
-        if (t(n) - t2) - ts < 0.01 % brake actuator settling time reached. PID controller engaged.
-            % Mark phase 3 final conditions
-            n3 = n;
-            x3 = x(n);
-            xdot3 = xdot(n);
-            t3 = t(n);
-        end
 
-        % Constrain brakegap to limit switches
-        if brakegap(n) > 25
-            brakegap(n) = 25;
-        end
-        if brakegap(n) < 2.5
-            brakegap(n) = 2.5;
-        end
-
-        % Compute load along brake actuator lead screw
-        Fload_brakes(n) = Fbrakelift(xdot(n),brakegap(n))*sin(17*pi()/180) - Fdrag_brake(n)*cos(17*pi()/180)/2;
     end
+
+    %% Phase 4: Generate Controlled Braking Trajectory - constrained by initial brake deployment settling time (~4.8s)
+    if (t(n) - t2) >= ts % brake actuator settling time reached. PID controller engaged.
+        break
+    end
+
+    % Constrain brakegap to limit switches
+    if brakegap(n) > 25
+        brakegap(n) = 25;
+    end
+    if brakegap(n) < 2.5
+        brakegap(n) = 2.5;
+    end
+
+    % Compute load along brake actuator lead screw
+    Fload_brakes(n) = Fbrakelift(xdot(n),brakegap(n))*sin(17*pi()/180) - Fdrag_brake(n)*cos(17*pi()/180)/2;
+end
+
+% Mark phase 3 final conditions
+n3 = n;
+x3 = x(n);
+xdot3 = xdot(n);
+t3 = t(n);
+
+%% Phase %: Generate Remaining Deceleration Trajectory - constrained by final velocity
+% Note: for PID controlled braking, brakes will adjust during this phase to reach target distance
+while xdot(n) > xdotf
+    n = n + 1;      % counter for simulation time step
+
+    % Compute Forces
+    Fdrag_aero(n) = Fdrag.aero(xdot(n-1),rho) / (1 - eta_aerodrag);
+    Fdrag_hover(n) = Fdrag.hover(xdot(n-1),z_nom) / (1 - eta_hoverdrag);
+    Fdrag_brake(n) = Fdrag.brake(xdot(n-1),brakegap(n-1)) / (1 - eta_brakedrag);
+
+    if ski_option == true
+        Fdrag_ski(n) = Fdrag.ski(xdot(n-1),z_nom) / (1 - eta_skidrag);
+        Fdrag_net(n) = Fdrag_aero(n) + Fdrag_hover(n) + Fdrag_brake(n) + Fdrag_ski(n);
+    else
+        Fdrag_net(n) = Fdrag_aero(n) + Fdrag_hover(n) + Fdrag_brake(n);
+    end
+
+    Fthrust(n) = 0;
+
+    % Compute kinematics
+    xddot(n) = (Fthrust(n) - Fdrag_net(n))/mpod;
+    xdot(n) = xdot(n-1) + xddot(n)*dt;
+    x(n) = x(n-1) + xdot(n-1)*dt + 0.5*xddot(n)*dt^2;
+    t(n) = t(n-1) + dt;
+
+    brakegap(n) = brakegap(n-1);
+
+    % Compute load along brake actuator lead screw
+    Fload_brakes(n) = Fbrakelift(xdot(n),brakegap(n))*sin(17*pi()/180) - Fdrag_brake(n)*cos(17*pi()/180)/2;
+end
 
 %     % if total distance traveled is within 0.05m of target, break for loop
 %     if abs(x(end) - xf) < 0.01 %&& xdotf - xdot(end) < 0.01
@@ -236,16 +290,21 @@ fprintf('Generating plots...\n')
 
 figure(1)
 subplot(411)
+if ski_option == true
+    title(['Trajectory case no. ' num2str(caseno) ': ' num2str(gForce_pusher,2) 'g acceleration for ' num2str(t1,3) 's ' num2str(x1,4) 'm | ' num2str(max(x),4) 'm pod travel | ' num2str(max(xdot),4) 'm/s max velocity | ' num2str(max(Fdrag_hover),4) 'N max hover drag | ' num2str(max(Fdrag_ski),4) 'N max ski drag'])
+else
+    title(['Trajectory case no. ' num2str(caseno) ': ' num2str(gForce_pusher,2) 'g acceleration for ' num2str(t1,3) 's ' num2str(x1,4) 'm | ' num2str(max(x),4) 'm pod travel | ' num2str(max(xdot),4) 'm/s max velocity | ' num2str(max(Fdrag_hover),4) 'N max hover drag | ' ])
+end
 hold on
 plot(t,x)
 plot([0 t(length(t))],[xf xf])
-axis([0 1.2*t(length(t)) 0 1.2*xf])
+plot([0 t(length(t))],[(xf+deltax_dangerzone) (xf+deltax_dangerzone)],'r')
+axis([0 1.2*t(length(t)) 0 1.2*(xf+deltax_dangerzone)])
 
 grid on
 grid minor    
-title(['Trajectory case no. ' num2str(caseno) ': ' num2str(mpod) 'kg pod mass | ' num2str(P/1000,4) 'kPa @' num2str(T,4) 'K | ' num2str(gForce_pusher,2) 'g acceleration for ' num2str(t1,3) 's ' num2str(x1,4) 'm | ' num2str(xdot1,4) 'm/s max velocity | ' num2str(deltat_cruising,2) 's cruising | ' num2str(brakegapNom) 'mm nominal brakegap'])
 ylabel('Distance (m)')
-legend('Pod travel','Target distance');
+legend('Pod Travel','Target Distance','Danger Zone');
 
 subplot(412)
 plot(t,xdot)
@@ -263,14 +322,19 @@ plot(t,Fthrust/(mpod*g))
 plot(t,-Fdrag_aero/(mpod*g))
 plot(t,-Fdrag_hover/(mpod*g))
 plot(t,-Fdrag_brake/(mpod*g))
-plot(t,-Fdrag_ski/(mpod*g))
-%     axis([0 1.25*t(length(t)) -1.5 1.5])
-axis([0 1.2*t(length(t)) -2.1 2.1])
+if ski_option == true
+    plot(t,-Fdrag_ski/(mpod*g))
+end
+axis([0 1.2*t(length(t)) -1.1*max(Fdrag_net/(mpod*g)) 1.1*max(Fthrust/(mpod*g))])
 grid on
 grid minor
 ylabel('Acceleration (gs)')
 %     legend('Total acceleration','Pusher','LIM prop','Aerodynamic drag','Hover drag','Braking drag');
-legend('Total acceleration','Pusher','Aerodynamic drag','Hover drag','Braking drag','Ski drag');
+if ski_option == true
+    legend('Total acceleration','Pusher','Aerodynamic drag','Hover drag','Braking drag','Ski drag');
+else
+    legend('Total acceleration','Pusher','Aerodynamic drag','Hover drag','Braking drag');
+end
 
 subplot(414)
 plot(t,brakegap)
@@ -284,50 +348,61 @@ legend('Braking profile');
 %% Distance-dependent Trajectory Graphs
 figure(2)
 subplot(311)
+if ski_option == true
+    title(['Trajectory case no. ' num2str(caseno) ': ' num2str(gForce_pusher,2) 'g acceleration for ' num2str(t1,3) 's ' num2str(x1,4) 'm | ' num2str(max(x),4) 'm pod travel | ' num2str(max(xdot),4) 'm/s max velocity | ' num2str(max(Fdrag_hover),4) 'N max hover drag | ' num2str(max(Fdrag_ski),4) 'N max ski drag'])
+else
+    title(['Trajectory case no. ' num2str(caseno) ': ' num2str(gForce_pusher,2) 'g acceleration for ' num2str(t1,3) 's ' num2str(x1,4) 'm | ' num2str(max(x),4) 'm pod travel | ' num2str(max(xdot),4) 'm/s max velocity | ' num2str(max(Fdrag_hover),4) 'N max hover drag | ' ])
+end
 hold on
 plot(x,xdot)
-%     plot(xf + deltax_dangerzone - xdotOverride*4.8,xdotOverride)
-%     plot(x,v_override)
-plot([x1 x1],[0 1.1*xdot2])
-plot([x2 x2],[0 1.1*xdot2])
-% plot([x3 x3],[0 1.1*xdot2])
-plot([xf xf],[0 1.1*xdot2])
-plot([xf+deltax_dangerzone xf+deltax_dangerzone],[0 1.1*xdot2],'r')
-axis([0 1.2*xf 0 1.1*xdot2])
+plot([x1 x1],[0 1.1*max(xdot)])
+plot([x2 x2],[0 1.1*max(xdot)])
+if PIDcontroller == true
+    plot([x3 x3],[0 1.1*max(xdot)])
+end
+plot([xf xf],[0 1.1*max(xdot)])
+plot([(xf+deltax_dangerzone) (xf+deltax_dangerzone)],[0 1.1*max(xdot)],'r')
+axis([0 1.2*(xf+deltax_dangerzone) 0 1.1*max(xdot)])
 grid on
 grid minor
-title(['Trajectory case no. ' num2str(caseno) ': ' num2str(mpod) 'kg pod mass | ' num2str(P/1000,4) 'kPa @' num2str(T,4) 'K | ' num2str(gForce_pusher,2) 'g acceleration for ' num2str(t1,3) 's ' num2str(x1,4) 'm | ' num2str(xdot1,4) 'm/s max velocity | ' num2str(deltat_cruising,2) 's cruising | ' num2str(brakegapNom) 'mm nominal brakegap'])
-%     formatSpec = 'PID Override Trigger for deltax_{dangerzone} = %0.fm';
-%formatSpec = 'PID Override Trigger';
-%str = sprintf(formatSpec,deltax_dangerzone);
-% legend('rPod Trajectory','Pusher Jettisoned','Braking Engaged','PID Controller Engaged','Target Distance','Danger Zone');
-legend('rPod Trajectory','Pusher Jettisoned','Braking Engaged','Target Distance','Danger Zone');
 ylabel('Velocity (m/s)')
+if PIDcontroller == true
+    legend('rPod Trajectory','Pusher Jettisoned','Braking Engaged','PID Controller Engaged','Target Distance','Danger Zone');
+else
+    legend('rPod Trajectory','Pusher Jettisoned','Braking Engaged','Target Distance','Danger Zone');
+end
 
 subplot(312)
+hold on
 plot(x,brakegap)
-axis([0 1.2*xf 0 30])
+axis([0 1.2*(xf+deltax_dangerzone) 0 30])
 grid on
 grid minor
 ylabel('Brake gap (mm)')
 xlabel('Distance (m)')
-legend('Braking profile');
+% legend('Braking profile');
 
 subplot(313)
+hold on
 plot(x,Fload_brakes)
-axis([0 1.2*xf 1.1*min(Fload_brakes) 1.1*max(Fload_brakes)])
+axis([0 1.2*(xf+deltax_dangerzone) 1.1*min(Fload_brakes) 1.1*max(Fload_brakes)])
 grid on
 grid minor
 ylabel('Brake load (N)')
 xlabel('Distance (m)')
-legend('load along leadscrew');
+% legend('load along leadscrew');
 
 %% Output Trajectory data to csv
 fprintf('Saving trajectory data to csv...\n')
 
-header = {'t', 'x', 'xdot', 'xddot', 'drag_aero', 'drag_hover', 'drag_brake', 'drag_ski', 'brakegap', 'Fload_brakes'};
+if ski_option == true
+    header = {'t', 'x', 'xdot', 'xddot', 'drag_aero', 'drag_hover', 'drag_brake', 'drag_ski', 'brakegap', 'Fload_brakes'};
+    data = table(t', x', xdot', xddot', -Fdrag_aero'/(mpod*g), -Fdrag_hover'/(mpod*g), -Fdrag_brake'/(mpod*g), -Fdrag_ski'/(mpod*g), brakegap', Fload_brakes');
+else
+    header = {'t', 'x', 'xdot', 'xddot', 'drag_aero', 'drag_hover', 'drag_brake', 'brakegap', 'Fload_brakes'};
+    data = table(t', x', xdot', xddot', -Fdrag_aero'/(mpod*g), -Fdrag_hover'/(mpod*g), -Fdrag_brake'/(mpod*g), brakegap', Fload_brakes');
+end
 
-data = table(t', x', xdot', xddot', -Fdrag_aero'/(mpod*g), -Fdrag_hover'/(mpod*g), -Fdrag_brake'/(mpod*g), -Fdrag_ski'/(mpod*g), brakegap', Fload_brakes');
 data.Properties.VariableNames = header;
 
 formatSpec = 'Trajectory_case_no_%0.f.csv';
@@ -367,6 +442,9 @@ parameternames = {   'mpod',
                     'brakegapNom',
                     'deltax_dangerzone',
                     'z_nom',
+                    'ski_option',
+                    'instant_braking',
+                    'PIDcontroller',
                     'Ppsi',
                     'P',
                     'T',
@@ -375,7 +453,7 @@ parameternames = {   'mpod',
                     'eta_aerodrag',
                     'eta_hoverdrag',
                     'eta_brakedrag',
-                    'eta_skidrag'
+                    'eta_skidrag',
                     }
 
 value = [   mpod,
@@ -391,6 +469,9 @@ value = [   mpod,
             brakegapNom,
             deltax_dangerzone,
             z_nom,
+            ski_option,
+            instant_braking,
+            PIDcontroller,
             Ppsi,
             P,
             T,
@@ -416,6 +497,9 @@ description = { 'Total pod mass (kg)',
                 'Nominal brake gap during controlled braking phase (mm)',
                 'Distance between final target and end of track (DANGER ZONE!!!) (m)'
                 'Nominal hover height (m)',
+                'Enables/disables addition of skis',
+                'true = brakes reach nominal brakegap instantaneously',
+                'true = brakes actuators use PID controller to adjust trajectory',
                 'Atmospheric air pressure inside SpaceX Hyperloop test tube (Psi)',
                 'Atmospheric air pressure inside SpaceX Hyperloop test tube (Pa)',
                 'Atmospheric air temperature inside SpaceX Hyperloop test tube (K)',
