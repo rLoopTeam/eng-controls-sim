@@ -12,12 +12,20 @@ classdef Fdrag
 
             %%%% Compute aerodrag %%%%
             F =  rho * Cd * Ap * v^2 / 2;
+            
+            if F < 0
+                F = 0;
+            end
         end
         
         % Input: velocity (m/s), brakegap (mm), hover height (mm)
         % Output: Total brake drag force (N)
         function F = brake(v,bg)
             F = (5632 * exp(-202*bg*10^-3) * (-exp(-0.3*v) + 1) * (1.5*exp(-0.02*v) + 1) );
+            
+            if F < 0
+                F = 0;
+            end
         end
         
         %% Hover drag for hover engines rotating at 2000 rpm
@@ -46,6 +54,9 @@ classdef Fdrag
         % Output: Total ski drag force (N)
         function F = ski(v,z_nom)
             F = 204.983 * exp(-0.004*v);
+            if F <= 0
+                F = 0;
+            end
         end
         
     end
