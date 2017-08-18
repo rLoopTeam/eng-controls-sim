@@ -2,12 +2,54 @@
 g = 9.81;                                   % Gravitational constant
 
 %Input
-caseno = 037;
+caseno = 038;
 
 %%%% Trajectory & Simulation Constraints %%%%
 switch caseno
     
-    case 037    % to debud low g issue
+    case 038    % Outdoor case at 0.3g with skis
+        mpod = 441.;                % Total pod mass (kg)
+        dt = 0.01;                 % time step (s)
+        xf = 37;                  % Target distance (m)
+        xdotf = 0.01;               % Target final velocity at xf (m/s)
+        gForce_pusher = 0.3;        % Pusher acceleration (g's)
+%         deltax_pusher = 312;     % Desired max push distance (max: 487.68m or 1600ft) (m)
+        deltax_pusher_max = 487.68; % Max push distance (max: 487.68m or 1600ft) (m)
+%         vpod_max = 90.;            % Constraint on max velocity (m/s)
+        deltat_pusher = 1;     % Desired max push distance (max: 487.68m or 1600ft) (m)
+        deltat_cruising = 2;        % Cruising time between pusher and deceleration phase (minimum 2s required) (s)
+%         gForce_brakedrag = 1.0;     % Constraint on max braking force (g's)
+        brakegapNom = 2.5;          % Nominal brake gap during controlled braking phase (mm)
+        deltax_dangerzone = 8;     % Distance between final target and end of track (DANGER ZONE!!!) (m)
+        z_nom = 0.012;              % Nominal hover height (m) based on pod mass and 8 hover engines
+        ski_option = true;          % Enables/disables addition of skis
+        instant_braking = true;     % true = brakes reach nominal brakegap instantaneously
+        PIDcontroller = false;       % true = brakes actuators use PID controller to adjust trajectory
+
+        %%%% Pressure %%%%
+%         Ppsi = 0.4;              % Atmospheric air pressure inside SpaceX test tube (Psi)
+%         Ppsi = 0.1250;              % Atmospheric air pressure inside SpaceX test tube (Psi)
+%         Ppsi = 3.7188;              % Atmospheric air pressure inside SpaceX test tube (Psi)
+%         Ppsi = 7.3125;              % Atmospheric air pressure inside SpaceX test tube (Psi)
+%         Ppsi = 10.9063;             % Atmospheric air pressure inside SpaceX test tube (Psi)
+%         Ppsi = 14.5;                % Atmospheric air pressure inside SpaceX test tube (Psi)
+        Ppsi = 14.7;              % Atmospheric air pressure for outdoor SpaceX test track (Psi)
+        
+        % Using ideal gas law, P = rho*R*T, solve for rho 
+        P = 6894.76*Ppsi;           % Atmospheric air pressure inside SpaceX test tube (Pa)
+        R = 287.05;                 % Ideal gas constant (J/(kg*K))
+        T = 293.15;                 % Atmospheric air temperature inside SpaceX test tube (K)
+        rho = P/(R*T);              % Air density inside SpaceX test tube(kg/m^3)
+%         rho = 0.100098;             % Air density inside SpaceX test tube(kg/m^3)
+%         rho = 1.2754;               % Standard Air density at 20 degC, sealevel(kg/m^3)
+
+        %%%% Relative Error (eta is positive for under-estimated case; negative for over-estimated case)%%%%
+        eta_aerodrag = 0.0;        % Estimated aerodynamic drag relative error
+        eta_hoverdrag = 0.0;       % Estimated hover-engine drag relative error
+        eta_brakedrag = 0.0;       % Estimated brake drag relative error
+        eta_skidrag = 0.0;         % Estimated ski drag relative error
+        
+    case 037    % Outdoor case at 0.2g with skis
         mpod = 441.;                % Total pod mass (kg)
         dt = 0.01;                 % time step (s)
         xf = 37;                  % Target distance (m)
@@ -27,12 +69,13 @@ switch caseno
         PIDcontroller = false;       % true = brakes actuators use PID controller to adjust trajectory
 
         %%%% Pressure %%%%
-        Ppsi = 14.7;              % Atmospheric air pressure inside SpaceX test tube (Psi)
+%         Ppsi = 0.4;              % Atmospheric air pressure inside SpaceX test tube (Psi)
 %         Ppsi = 0.1250;              % Atmospheric air pressure inside SpaceX test tube (Psi)
 %         Ppsi = 3.7188;              % Atmospheric air pressure inside SpaceX test tube (Psi)
 %         Ppsi = 7.3125;              % Atmospheric air pressure inside SpaceX test tube (Psi)
 %         Ppsi = 10.9063;             % Atmospheric air pressure inside SpaceX test tube (Psi)
 %         Ppsi = 14.5;                % Atmospheric air pressure inside SpaceX test tube (Psi)
+        Ppsi = 14.7;              % Atmospheric air pressure for outdoor SpaceX test track (Psi)
         
         % Using ideal gas law, P = rho*R*T, solve for rho 
         P = 6894.76*Ppsi;           % Atmospheric air pressure inside SpaceX test tube (Pa)
