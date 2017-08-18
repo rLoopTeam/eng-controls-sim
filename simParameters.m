@@ -27,7 +27,7 @@ switch caseno
         PIDcontroller = false;       % true = brakes actuators use PID controller to adjust trajectory
 
         %%%% Pressure %%%%
-        Ppsi = 0.4;              % Atmospheric air pressure inside SpaceX test tube (Psi)
+        Ppsi = 14.7;              % Atmospheric air pressure inside SpaceX test tube (Psi)
 %         Ppsi = 0.1250;              % Atmospheric air pressure inside SpaceX test tube (Psi)
 %         Ppsi = 3.7188;              % Atmospheric air pressure inside SpaceX test tube (Psi)
 %         Ppsi = 7.3125;              % Atmospheric air pressure inside SpaceX test tube (Psi)

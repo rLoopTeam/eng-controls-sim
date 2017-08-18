@@ -12,11 +12,11 @@ z_nom,0.012,Nominal hover height (m)
 ski_option,1,Enables/disables addition of skis
 instant_braking,1,true = brakes reach nominal brakegap instantaneously
 PIDcontroller,0,true = brakes actuators use PID controller to adjust trajectory
-Ppsi,0.4,Atmospheric air pressure inside SpaceX Hyperloop test tube (Psi)
-P,2757.904,Atmospheric air pressure inside SpaceX Hyperloop test tube (Pa)
+Ppsi,14.7,Atmospheric air pressure inside SpaceX Hyperloop test tube (Psi)
+P,101352.972,Atmospheric air pressure inside SpaceX Hyperloop test tube (Pa)
 T,293.15,Atmospheric air temperature inside SpaceX Hyperloop test tube (K)
 R,287.05,Ideal gas constant (J/(kg*K)
-rho,0.0327741694665958,Air density inside SpaceX Hyperloop test tube (kg/m^3)
+rho,1.2044507278974,Air density inside SpaceX Hyperloop test tube (kg/m^3)
 eta_aerodrag,0,Estimated aerodynamic drag relative error
 eta_hoverdrag,0,Estimated hover-engine drag relative error
 eta_brakedrag,0,Estimated brake drag relative error
