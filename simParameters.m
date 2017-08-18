@@ -2,7 +2,7 @@
 g = 9.81;                                   % Gravitational constant
 
 %Input
-caseno = 042;
+caseno = 043;
 
 %%%% Trajectory & Simulation Constraints %%%%
 switch caseno
@@ -12,7 +12,7 @@ switch caseno
         dt = 0.01;                 % time step (s)
         xf = 37;                  % Target distance (m)
         xdotf = 0.01;               % Target final velocity at xf (m/s)
-        gForce_pusher = 0.2;        % Pusher acceleration (g's)
+        gForce_pusher = 0.5;        % Pusher acceleration (g's)
 %         deltax_pusher = 312;     % Desired max push distance (max: 487.68m or 1600ft) (m)
         deltax_pusher_max = 487.68; % Max push distance (max: 487.68m or 1600ft) (m)
 %         vpod_max = 90.;            % Constraint on max velocity (m/s)
