@@ -2,7 +2,7 @@
 g = 9.81;                                   % Gravitational constant
 
 %Input
-caseno = 043;
+caseno = 037;
 
 %%%% Trajectory & Simulation Constraints %%%%
 switch caseno
@@ -863,7 +863,7 @@ switch caseno
         deltax_dangerzone = 8;     % Distance between final target and end of track (DANGER ZONE!!!) (m)
         z_nom = 0.012;              % Nominal hover height (m) based on pod mass and 8 hover engines
         ski_option = true;          % Enables/disables addition of skis
-        instant_braking = true;     % true = brakes reach nominal brakegap instantaneously
+        instant_braking = false;     % true = brakes reach nominal brakegap instantaneously
         PIDcontroller = false;       % true = brakes actuators use PID controller to adjust trajectory
 
         %%%% Pressure %%%%
