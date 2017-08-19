@@ -10,7 +10,7 @@ brakegapNom,2.5,Nominal brake gap during controlled braking phase (mm)
 deltax_dangerzone,50,Distance between final target and end of track (DANGER ZONE!!!) (m)
 z_nom,0.016,Nominal hover height (m)
 ski_option,1,Enables/disables addition of skis
-instant_braking,1,true = brakes reach nominal brakegap instantaneously
+instant_braking,0,true = brakes reach nominal brakegap instantaneously
 PIDcontroller,0,true = brakes actuators use PID controller to adjust trajectory
 Ppsi,0.4,Atmospheric air pressure inside SpaceX Hyperloop test tube (Psi)
 P,2757.904,Atmospheric air pressure inside SpaceX Hyperloop test tube (Pa)
