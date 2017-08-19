@@ -2,7 +2,7 @@
 g = 9.81;                                   % Gravitational constant
 
 %Input
-caseno = 037;
+caseno = 057;
 
 %%%% Trajectory & Simulation Constraints %%%%
 switch caseno
@@ -932,7 +932,7 @@ switch caseno
         
     case 035    % case 35 = case 34 without skis
         mpod = 441.;                % Total pod mass (kg)
-        dt = 0.001;                 % time step (s)
+        dt = 0.01;                  % time step (s)
         xf = 1250;                  % Target distance (m)
         xdotf = 0.01;               % Target final velocity at xf (m/s)
         gForce_pusher = 1.0;        % Pusher acceleration (g's)
@@ -972,7 +972,7 @@ switch caseno
         
     case 034    % case 24
         mpod = 441.;                % Total pod mass (kg)
-        dt = 0.001;                 % time step (s)
+        dt = 0.01;                  % time step (s)
         xf = 1250;                  % Target distance (m)
         xdotf = 0.01;               % Target final velocity at xf (m/s)
         gForce_pusher = 1.0;        % Pusher acceleration (g's)
@@ -1011,7 +1011,7 @@ switch caseno
         
     case 033    % case 24
         mpod = 441.;                % Total pod mass (kg)
-        dt = 0.001;                 % time step (s)
+        dt = 0.01;                  % time step (s)
         xf = 1250;                  % Target distance (m)
         xdotf = 0.01;               % Target final velocity at xf (m/s)
         gForce_pusher = 1.0;        % Pusher acceleration (g's)
@@ -1050,7 +1050,7 @@ switch caseno
         
     case 032    % case 24
         mpod = 441.;                % Total pod mass (kg)
-        dt = 0.001;                 % time step (s)
+        dt = 0.01;                  % time step (s)
         xf = 1250;                  % Target distance (m)
         xdotf = 0.01;               % Target final velocity at xf (m/s)
         gForce_pusher = 1.0;        % Pusher acceleration (g's)
@@ -1316,7 +1316,7 @@ switch caseno
         
     case 025    % Run as deltat_pusher constrained
         mpod = 441.;                % Total pod mass (kg)
-        dt = 0.001;                 % time step (s)
+        dt = 0.01;                  % time step (s)
         xf = 1250;                  % Target distance (m)
         xdotf = 0.01;               % Target final velocity at xf (m/s)
         gForce_pusher = 0.5;        % Pusher acceleration (g's)
@@ -1354,7 +1354,7 @@ switch caseno
         
     case 024    % Run as deltat_pusher constrained
         mpod = 441.;                % Total pod mass (kg)
-        dt = 0.001;                 % time step (s)
+        dt = 0.01;                  % time step (s)
         xf = 1250;                  % Target distance (m)
         xdotf = 0.01;               % Target final velocity at xf (m/s)
         gForce_pusher = 1.0;        % Pusher acceleration (g's)
@@ -1392,7 +1392,7 @@ switch caseno
         
     case 023    % (Run as deltat_pusher constrained) Full track case for rPod (as of 8/01) and constraints as per 2017_0207_Hyperloop_Tube_Specs
         mpod = 441.;                % Total pod mass (kg)
-        dt = 0.001;                 % time step (s)
+        dt = 0.01;                  % time step (s)
         xf = 1250;                  % Target distance (m)
         xdotf = 0.01;               % Target final velocity at xf (m/s)
         gForce_pusher = 1.0;        % Pusher acceleration (g's)
@@ -1428,7 +1428,7 @@ switch caseno
         
     case 022    % Full track case for rPod v2 and constraints as per 2017_0207_Hyperloop_Tube_Specs
         mpod = 360.;                % Total pod mass (kg)
-        dt = 0.001;                 % time step (s)
+        dt = 0.01;                  % time step (s)
         xf = 1250;                  % Target distance (m)
         xdotf = 0.01;               % Target final velocity at xf (m/s)
         gForce_pusher = 1.0;        % Pusher acceleration (g's)
@@ -1451,7 +1451,7 @@ switch caseno
         
     case 021    % Full track case for rPod v1 and constraints as per 2017_0207_Hyperloop_Tube_Specs
         mpod = 360.;                % Total pod mass (kg)
-        dt = 0.001;                 % time step (s)
+        dt = 0.01;                  % time step (s)
         xf = 1250;                  % Target distance (m)
         xdotf = 0.01;               % Target final velocity at xf (m/s)
         gForce_pusher = 1.0;        % Pusher acceleration (g's)
@@ -1475,7 +1475,7 @@ switch caseno
         
     case 020    % Full track case for rPod v1 and constraints as per 2017_0207_Hyperloop_Tube_Specs
         mpod = 360.;                % Total pod mass (kg)
-        dt = 0.001;                 % time step (s)
+        dt = 0.01;                  % time step (s)
         xf = 1250;                  % Target distance (m)
         xdotf = 0.01;               % Target final velocity at xf (m/s)
         gForce_pusher = 1.0;        % Pusher acceleration (g's)
@@ -1500,7 +1500,7 @@ switch caseno
     case 019    % Full track case for rPod v1 and constraints as per 2017_0207_Hyperloop_Tube_Specs
         mpod = 360.;                % Total pod mass (kg)
 
-        dt = 0.001;                 % time step (s)
+        dt = 0.01;                  % time step (s)
         xf = 1250;                  % Target distance (m)
         xdotf = 0.01;               % Target final velocity at xf (m/s)
         gForce_pusher = 1.0;        % Pusher acceleration (g's)
@@ -1522,7 +1522,7 @@ switch caseno
 %         Ppsi = 14.5;
         
     case 018    % Full track case for rPod v1 and constraints as per 2017_0207_Hyperloop_Tube_Specs
-        dt = 0.001;                 % time step (s)
+        dt = 0.01;                  % time step (s)
         xf = 1250;                  % Target distance (m)
         xdotf = 0.01;               % Target final velocity at xf (m/s)
         gForce_pusher = 1.0;        % Pusher acceleration (g's)
