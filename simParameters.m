@@ -2,7 +2,7 @@
 g = 9.81;                                   % Gravitational constant
 
 %Input
-caseno = 042;
+caseno = 043;
 
 %%%% Trajectory & Simulation Constraints %%%%
 switch caseno
