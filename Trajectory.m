@@ -409,6 +409,13 @@ formatSpec = 'Trajectory_case_no_%0.f.csv';
 filename = sprintf(formatSpec,caseno);
 writetable(data,filename,'Delimiter',',')
 
+header_avionics = {'ACCEL_X'};
+data_avionics = table(-int32(512*Fdrag_net')/(mpod*g));
+data_avionics.Properties.VariableNames = header_avionics;
+formatSpec_avionics = 'Trajectory_case_no_%0.f_avionics.csv';
+filename_avionics = sprintf(formatSpec_avionics ,caseno);
+writetable(data_avionics,filename_avionics,'Delimiter',',')
+
 % %% Output Trajectory to csv
 % % header = {'time (s)', 'Distance (m)', 'Velocity (m/s)', 'Acceleration (m/s^2)', 'Aerodrag (gs)', 'Hoverdrag (gs)', 'Brakedrag (gs)', 'brakegap (mm)'};
 % data = [t; x; xdot; xddot; -Fdrag_aero/(mpod*g); -Fdrag_hover/(mpod*g); -Fdrag_brake/(mpod*g); -Fdrag_ski/(mpod*g); brakegap; Fload_brakes]';
