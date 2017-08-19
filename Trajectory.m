@@ -410,7 +410,7 @@ filename = sprintf(formatSpec,caseno);
 writetable(data,filename,'Delimiter',',')
 
 header_avionics = {'ACCEL_X'};
-data_avionics = table(-int32(512*Fdrag_net')/(mpod*g));
+data_avionics = table(-int32(512*xddot'));
 data_avionics.Properties.VariableNames = header_avionics;
 formatSpec_avionics = 'Trajectory_case_no_%0.f_avionics.csv';
 filename_avionics = sprintf(formatSpec_avionics ,caseno);
