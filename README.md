@@ -6,9 +6,11 @@
 
     Install Matlab and Simulink (code was developed using 2015a)
 
-# Run Trajectory Simulation (Matlab)
+# Run Trajectory Simulation
 
-    1. Configure simulation parameters in 'simParameters.m'
+Generates plots and csv files for trajectory scenarios under the specified simulation parameters.
+
+1. Configure simulation parameters in 'simParameters.m'
 
 	create new case or change 'caseno' to desired case to use its corresponding simulation parameters
 
@@ -51,12 +53,14 @@
             eta_skidrag = 0.0;         % Estimated ski drag relative error
     ```
 
-    2. Run 'Trajectory.m' to generate scenario 
+2. Run 'Trajectory.m' to generate scenario 
 
-# Run Controlled Trajectory Simulation (Simulink)
+# Run Trajectory Simulation (with controlled braking)
 
-    1. Generate Simulation Parameters and Setpoint Tables (Velocity & Position) from running 'simParameters.m' and 'Trajectory.m'
+Generates plots for response dynamics of controlled braking algorithm under specified disturbances and/or relative error estimations in drag forces
+
+1. Generate Simulation Parameters and Setpoint Tables (Velocity & Position) from running 'simParameters.m' and 'Trajectory.m'
     
-    2. Run 'GainScheduledPIDTuner.m' to generate Theoretical Gains linearized by breakpoint table
+2. Run 'GainScheduledPIDTuner.m' to generate Theoretical Gains linearized by breakpoint table
     
-    3. Run 'GainScheduledPIDBrakingSystem.mdl' to visualize response dynamics
+3. Run 'GainScheduledPIDBrakingSystem.mdl' to visualize response dynamics
