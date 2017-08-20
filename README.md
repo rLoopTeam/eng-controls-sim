@@ -9,7 +9,7 @@
     
     mkdir rloopsim
     cd rloopsim
-    git clone https://github.com/capsulecorplab/eng-controls-sim.git
+    git https://github.com/rLoopTeam/eng-controls-sim.git
 
 # Run Trajectory Simulation
 
