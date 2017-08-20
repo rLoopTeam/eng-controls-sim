@@ -1,10 +1,15 @@
 # eng-controls-sim
 
+# Prerequisites
+    
+    Matlab
+    Simulink
+
 # Installation
-
-    cmd: 'git clone https://github.com/capsulecorplab/eng-controls-sim.git'
-
-    Install Matlab and Simulink (code was developed using 2015a)
+    
+    mkdir rloopsim
+    cd rloopsim
+    git clone https://github.com/capsulecorplab/eng-controls-sim.git
 
 # Run Trajectory Simulation
 
@@ -57,10 +62,12 @@ Generates plots and csv files for trajectory scenarios under the specified simul
 
 # Run Trajectory Simulation (with controlled braking)
 
-Generates plots for response dynamics of controlled braking algorithm under specified disturbances and/or relative error estimations in drag forces
+Simulates response dynamics of controlled braking algorithm under specified disturbances and/or relative error estimations in drag forces
 
 1. Generate Simulation Parameters and Setpoint Tables (Velocity & Position) from running 'simParameters.m' and 'Trajectory.m'
     
 2. Run 'GainScheduledPIDTuner.m' to generate Theoretical Gains linearized by breakpoint table
     
 3. Run 'GainScheduledPIDBrakingSystem.mdl' to visualize response dynamics
+
+4. Open 'Scope' to see response dynamics
