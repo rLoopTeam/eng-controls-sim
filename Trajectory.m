@@ -36,6 +36,7 @@ x = [0];                    % Initialize distance array (m)
 xdot = [0];                 % Initialize velocity array (m/s)
 xddot = [0];                % Initialize acceleration array (m/s^2)
 brakegap = [25];            % Initialize brake Gap (mm)
+gForce_pusher = [0];
 
 t0 = t(n);                      % Store time Stamp
 x0 = x(n);                      % pod distance at beginning of push phase (m/s)
@@ -44,7 +45,7 @@ xdot0 = xdot(n);                % pod velocity at beginning of push phase (m/s)
 %     Fdrag_aero = [Fdrag.aero(xdot(1),rho) / (1 - eta)];              % Initialize array
 %     Fdrag_hover = [Fdrag.hover(xdot(1),z_nom*10^3) / (1 - eta)];     % Initialize array
 %     Fdrag_brake = [Fdrag.brake(xdot(1),brakegap(1)) / (1 - eta)];    % Initialize array
-%     Fthrust = [gForce_pusher*g];
+%     Fthrust = [gForce_pusher(end)*g];
 %     Flimprop = [0];
 
 %% Phase 1: Generate Trajectory profile for Pusher Phase
@@ -64,8 +65,17 @@ while t(n) < deltat_pusher      % pusher phase constrained by time
     else
         Fdrag_net(n) = Fdrag_aero(n) + Fdrag_hover(n) + Fdrag_brake(n);
     end
-
-    Fthrust(n) = mpod*gForce_pusher*g;
+    
+    % Compute jerk (time derivative of acceleration)
+    xdddot_jerk = gForce_pusher_max/deltat_jerk;
+    
+    % Compute gForce at time, t
+    gForce_pusher(n) = gForce_pusher(n-1) + xdddot_jerk*dt;
+    if gForce_pusher(n) >= gForce_pusher_max
+        gForce_pusher(n) = gForce_pusher_max;
+    end
+    
+    Fthrust(n) = mpod*gForce_pusher(end)*g;
 
     % Compute kinematics
     xddot(n) = (Fthrust(n) - Fdrag_net(n))/mpod;
@@ -78,10 +88,10 @@ while t(n) < deltat_pusher      % pusher phase constrained by time
     % Compute load along brake actuator lead screw
     Fload_brakes(n) = Fbrakelift(xdot(n),brakegap(n))*sin(17*pi()/180) - Fdrag_brake(n)*cos(17*pi()/180)/2;
 
-%     % If max pusher distance reached, exit pusher phase
-%     if x(n) >= deltax_pusher_max
-%         break;
-%     end
+    % If max pusher distance reached, exit pusher phase
+    if x(n) >= deltax_pusher_max
+        break;
+    end
 end
 
 % Mark phase 1 final conditions
@@ -291,9 +301,9 @@ fprintf('Generating plots...\n')
 figure(1)
 subplot(411)
 if ski_option == true
-    title(['Trajectory case no. ' num2str(caseno) ': ' num2str(gForce_pusher,2) 'g acceleration for ' num2str(t1,3) 's ' num2str(x1,4) 'm | ' num2str(max(x),4) 'm pod travel | ' num2str(max(xdot),4) 'm/s max velocity | ' num2str(max(Fdrag_hover),4) 'N max hover drag | ' num2str(max(Fdrag_ski),4) 'N max ski drag'])
+    title(['Trajectory case no. ' num2str(caseno) ': ' num2str(gForce_pusher(end),2) 'g acceleration for ' num2str(t1,3) 's ' num2str(x1,4) 'm | ' num2str(max(x),4) 'm pod travel | ' num2str(max(xdot),4) 'm/s max velocity | ' num2str(max(Fdrag_hover),4) 'N max hover drag | ' num2str(max(Fdrag_ski),4) 'N max ski drag'])
 else
-    title(['Trajectory case no. ' num2str(caseno) ': ' num2str(gForce_pusher,2) 'g acceleration for ' num2str(t1,3) 's ' num2str(x1,4) 'm | ' num2str(max(x),4) 'm pod travel | ' num2str(max(xdot),4) 'm/s max velocity | ' num2str(max(Fdrag_hover),4) 'N max hover drag' ])
+    title(['Trajectory case no. ' num2str(caseno) ': ' num2str(gForce_pusher(end),2) 'g acceleration for ' num2str(t1,3) 's ' num2str(x1,4) 'm | ' num2str(max(x),4) 'm pod travel | ' num2str(max(xdot),4) 'm/s max velocity | ' num2str(max(Fdrag_hover),4) 'N max hover drag' ])
 end
 hold on
 plot(t,x)
@@ -349,9 +359,9 @@ legend('Braking profile');
 figure(2)
 subplot(311)
 if ski_option == true
-    title(['Trajectory case no. ' num2str(caseno) ': ' num2str(gForce_pusher,2) 'g acceleration for ' num2str(t1,3) 's ' num2str(x1,4) 'm | ' num2str(max(x),4) 'm pod travel | ' num2str(max(xdot),4) 'm/s max velocity | ' num2str(max(Fdrag_hover),4) 'N max hover drag | ' num2str(max(Fdrag_ski),4) 'N max ski drag'])
+    title(['Trajectory case no. ' num2str(caseno) ': ' num2str(gForce_pusher(end),2) 'g acceleration for ' num2str(t1,3) 's ' num2str(x1,4) 'm | ' num2str(max(x),4) 'm pod travel | ' num2str(max(xdot),4) 'm/s max velocity | ' num2str(max(Fdrag_hover),4) 'N max hover drag | ' num2str(max(Fdrag_ski),4) 'N max ski drag'])
 else
-    title(['Trajectory case no. ' num2str(caseno) ': ' num2str(gForce_pusher,2) 'g acceleration for ' num2str(t1,3) 's ' num2str(x1,4) 'm | ' num2str(max(x),4) 'm pod travel | ' num2str(max(xdot),4) 'm/s max velocity | ' num2str(max(Fdrag_hover),4) 'N max hover drag' ])
+    title(['Trajectory case no. ' num2str(caseno) ': ' num2str(gForce_pusher(end),2) 'g acceleration for ' num2str(t1,3) 's ' num2str(x1,4) 'm | ' num2str(max(x),4) 'm pod travel | ' num2str(max(xdot),4) 'm/s max velocity | ' num2str(max(Fdrag_hover),4) 'N max hover drag' ])
 end
 hold on
 plot(x,xdot)
@@ -440,7 +450,7 @@ parameternames = {   'mpod',
                     'dt', 
                     'xf', 
                     'xdotf', 
-                    'gForce_pusher',
+                    'gForce_pusher(end)',
 %                     'deltax_pusher'
                     'deltat_pusher',
 %                     'vpod_max',
@@ -467,7 +477,7 @@ value = [   mpod,
             dt,
             xf,
             xdotf,
-            gForce_pusher,
+            gForce_pusher(end),
 %             deltax_pusher,
             deltat_pusher,
 %             vpod_max,
