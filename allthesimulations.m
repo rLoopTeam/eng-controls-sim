@@ -51,7 +51,8 @@ for eta_aerodrag = -0.15:0.15:0.15          % relative error for aerodynamic dra
                 brakegapNom = 5;          % Nominal brake gap during controlled braking phase (mm)
                 deltax_dangerzone = 50;     % Distance between final target and end of track (DANGER ZONE!!!) (m)
                 z_nom = 0.012;              % Nominal hover height (m) based on pod mass and 8 hover engines
-                ski_option = true;          % Enables/disables addition of skis
+                hover_option = true;          % Enables/disables hover-engines
+                ski_option = true;          % Enables/disables skis
                 instant_braking = false;     % true = brakes reach nominal brakegap instantaneously
                 PIDcontroller = false;       % true = brakes actuators use PID controller to adjust trajectory
 

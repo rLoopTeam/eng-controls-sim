@@ -59,15 +59,11 @@ while t(n) < deltat_pusher      % pusher phase constrained by time
 
     % Compute Forces
     Fdrag_aero(n) = Fdrag.aero(xdot(n-1),rho) / (1 - eta_aerodrag);
-    Fdrag_hover(n) = Fdrag.hover(xdot(n-1),z_nom) / (1 - eta_hoverdrag);
     Fdrag_brake(n) = Fdrag.brake(xdot(n-1),brakegap(n-1)) / (1 - eta_brakedrag);
+    Fdrag_hover(n) = Fdrag.hover(xdot(n-1),z_nom) / (1 - eta_hoverdrag);
+    Fdrag_ski(n) = Fdrag.ski(xdot(n-1),z_nom) / (1 - eta_skidrag);
     
-    if ski_option == true
-        Fdrag_ski(n) = Fdrag.ski(xdot(n-1),z_nom) / (1 - eta_skidrag);
-        Fdrag_net(n) = Fdrag_aero(n) + Fdrag_hover(n) + Fdrag_brake(n) + Fdrag_ski(n);
-    else
-        Fdrag_net(n) = Fdrag_aero(n) + Fdrag_hover(n) + Fdrag_brake(n);
-    end
+    Fdrag_net(n) = Fdrag_aero(n) + hover_option*Fdrag_hover(n) + ski_option*Fdrag_ski(n) + Fdrag_brake(n);
     
     % Compute jerk (time derivative of acceleration)
     xdddot_jerk = gForce_pusher_max/deltat_jerk;
@@ -108,15 +104,11 @@ while t(n) < (t1 + deltat_cruising)     % Cruising phase constrained by time
 
     % Compute Forces
     Fdrag_aero(n) = Fdrag.aero(xdot(n-1),rho) / (1 - eta_aerodrag);
-    Fdrag_hover(n) = Fdrag.hover(xdot(n-1),z_nom) / (1 - eta_hoverdrag);
     Fdrag_brake(n) = Fdrag.brake(xdot(n-1),brakegap(n-1)) / (1 - eta_brakedrag);
-
-    if ski_option == true
-        Fdrag_ski(n) = Fdrag.ski(xdot(n-1),z_nom) / (1 - eta_skidrag);
-        Fdrag_net(n) = Fdrag_aero(n) + Fdrag_hover(n) + Fdrag_brake(n) + Fdrag_ski(n);
-    else
-        Fdrag_net(n) = Fdrag_aero(n) + Fdrag_hover(n) + Fdrag_brake(n);
-    end
+    Fdrag_hover(n) = Fdrag.hover(xdot(n-1),z_nom) / (1 - eta_hoverdrag);
+    Fdrag_ski(n) = Fdrag.ski(xdot(n-1),z_nom) / (1 - eta_skidrag);
+    
+    Fdrag_net(n) = Fdrag_aero(n) + hover_option*Fdrag_hover(n) + ski_option*Fdrag_ski(n) + Fdrag_brake(n);
 
     Fthrust(n) = 0;
 
@@ -185,15 +177,11 @@ while xdot(n) > xdotf
 
     % Compute Forces
     Fdrag_aero(n) = Fdrag.aero(xdot(n-1),rho) / (1 - eta_aerodrag);
-    Fdrag_hover(n) = Fdrag.hover(xdot(n-1),z_nom) / (1 - eta_hoverdrag);
     Fdrag_brake(n) = Fdrag.brake(xdot(n-1),brakegap(n-1)) / (1 - eta_brakedrag);
-
-    if ski_option == true
-        Fdrag_ski(n) = Fdrag.ski(xdot(n-1),z_nom) / (1 - eta_skidrag);
-        Fdrag_net(n) = Fdrag_aero(n) + Fdrag_hover(n) + Fdrag_brake(n) + Fdrag_ski(n);
-    else
-        Fdrag_net(n) = Fdrag_aero(n) + Fdrag_hover(n) + Fdrag_brake(n);
-    end
+    Fdrag_hover(n) = Fdrag.hover(xdot(n-1),z_nom) / (1 - eta_hoverdrag);
+    Fdrag_ski(n) = Fdrag.ski(xdot(n-1),z_nom) / (1 - eta_skidrag);
+    
+    Fdrag_net(n) = Fdrag_aero(n) + hover_option*Fdrag_hover(n) + ski_option*Fdrag_ski(n) + Fdrag_brake(n);
 
     Fthrust(n) = 0;
 
@@ -243,15 +231,11 @@ while xdot(n) > xdotf
 
     % Compute Forces
     Fdrag_aero(n) = Fdrag.aero(xdot(n-1),rho) / (1 - eta_aerodrag);
-    Fdrag_hover(n) = Fdrag.hover(xdot(n-1),z_nom) / (1 - eta_hoverdrag);
     Fdrag_brake(n) = Fdrag.brake(xdot(n-1),brakegap(n-1)) / (1 - eta_brakedrag);
-
-    if ski_option == true
-        Fdrag_ski(n) = Fdrag.ski(xdot(n-1),z_nom) / (1 - eta_skidrag);
-        Fdrag_net(n) = Fdrag_aero(n) + Fdrag_hover(n) + Fdrag_brake(n) + Fdrag_ski(n);
-    else
-        Fdrag_net(n) = Fdrag_aero(n) + Fdrag_hover(n) + Fdrag_brake(n);
-    end
+    Fdrag_hover(n) = Fdrag.hover(xdot(n-1),z_nom) / (1 - eta_hoverdrag);
+    Fdrag_ski(n) = Fdrag.ski(xdot(n-1),z_nom) / (1 - eta_skidrag);
+    
+    Fdrag_net(n) = Fdrag_aero(n) + hover_option*Fdrag_hover(n) + ski_option*Fdrag_ski(n) + Fdrag_brake(n);
 
     Fthrust(n) = 0;
 
@@ -303,10 +287,14 @@ fprintf('Generating plots...\n')
 
 figure(1)
 subplot(411)
-if ski_option == true
-    title(['Trajectory case no. ' num2str(caseno) ': ' num2str(gForce_pusher(end),2) 'g acceleration for ' num2str(t1,3) 's ' num2str(x1,4) 'm | ' num2str(max(x),4) 'm pod travel | ' num2str(max(xdot),4) 'm/s max velocity | ' num2str(max(Fdrag_hover),4) 'N max hover drag | ' num2str(max(Fdrag_ski),4) 'N max ski drag'])
+if  hover_option == false && ski_option == false
+    title(['Trajectory case no. ' num2str(caseno) ': ' num2str(gForce_pusher(end),2) 'g acceleration for ' num2str(t1,3) 's ' num2str(x1,4) 'm | ' num2str(max(x),4) 'm pod travel | ' num2str(max(xdot),4) 'm/s max velocity'])
+elseif hover_option == true && ski_option == false
+    title(['Trajectory case no. ' num2str(caseno) ': ' num2str(gForce_pusher(end),2) 'g acceleration for ' num2str(t1,3) 's ' num2str(x1,4) 'm | ' num2str(max(x),4) 'm pod travel | ' num2str(max(xdot),4) 'm/s max velocity | ' num2str(max(Fdrag_hover),4) 'N max hover drag'])
+elseif hover_option == false && ski_option == true
+    title(['Trajectory case no. ' num2str(caseno) ': ' num2str(gForce_pusher(end),2) 'g acceleration for ' num2str(t1,3) 's ' num2str(x1,4) 'm | ' num2str(max(x),4) 'm pod travel | ' num2str(max(xdot),4) 'm/s max velocity | ' num2str(max(Fdrag_ski),4) 'N max ski drag'])
 else
-    title(['Trajectory case no. ' num2str(caseno) ': ' num2str(gForce_pusher(end),2) 'g acceleration for ' num2str(t1,3) 's ' num2str(x1,4) 'm | ' num2str(max(x),4) 'm pod travel | ' num2str(max(xdot),4) 'm/s max velocity | ' num2str(max(Fdrag_hover),4) 'N max hover drag' ])
+    title(['Trajectory case no. ' num2str(caseno) ': ' num2str(gForce_pusher(end),2) 'g acceleration for ' num2str(t1,3) 's ' num2str(x1,4) 'm | ' num2str(max(x),4) 'm pod travel | ' num2str(max(xdot),4) 'm/s max velocity | ' num2str(max(Fdrag_hover),4) 'N max hover drag | ' num2str(max(Fdrag_ski),4) 'N max ski drag'])
 end
 hold on
 plot(t,x)
@@ -333,8 +321,10 @@ plot(t,xddot/g)
 plot(t,Fthrust/(mpod*g))
 %     plot(t,Flimprop/(mpod*g))
 plot(t,-Fdrag_aero/(mpod*g))
-plot(t,-Fdrag_hover/(mpod*g))
 plot(t,-Fdrag_brake/(mpod*g))
+if hover_option == true
+    plot(t,-Fdrag_hover/(mpod*g))
+end
 if ski_option == true
     plot(t,-Fdrag_ski/(mpod*g))
 end
@@ -343,11 +333,16 @@ grid on
 grid minor
 ylabel('Acceleration (gs)')
 %     legend('Total acceleration','Pusher','LIM prop','Aerodynamic drag','Hover drag','Braking drag');
-if ski_option == true
-    legend('Total acceleration','Pusher','Aerodynamic drag','Hover drag','Braking drag','Ski drag');
+if  hover_option == false && ski_option == false
+    legend('Total acceleration','Pusher','Aerodynamic drag','Braking drag');
+elseif hover_option == true && ski_option == false
+    legend('Total acceleration','Pusher','Aerodynamic drag','Braking drag','Hover drag');
+elseif hover_option == false && ski_option == true
+    legend('Total acceleration','Pusher','Aerodynamic drag','Braking drag','Ski drag');
 else
-    legend('Total acceleration','Pusher','Aerodynamic drag','Hover drag','Braking drag');
+    legend('Total acceleration','Pusher','Aerodynamic drag','Braking drag','Hover drag','Ski drag');
 end
+
 
 subplot(414)
 plot(t,brakegap)
@@ -361,10 +356,14 @@ legend('Braking profile');
 %% Distance-dependent Trajectory Graphs
 figure(2)
 subplot(311)
-if ski_option == true
-    title(['Trajectory case no. ' num2str(caseno) ': ' num2str(gForce_pusher(end),2) 'g acceleration for ' num2str(t1,3) 's ' num2str(x1,4) 'm | ' num2str(max(x),4) 'm pod travel | ' num2str(max(xdot),4) 'm/s max velocity | ' num2str(max(Fdrag_hover),4) 'N max hover drag | ' num2str(max(Fdrag_ski),4) 'N max ski drag'])
+if  hover_option == false && ski_option == false
+    title(['Trajectory case no. ' num2str(caseno) ': ' num2str(gForce_pusher(end),2) 'g acceleration for ' num2str(t1,3) 's ' num2str(x1,4) 'm | ' num2str(max(x),4) 'm pod travel | ' num2str(max(xdot),4) 'm/s max velocity'])
+elseif hover_option == true && ski_option == false
+    title(['Trajectory case no. ' num2str(caseno) ': ' num2str(gForce_pusher(end),2) 'g acceleration for ' num2str(t1,3) 's ' num2str(x1,4) 'm | ' num2str(max(x),4) 'm pod travel | ' num2str(max(xdot),4) 'm/s max velocity | ' num2str(max(Fdrag_hover),4) 'N max hover drag'])
+elseif hover_option == false && ski_option == true
+    title(['Trajectory case no. ' num2str(caseno) ': ' num2str(gForce_pusher(end),2) 'g acceleration for ' num2str(t1,3) 's ' num2str(x1,4) 'm | ' num2str(max(x),4) 'm pod travel | ' num2str(max(xdot),4) 'm/s max velocity | ' num2str(max(Fdrag_ski),4) 'N max ski drag'])
 else
-    title(['Trajectory case no. ' num2str(caseno) ': ' num2str(gForce_pusher(end),2) 'g acceleration for ' num2str(t1,3) 's ' num2str(x1,4) 'm | ' num2str(max(x),4) 'm pod travel | ' num2str(max(xdot),4) 'm/s max velocity | ' num2str(max(Fdrag_hover),4) 'N max hover drag' ])
+    title(['Trajectory case no. ' num2str(caseno) ': ' num2str(gForce_pusher(end),2) 'g acceleration for ' num2str(t1,3) 's ' num2str(x1,4) 'm | ' num2str(max(x),4) 'm pod travel | ' num2str(max(xdot),4) 'm/s max velocity | ' num2str(max(Fdrag_hover),4) 'N max hover drag | ' num2str(max(Fdrag_ski),4) 'N max ski drag'])
 end
 hold on
 plot(x,xdot)
@@ -408,12 +407,18 @@ xlabel('Distance (m)')
 %% Output Trajectory data to csv
 fprintf('Saving trajectory data to csv...\n')
 
-if ski_option == true
-    header = {'t', 'x', 'xdot', 'xddot', 'drag_aero', 'drag_hover', 'drag_brake', 'drag_ski', 'brakegap', 'Fload_brakes'};
-    data = table(t', x', xdot', xddot', -Fdrag_aero'/(mpod*g), -Fdrag_hover'/(mpod*g), -Fdrag_brake'/(mpod*g), -Fdrag_ski'/(mpod*g), brakegap', Fload_brakes');
-else
+if  hover_option == false && ski_option == false
+    header = {'t', 'x', 'xdot', 'xddot', 'drag_aero', 'drag_brake', 'brakegap', 'Fload_brakes'};
+    data = table(t', x', xdot', xddot', -Fdrag_aero'/(mpod*g), -Fdrag_brake'/(mpod*g), brakegap', Fload_brakes');
+elseif hover_option == true && ski_option == false
     header = {'t', 'x', 'xdot', 'xddot', 'drag_aero', 'drag_hover', 'drag_brake', 'brakegap', 'Fload_brakes'};
     data = table(t', x', xdot', xddot', -Fdrag_aero'/(mpod*g), -Fdrag_hover'/(mpod*g), -Fdrag_brake'/(mpod*g), brakegap', Fload_brakes');
+elseif hover_option == false && ski_option == true
+    header = {'t', 'x', 'xdot', 'xddot', 'drag_aero', 'drag_brake', 'drag_ski', 'brakegap', 'Fload_brakes'};
+    data = table(t', x', xdot', xddot', -Fdrag_aero'/(mpod*g), -Fdrag_brake'/(mpod*g), -Fdrag_ski'/(mpod*g), brakegap', Fload_brakes');
+else
+    header = {'t', 'x', 'xdot', 'xddot', 'drag_aero', 'drag_hover', 'drag_brake', 'drag_ski', 'brakegap', 'Fload_brakes'};
+    data = table(t', x', xdot', xddot', -Fdrag_aero'/(mpod*g), -Fdrag_hover'/(mpod*g), -Fdrag_brake'/(mpod*g), -Fdrag_ski'/(mpod*g), brakegap', Fload_brakes');
 end
 
 data.Properties.VariableNames = header;
@@ -462,6 +467,7 @@ parameternames = {   'mpod',
                     'brakegapNom',
                     'deltax_dangerzone',
                     'z_nom',
+                    'hover_option',
                     'ski_option',
                     'instant_braking',
                     'PIDcontroller',
@@ -489,6 +495,7 @@ value = [   mpod,
             brakegapNom,
             deltax_dangerzone,
             z_nom,
+            hover_option,
             ski_option,
             instant_braking,
             PIDcontroller,
@@ -517,7 +524,8 @@ description = { 'Total pod mass (kg)',
                 'Nominal brake gap during controlled braking phase (mm)',
                 'Distance between final target and end of track (DANGER ZONE!!!) (m)'
                 'Nominal hover height (m)',
-                'Enables/disables addition of skis',
+                'Enables/disables hover-engines',
+                'Enables/disables skis',
                 'true = brakes reach nominal brakegap instantaneously',
                 'true = brakes actuators use PID controller to adjust trajectory',
                 'Atmospheric air pressure inside SpaceX Hyperloop test tube (Psi)',
