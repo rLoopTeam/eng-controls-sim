@@ -1,11 +1,11 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % filename: miscalc_cases.m 
 % author: dr. briefs
-% date: 2017/8/5
+% date: 2017/8/21
 %
 % purpose:
-% - sets simulation parameters and generates graphs for all combinations of
-% relative error in a single plot
+% sets simulation parameters and generates graphs for 81 possible 
+% scenarios for all combinations of relative error per each drag force
 %
 % Dependencies:
 % Trajectory.m
