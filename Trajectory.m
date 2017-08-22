@@ -19,8 +19,8 @@
 
 
 %% Clear workspace and Generate Simulation Constraints
-clear
-simParameters
+% clear
+% simParameters
 
 formatSpec = 'Generating case no. %0.f...\n\n';
 str = sprintf(formatSpec, caseno);
@@ -42,11 +42,14 @@ t0 = t(n);                      % Store time Stamp
 x0 = x(n);                      % pod distance at beginning of push phase (m/s)
 xdot0 = xdot(n);                % pod velocity at beginning of push phase (m/s)
 
-%     Fdrag_aero = [Fdrag.aero(xdot(1),rho) / (1 - eta)];              % Initialize array
-%     Fdrag_hover = [Fdrag.hover(xdot(1),z_nom*10^3) / (1 - eta)];     % Initialize array
-%     Fdrag_brake = [Fdrag.brake(xdot(1),brakegap(1)) / (1 - eta)];    % Initialize array
-%     Fthrust = [gForce_pusher(end)*g];
-%     Flimprop = [0];
+Fdrag_aero = [0];              % Initialize array
+Fdrag_hover = [0];     % Initialize array
+Fdrag_brake = [0];    % Initialize array
+Fdrag_ski = [0];
+Fthrust = [0];
+Fdrag_net = [0];
+% Flimprop = [0];
+Fload_brakes = [0];
 
 %% Phase 1: Generate Trajectory profile for Pusher Phase
 while t(n) < deltat_pusher      % pusher phase constrained by time
