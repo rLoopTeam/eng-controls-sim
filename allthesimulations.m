@@ -1,5 +1,5 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% filename: miscalc_cases.m 
+% filename: allthesimulations.m 
 % author: dr. briefs
 % date: 2017/8/21
 %
