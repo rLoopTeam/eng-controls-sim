@@ -13,7 +13,6 @@
 % Fbrake_lift.m
 % brakeactuator.m
 %
-% Note: Fload_brakes neglects magnetic load due to force of brakes acting on eachother.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 clear
@@ -125,7 +124,7 @@ for eta_aerodrag = [eta_aerodrag_min, eta_aerodrag_nominal, eta_aerodrag_max]   
                 end
                 
                 %% create data entry summary for the case we just ran
-                data = table(caseno, eta_aerodrag, eta_hoverdrag, eta_brakedrag, eta_skidrag, x(end), max(xdot), max(xddot), max(-Fdrag_aero/(mpod*g)), max(-hover_option*Fdrag_hover/(mpod*g)), max(-ski_option*Fdrag_ski/(mpod*g)), max(-Fdrag_brake/(mpod*g)), max(100*Fdrag_aero./Fdrag_net), max(100*hover_option*Fdrag_hover./Fdrag_net), max(100*ski_option*Fdrag_ski./Fdrag_net), max(100*Fdrag_brake./Fdrag_net), max(Fload_brakes));
+                data = table(caseno, eta_aerodrag, eta_hoverdrag, eta_brakedrag, eta_skidrag, x(end), max(xdot), max(xddot), max(-Fdrag_aero/(mpod*g)), max(-hover_option*Fdrag_hover/(mpod*g)), max(-ski_option*Fdrag_ski/(mpod*g)), max(-Fdrag_brake/(mpod*g)), max(100*Fdrag_aero./Fdrag_net), max(100*hover_option*Fdrag_hover./Fdrag_net), max(100*ski_option*Fdrag_ski./Fdrag_net), max(100*Fdrag_brake./Fdrag_net), max(Tload_brakes));
                 simtable = [simtable; data];
 
                 if eta_aerodrag == eta_aerodrag_nominal && eta_hoverdrag == eta_hoverdrag_nominal && eta_brakedrag == eta_brakedrag_nominal && eta_skidrag == eta_skidrag_nominal
