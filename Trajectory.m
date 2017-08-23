@@ -84,7 +84,7 @@ while t(n) < deltat_pusher      % pusher phase constrained by time
     brakegap(n) = brakegap(n-1);
 
     % Compute load along brake actuator lead screw
-    Tload_brakes(n) = Tbrakeload(xdot(n),brakegap(n)) / (1 - eta_brakedrag);
+    Tload_brakes(n) = Tbrakeload(xdot(n),xddot(n),brakegap(n)) / (1 - eta_brakedrag);
 
     % If max pusher distance reached, exit pusher phase
     if x(n) >= deltax_pusher_max
@@ -120,7 +120,7 @@ while t(n) < (t1 + deltat_cruising)     % Cruising phase constrained by time
     brakegap(n) = brakegap(n-1);
 
     % Compute load along brake actuator lead screw
-    Tload_brakes(n) = Tbrakeload(xdot(n),brakegap(n)) / (1 - eta_brakedrag);
+    Tload_brakes(n) = Tbrakeload(xdot(n),xddot(n),brakegap(n)) / (1 - eta_brakedrag);
 end
 
 % Mark phase 2 final conditions
@@ -214,7 +214,7 @@ while xdot(n) > xdotf
     end
 
     % Compute load along brake actuator lead screw
-    Tload_brakes(n) = Tbrakeload(xdot(n),brakegap(n)) / (1 - eta_brakedrag);
+    Tload_brakes(n) = Tbrakeload(xdot(n),xddot(n),brakegap(n)) / (1 - eta_brakedrag);
 end
 
 % Mark phase 3 final conditions
@@ -247,7 +247,7 @@ while xdot(n) > xdotf
     brakegap(n) = brakegap(n-1);
 
     % Compute load along brake actuator lead screw
-    Tload_brakes(n) = Tbrakeload(xdot(n),brakegap(n)) / (1 - eta_brakedrag);
+    Tload_brakes(n) = Tbrakeload(xdot(n),xddot(n),brakegap(n)) / (1 - eta_brakedrag);
 end
 
 %% Save Distance and Velocity setpoints to be used for PID controlled braking (see 'GainScheduledPIDBrakingSystem.m')
@@ -317,8 +317,9 @@ end
 
 
 subplot(414)
+hold on
 plot(t,brakegap,'b')
-plot(0 ,brakegap,'r')
+plot(0,brakegap,'r')
 axis([0 1.2*t(length(t)) 0 30])
 grid on
 grid minor
@@ -434,7 +435,7 @@ else
     legend('rPod Trajectory','Pusher Jettisoned','Braking Engaged','Target Distance','Danger Zone');
 end
 
-%% Drag Contribution Graphs
+%% Drag Contribution vs. Time Graphs
 figure(5)
 if  hover_option == false && ski_option == false
     title(['Trajectory case no. ' num2str(caseno) ': ' num2str(gForce_pusher(end),2) 'g acceleration for ' num2str(t1,3) 's ' num2str(x1,4) 'm | ' num2str(max(x),4) 'm pod travel | ' num2str(max(xdot),4) 'm/s max velocity'])
@@ -455,6 +456,30 @@ if ski_option == true
     plot(t,100*Fdrag_ski./Fdrag_net,'c')
 end
 xlabel('time (s)')
+ylabel('drag contribution (%)')
+legend('aerodrag','brakedrag','hoverdrag','skidrag')
+
+%% Drag Contribution vs. Velocity Graphs
+figure(6)
+if  hover_option == false && ski_option == false
+    title(['Trajectory case no. ' num2str(caseno) ': ' num2str(gForce_pusher(end),2) 'g acceleration for ' num2str(t1,3) 's ' num2str(x1,4) 'm | ' num2str(max(x),4) 'm pod travel | ' num2str(max(xdot),4) 'm/s max velocity'])
+elseif hover_option == true && ski_option == false
+    title(['Trajectory case no. ' num2str(caseno) ': ' num2str(gForce_pusher(end),2) 'g acceleration for ' num2str(t1,3) 's ' num2str(x1,4) 'm | ' num2str(max(x),4) 'm pod travel | ' num2str(max(xdot),4) 'm/s max velocity | ' num2str(max(Fdrag_hover),4) 'N max hover drag'])
+elseif hover_option == false && ski_option == true
+    title(['Trajectory case no. ' num2str(caseno) ': ' num2str(gForce_pusher(end),2) 'g acceleration for ' num2str(t1,3) 's ' num2str(x1,4) 'm | ' num2str(max(x),4) 'm pod travel | ' num2str(max(xdot),4) 'm/s max velocity | ' num2str(max(Fdrag_ski),4) 'N max ski drag'])
+else
+    title(['Trajectory case no. ' num2str(caseno) ': ' num2str(gForce_pusher(end),2) 'g acceleration for ' num2str(t1,3) 's ' num2str(x1,4) 'm | ' num2str(max(x),4) 'm pod travel | ' num2str(max(xdot),4) 'm/s max velocity | ' num2str(max(Fdrag_hover),4) 'N max hover drag | ' num2str(max(Fdrag_ski),4) 'N max ski drag'])
+end
+hold on
+plot(xdot,100*Fdrag_aero./Fdrag_net,'b')
+plot(xdot,100*Fdrag_brake./Fdrag_net,'r')
+if hover_option == true
+    plot(xdot,100*Fdrag_hover./Fdrag_net,'m')
+end
+if ski_option == true
+    plot(xdot,100*Fdrag_ski./Fdrag_net,'c')
+end
+xlabel('velocity (m/s)')
 ylabel('drag contribution (%)')
 legend('aerodrag','brakedrag','hoverdrag','skidrag')
 
