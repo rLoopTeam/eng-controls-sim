@@ -1,5 +1,5 @@
 % Input: velocity (m/s), brakegap (mm)
-% Output: Brake lift force for one brakepad (N)
+% Output: Load torque on brake stepper motors due to magnetic lift and drag forces (N*m)
 function T = Tbrakeload(v,bg)
     % lead pitch on W1003WF-24P-C3Z4 ball screw (m)
     P_ballscrew = 0.004;
