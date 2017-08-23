@@ -93,13 +93,10 @@ for eta_aerodrag = [eta_aerodrag_min, eta_aerodrag_nominal, eta_aerodrag_max]   
                 xf = 1250;                  % Target distance (m)
                 xdotf = 0.01;               % Target final velocity at xf (m/s)
                 gForce_pusher_max = 1.0;        % Pusher acceleration (g's)
-        %         deltax_pusher = 312;     % Desired max push distance (max: 487.68m or 1600ft) (m)
                 deltat_jerk = 0.3;          % jerk time for pusher to ramp to full acceleration (s)
                 deltax_pusher_max = 487.68; % Max push distance (max: 487.68m or 1600ft) (m)
-        %         vpod_max = 90.;            % Constraint on max velocity (m/s)
                 deltat_pusher = 10;     % Desired max push distance (max: 487.68m or 1600ft) (m)
                 deltat_cruising = 4.5;        % Cruising time between pusher and deceleration phase (minimum 2s required) (s)
-        %         gForce_brakedrag = 1.0;     % Constraint on max braking force (g's)
                 brakegapNom = 5;          % Nominal brake gap during controlled braking phase (mm)
                 deltax_dangerzone = 50;     % Distance between final target and end of track (DANGER ZONE!!!) (m)
                 z_nom = 0.012;              % Nominal hover height (m) based on pod mass and 8 hover engines
@@ -117,8 +114,6 @@ for eta_aerodrag = [eta_aerodrag_min, eta_aerodrag_nominal, eta_aerodrag_max]   
                 R = 287.05;                 % Ideal gas constant (J/(kg*K))
                 T = 293.15;                 % Atmospheric air temperature inside SpaceX test tube (K)
                 rho = P/(R*T);              % Air density inside SpaceX test tube(kg/m^3)
-        %         rho = 0.100098;             % Air density inside SpaceX test tube(kg/m^3)
-        %         rho = 1.2754;               % Standard Air density at 20 degC, sealevel(kg/m^3)
                 
                 %% Run sim case
                 Trajectory
@@ -136,48 +131,6 @@ for eta_aerodrag = [eta_aerodrag_min, eta_aerodrag_nominal, eta_aerodrag_max]   
                 if eta_aerodrag == eta_aerodrag_nominal && eta_hoverdrag == eta_hoverdrag_nominal && eta_brakedrag == eta_brakedrag_nominal && eta_skidrag == eta_skidrag_nominal
                     %% save nominal case in tl;dr sim table
                     tldrsimtable = [tldrsimtable; data];
-%                     fprintf('Printing Nominal Case... \n')
-%                     caseno
-%                     
-%                     eta_aerodrag
-%                     eta_hoverdrag
-%                     eta_brakedrag
-%                     eta_skidrag
-%                     
-%                     xf_nominal = x(end)
-%                     xdot_max = max(xdot)
-%                     xddot_max = max(xddot)
-%                     
-%                     aerodrag_max = max(-Fdrag_aero/(mpod*g))
-%                     hoverdrag_max = max(-hover_option*Fdrag_hover/(mpod*g))
-%                     skidrag_max = max(-ski_option*Fdrag_ski/(mpod*g))
-%                     brakedrag_max = max(-Fdrag_brake/(mpod*g))
-%                     aerodrag_contribution = max(100*Fdrag_aero./Fdrag_net)
-%                     hoverdrag_contribution = max(100*hover_option*Fdrag_hover./Fdrag_net)
-%                     skidrag_contribution = max(100*ski_option*Fdrag_ski./Fdrag_net)
-%                     brakedrag_contribution = max(100*Fdrag_brake./Fdrag_net, brakegap)
-%                     Fload_brakes_max = max(Fload_brakes)
-%                     
-%                     x(end)
-%                     xdot(end)
-%                     xddot(end)
-%                     max(-Fdrag_aero/(mpod*g))
-%                     max(-hover_option*Fdrag_hover/(mpod*g))
-%                     max(-ski_option*Fdrag_ski/(mpod*g))
-%                     max(-Fdrag_brake/(mpod*g))
-%                     max(100*Fdrag_aero./Fdrag_net)
-%                     max(100*hover_option*Fdrag_hover./Fdrag_net)
-%                     max(100*ski_option*Fdrag_ski./Fdrag_net)
-%                     max(100*Fdrag_brake./Fdrag_net, brakegap)
-%                     max(Fload_brakes)
-                    
-%                     Fdrag_aero_nominal = max(Fdrag_aero)
-%                     Fdrag_hover_nominal = max(Fdrag_hover)
-%                     Fdrag_brake_nominal = max(Fdrag_brake)
-%                     Fdrag_ski_nominal = max(Fdrag_ski)
-%                     Fthrust_nominal = max(Fthrust)
-%                     Fdrag_net_nominal = max(Fdrag_net)
-%                     Fload_brakes_nominal = max(Fload_brakes)
                 end
                 
                 %% save under estimation case in tl;dr sim table
@@ -188,7 +141,6 @@ for eta_aerodrag = [eta_aerodrag_min, eta_aerodrag_nominal, eta_aerodrag_max]   
                 %% save over estimation case in tl;dr sim table
                 if eta_aerodrag == eta_aerodrag_min && eta_hoverdrag == eta_hoverdrag_min && eta_brakedrag == eta_brakedrag_min && eta_skidrag == eta_skidrag_min
                     tldrsimtable = [tldrsimtable; data];
-%                     fprintf('Over estimation Case \n')
                 end
             end
         end
