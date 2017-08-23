@@ -4,11 +4,11 @@ clear
 g = 9.81;                                   % Gravitational constant
 
 %Input
-caseno = 551;
+caseno = 605;
 
 %%%% Trajectory & Simulation Constraints %%%%
 switch caseno
-    
+
 case 551	% used to test hover & ski option switch
         mpod = 441.;                % Total pod mass (kg)
         dt = 0.01;                 % time step (s)
@@ -25,8 +25,8 @@ case 551	% used to test hover & ski option switch
         brakegapNom = 5;          % Nominal brake gap during controlled braking phase (mm)
         deltax_dangerzone = 50;     % Distance between final target and end of track (DANGER ZONE!!!) (m)
         z_nom = 0.012;              % Nominal hover height (m) based on pod mass and 8 hover engines
-        hover_option = false;          % Enables/disables hover-engines
-        ski_option = false;          % Enables/disables skis
+        hover_option = true;          % Enables/disables hover-engines
+        ski_option = true;          % Enables/disables skis
         instant_braking = false;     % true = brakes reach nominal brakegap instantaneously
         PIDcontroller = false;       % true = brakes actuators use PID controller to adjust trajectory
 
@@ -43,10 +43,10 @@ case 551	% used to test hover & ski option switch
 %         rho = 1.2754;               % Standard Air density at 20 degC, sealevel(kg/m^3)
 
         %%%% Relative Error (eta is positive for under-estimated case; negative for over-estimated case)%%%%
-        eta_aerodrag = -0.15;        % Estimated aerodynamic drag relative error
-        eta_hoverdrag = -0.15;       % Estimated hover-engine drag relative error
-        eta_brakedrag = -0.15;       % Estimated brake drag relative error
-        eta_skidrag = -0.15;         % Estimated ski drag relative error
+        eta_aerodrag = -0.0;        % Estimated aerodynamic drag relative error
+        eta_hoverdrag = -0.0;       % Estimated hover-engine drag relative error
+        eta_brakedrag = -0.0;       % Estimated brake drag relative error
+        eta_skidrag = -0.0;         % Estimated ski drag relative error
     
 case 550	% low pressure case at 1.0g with skis (Updated brake actuator dynamics)
         mpod = 441.;                % Total pod mass (kg)

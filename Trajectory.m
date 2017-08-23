@@ -251,36 +251,9 @@ while xdot(n) > xdotf
     Fload_brakes(n) = Fbrakelift(xdot(n),brakegap(n))*sin(17*pi()/180) - Fdrag_brake(n)*cos(17*pi()/180)/2;
 end
 
-%     % if total distance traveled is within 0.05m of target, break for loop
-%     if abs(x(end) - xf) < 0.01 %&& xdotf - xdot(end) < 0.01
-%         break
-%     else	% else, reset arrays and try again
-%         n = n2;
-% 
-%         % reset force profile
-%         Fdrag_aero = Fdrag_aero(1:n2);
-%         Fdrag_hover = Fdrag_hover(1:n2);
-%         Fdrag_brake = Fdrag_brake(1:n2);            
-%         Fdrag_ski = Fdrag_ski(1:n2);
-%         Fthrust = Fthrust(1:n2);
-% 
-%         % reset kinematics
-%         xddot = xddot(1:n2);
-%         xdot = xdot(1:n2);
-%         x = x(1:n2);
-%         t = t(1:n2);
-% 
-%         % reset brakegap profile
-%         brakegap = brakegap(1:n2);
-% 
-%         % Compute load along brake actuator lead screw
-%         Fload_brakes = Fload_brakes(1:n2);
-%     end
-% end
-
 %% Save Distance and Velocity setpoints to be used for PID controlled braking (see 'GainScheduledPIDBrakingSystem.m')
-velocitySet = xdot(n2:end);
-distanceSet = x(n2:end);
+velocitySet = xdot(n3:end);
+distanceSet = x(n3:end);
 
 %% Time-dependent Trajectory Graphs
 fprintf('Generating plots...\n')
@@ -297,8 +270,8 @@ else
     title(['Trajectory case no. ' num2str(caseno) ': ' num2str(gForce_pusher(end),2) 'g acceleration for ' num2str(t1,3) 's ' num2str(x1,4) 'm | ' num2str(max(x),4) 'm pod travel | ' num2str(max(xdot),4) 'm/s max velocity | ' num2str(max(Fdrag_hover),4) 'N max hover drag | ' num2str(max(Fdrag_ski),4) 'N max ski drag'])
 end
 hold on
-plot(t,x)
-plot([0 t(length(t))],[xf xf])
+plot(t,x,'b')
+plot([0 t(length(t))],[xf xf],'m')
 plot([0 t(length(t))],[(xf+deltax_dangerzone) (xf+deltax_dangerzone)],'r')
 axis([0 1.2*t(length(t)) 0 1.2*(xf+deltax_dangerzone)])
 
@@ -308,7 +281,7 @@ ylabel('Distance (m)')
 legend('Pod Travel','Target Distance','Danger Zone');
 
 subplot(412)
-plot(t,xdot)
+plot(t,xdot,'b')
 axis([0 1.2*t(length(t)) 0 1.2*xdot1])
 grid on
 grid minor
@@ -317,16 +290,16 @@ legend('Velocity profile');
 
 subplot(413)
 hold on
-plot(t,xddot/g)
-plot(t,Fthrust/(mpod*g))
+plot(t,xddot/g,'b')
+plot(t,Fthrust/(mpod*g),'g')
 %     plot(t,Flimprop/(mpod*g))
-plot(t,-Fdrag_aero/(mpod*g))
-plot(t,-Fdrag_brake/(mpod*g))
+plot(t,-Fdrag_aero/(mpod*g),'y')
+plot(t,-Fdrag_brake/(mpod*g),'r')
 if hover_option == true
-    plot(t,-Fdrag_hover/(mpod*g))
+    plot(t,-Fdrag_hover/(mpod*g),'m')
 end
 if ski_option == true
-    plot(t,-Fdrag_ski/(mpod*g))
+    plot(t,-Fdrag_ski/(mpod*g),'c')
 end
 axis([0 1.2*t(length(t)) -1.1*max(Fdrag_net/(mpod*g)) 1.1*max(Fthrust/(mpod*g))])
 grid on
@@ -345,7 +318,7 @@ end
 
 
 subplot(414)
-plot(t,brakegap)
+plot(t,brakegap,'b')
 axis([0 1.2*t(length(t)) 0 30])
 grid on
 grid minor
@@ -366,13 +339,13 @@ else
     title(['Trajectory case no. ' num2str(caseno) ': ' num2str(gForce_pusher(end),2) 'g acceleration for ' num2str(t1,3) 's ' num2str(x1,4) 'm | ' num2str(max(x),4) 'm pod travel | ' num2str(max(xdot),4) 'm/s max velocity | ' num2str(max(Fdrag_hover),4) 'N max hover drag | ' num2str(max(Fdrag_ski),4) 'N max ski drag'])
 end
 hold on
-plot(x,xdot)
-plot([x1 x1],[0 1.1*max(xdot)])
-plot([x2 x2],[0 1.1*max(xdot)])
+plot(x,xdot,'b')
+plot([x1 x1],[0 1.1*max(xdot)],'g')
+plot([x2 x2],[0 1.1*max(xdot)],'c')
 if PIDcontroller == true
-    plot([x3 x3],[0 1.1*max(xdot)])
+    plot([x3 x3],[0 1.1*max(xdot)],'y')
 end
-plot([xf xf],[0 1.1*max(xdot)])
+plot([xf xf],[0 1.1*max(xdot)],'m')
 plot([(xf+deltax_dangerzone) (xf+deltax_dangerzone)],[0 1.1*max(xdot)],'r')
 axis([0 1.2*(xf+deltax_dangerzone) 0 1.1*max(xdot)])
 grid on
@@ -386,7 +359,7 @@ end
 
 subplot(312)
 hold on
-plot(x,brakegap)
+plot(x,brakegap,'b')
 axis([0 1.2*(xf+deltax_dangerzone) 0 30])
 grid on
 grid minor
@@ -396,7 +369,7 @@ xlabel('Distance (m)')
 
 subplot(313)
 hold on
-plot(x,Fload_brakes)
+plot(x,Fload_brakes,'b')
 axis([0 1.2*(xf+deltax_dangerzone) 1.1*min(Fload_brakes) 1.1*max(Fload_brakes)])
 grid on
 grid minor
@@ -404,22 +377,89 @@ ylabel('Brake load (N)')
 xlabel('Distance (m)')
 % legend('load along leadscrew');
 
+%% Velocity vs Time Graph
+figure(3)
+if  hover_option == false && ski_option == false
+    title(['Trajectory case no. ' num2str(caseno) ': ' num2str(gForce_pusher(end),2) 'g acceleration for ' num2str(t1,3) 's ' num2str(x1,4) 'm | ' num2str(max(x),4) 'm pod travel | ' num2str(max(xdot),4) 'm/s max velocity'])
+elseif hover_option == true && ski_option == false
+    title(['Trajectory case no. ' num2str(caseno) ': ' num2str(gForce_pusher(end),2) 'g acceleration for ' num2str(t1,3) 's ' num2str(x1,4) 'm | ' num2str(max(x),4) 'm pod travel | ' num2str(max(xdot),4) 'm/s max velocity | ' num2str(max(Fdrag_hover),4) 'N max hover drag'])
+elseif hover_option == false && ski_option == true
+    title(['Trajectory case no. ' num2str(caseno) ': ' num2str(gForce_pusher(end),2) 'g acceleration for ' num2str(t1,3) 's ' num2str(x1,4) 'm | ' num2str(max(x),4) 'm pod travel | ' num2str(max(xdot),4) 'm/s max velocity | ' num2str(max(Fdrag_ski),4) 'N max ski drag'])
+else
+    title(['Trajectory case no. ' num2str(caseno) ': ' num2str(gForce_pusher(end),2) 'g acceleration for ' num2str(t1,3) 's ' num2str(x1,4) 'm | ' num2str(max(x),4) 'm pod travel | ' num2str(max(xdot),4) 'm/s max velocity | ' num2str(max(Fdrag_hover),4) 'N max hover drag | ' num2str(max(Fdrag_ski),4) 'N max ski drag'])
+end
+hold on
+plot(t,x,'b')
+plot([0 t(length(t))],[xf xf],'m')
+plot([0 t(length(t))],[(xf+deltax_dangerzone) (xf+deltax_dangerzone)],'r')
+axis([0 1.2*t(length(t)) 0 1.2*(xf+deltax_dangerzone)])
+
+grid on
+grid minor    
+ylabel('Distance (m)')
+xlabel('time (s)')
+legend('Pod Travel','Target Distance','Danger Zone');
+
+%% Velocity vs Distance Graph
+figure(4)
+if  hover_option == false && ski_option == false
+    title(['Trajectory case no. ' num2str(caseno) ': ' num2str(gForce_pusher(end),2) 'g acceleration for ' num2str(t1,3) 's ' num2str(x1,4) 'm | ' num2str(max(x),4) 'm pod travel | ' num2str(max(xdot),4) 'm/s max velocity'])
+elseif hover_option == true && ski_option == false
+    title(['Trajectory case no. ' num2str(caseno) ': ' num2str(gForce_pusher(end),2) 'g acceleration for ' num2str(t1,3) 's ' num2str(x1,4) 'm | ' num2str(max(x),4) 'm pod travel | ' num2str(max(xdot),4) 'm/s max velocity | ' num2str(max(Fdrag_hover),4) 'N max hover drag'])
+elseif hover_option == false && ski_option == true
+    title(['Trajectory case no. ' num2str(caseno) ': ' num2str(gForce_pusher(end),2) 'g acceleration for ' num2str(t1,3) 's ' num2str(x1,4) 'm | ' num2str(max(x),4) 'm pod travel | ' num2str(max(xdot),4) 'm/s max velocity | ' num2str(max(Fdrag_ski),4) 'N max ski drag'])
+else
+    title(['Trajectory case no. ' num2str(caseno) ': ' num2str(gForce_pusher(end),2) 'g acceleration for ' num2str(t1,3) 's ' num2str(x1,4) 'm | ' num2str(max(x),4) 'm pod travel | ' num2str(max(xdot),4) 'm/s max velocity | ' num2str(max(Fdrag_hover),4) 'N max hover drag | ' num2str(max(Fdrag_ski),4) 'N max ski drag'])
+end
+hold on
+plot(x,xdot,'b')
+plot([x1 x1],[0 1.1*max(xdot)],'g')
+plot([x2 x2],[0 1.1*max(xdot)],'c')
+if PIDcontroller == true
+    plot([x3 x3],[0 1.1*max(xdot)],'y')
+end
+plot([xf xf],[0 1.1*max(xdot)],'m')
+plot([(xf+deltax_dangerzone) (xf+deltax_dangerzone)],[0 1.1*max(xdot)],'r')
+axis([0 1.2*(xf+deltax_dangerzone) 0 1.1*max(xdot)])
+grid on
+grid minor
+ylabel('Velocity (m/s)')
+xlabel('time (s)')
+if PIDcontroller == true
+    legend('rPod Trajectory','Pusher Jettisoned','Braking Engaged','PID Controller Engaged','Target Distance','Danger Zone');
+else
+    legend('rPod Trajectory','Pusher Jettisoned','Braking Engaged','Target Distance','Danger Zone');
+end
+
+%% Drag Contribution Graphs
+figure(5)
+if  hover_option == false && ski_option == false
+    title(['Trajectory case no. ' num2str(caseno) ': ' num2str(gForce_pusher(end),2) 'g acceleration for ' num2str(t1,3) 's ' num2str(x1,4) 'm | ' num2str(max(x),4) 'm pod travel | ' num2str(max(xdot),4) 'm/s max velocity'])
+elseif hover_option == true && ski_option == false
+    title(['Trajectory case no. ' num2str(caseno) ': ' num2str(gForce_pusher(end),2) 'g acceleration for ' num2str(t1,3) 's ' num2str(x1,4) 'm | ' num2str(max(x),4) 'm pod travel | ' num2str(max(xdot),4) 'm/s max velocity | ' num2str(max(Fdrag_hover),4) 'N max hover drag'])
+elseif hover_option == false && ski_option == true
+    title(['Trajectory case no. ' num2str(caseno) ': ' num2str(gForce_pusher(end),2) 'g acceleration for ' num2str(t1,3) 's ' num2str(x1,4) 'm | ' num2str(max(x),4) 'm pod travel | ' num2str(max(xdot),4) 'm/s max velocity | ' num2str(max(Fdrag_ski),4) 'N max ski drag'])
+else
+    title(['Trajectory case no. ' num2str(caseno) ': ' num2str(gForce_pusher(end),2) 'g acceleration for ' num2str(t1,3) 's ' num2str(x1,4) 'm | ' num2str(max(x),4) 'm pod travel | ' num2str(max(xdot),4) 'm/s max velocity | ' num2str(max(Fdrag_hover),4) 'N max hover drag | ' num2str(max(Fdrag_ski),4) 'N max ski drag'])
+end
+hold on
+plot(t,100*Fdrag_aero./Fdrag_net,'b')
+plot(t,100*Fdrag_brake./Fdrag_net,'r')
+if hover_option == true
+    plot(t,100*Fdrag_hover./Fdrag_net,'m')
+end
+if ski_option == true
+    plot(t,100*Fdrag_ski./Fdrag_net,'c')
+end
+xlabel('time (s)')
+ylabel('drag contribution (%)')
+legend('aerodrag','brakedrag','hoverdrag','skidrag')
+
 %% Output Trajectory data to csv
 fprintf('Saving trajectory data to csv...\n')
 
-if  hover_option == false && ski_option == false
-    header = {'t', 'x', 'xdot', 'xddot', 'drag_aero', 'drag_brake', 'brakegap', 'Fload_brakes'};
-    data = table(t', x', xdot', xddot', -Fdrag_aero'/(mpod*g), -Fdrag_brake'/(mpod*g), brakegap', Fload_brakes');
-elseif hover_option == true && ski_option == false
-    header = {'t', 'x', 'xdot', 'xddot', 'drag_aero', 'drag_hover', 'drag_brake', 'brakegap', 'Fload_brakes'};
-    data = table(t', x', xdot', xddot', -Fdrag_aero'/(mpod*g), -Fdrag_hover'/(mpod*g), -Fdrag_brake'/(mpod*g), brakegap', Fload_brakes');
-elseif hover_option == false && ski_option == true
-    header = {'t', 'x', 'xdot', 'xddot', 'drag_aero', 'drag_brake', 'drag_ski', 'brakegap', 'Fload_brakes'};
-    data = table(t', x', xdot', xddot', -Fdrag_aero'/(mpod*g), -Fdrag_brake'/(mpod*g), -Fdrag_ski'/(mpod*g), brakegap', Fload_brakes');
-else
-    header = {'t', 'x', 'xdot', 'xddot', 'drag_aero', 'drag_hover', 'drag_brake', 'drag_ski', 'brakegap', 'Fload_brakes'};
-    data = table(t', x', xdot', xddot', -Fdrag_aero'/(mpod*g), -Fdrag_hover'/(mpod*g), -Fdrag_brake'/(mpod*g), -Fdrag_ski'/(mpod*g), brakegap', Fload_brakes');
-end
+header = {'t', 'x', 'xdot', 'xddot', 'drag_aero', 'drag_hover', 'drag_ski', 'drag_brake', 'aerodrag_contribution', 'hoverdrag_contribution', 'skidrag_contribution', 'brakedrag_contribution', 'brakegap', 'Fload_brakes'};
+data = table(t', x', xdot', xddot', -Fdrag_aero'/(mpod*g), -hover_option*Fdrag_hover'/(mpod*g), -ski_option*Fdrag_ski'/(mpod*g), -Fdrag_brake'/(mpod*g), 100*Fdrag_aero'./Fdrag_net', 100*hover_option*Fdrag_hover'./Fdrag_net', 100*ski_option*Fdrag_ski'./Fdrag_net', 100*Fdrag_brake'./Fdrag_net', brakegap', Fload_brakes');
 
 data.Properties.VariableNames = header;
 
@@ -454,7 +494,7 @@ writetable(data_avionics,filename_avionics,'Delimiter',',')
 %% Output Simulation Parameters to csv
 fprintf('Saving simulation parameters to csv...\n')
 
-parameternames = {   'mpod', 
+parameternames = {	'mpod', 
                     'dt', 
                     'xf', 
                     'xdotf', 
@@ -522,7 +562,7 @@ description = { 'Total pod mass (kg)',
                 'Cruising time between pusher and deceleration phase (minimum 2s required) (s)',
 %                 'Constraint on max braking force (gs)',
                 'Nominal brake gap during controlled braking phase (mm)',
-                'Distance between final target and end of track (DANGER ZONE!!!) (m)'
+                'Distance between final target and end of track (DANGER ZONE!!!) (m)',
                 'Nominal hover height (m)',
                 'Enables/disables hover-engines',
                 'Enables/disables skis',
@@ -545,3 +585,4 @@ formatSpec = 'SimParameters_case_no_%0.f.csv';
 filename = sprintf(formatSpec,caseno);
 writetable(data,filename,'Delimiter',',')
 
+%%
