@@ -270,9 +270,9 @@ else
 end
 hold on
 plot(t,x,'b')
-plot([0 t(length(t))],[xf xf],'m')
-plot([0 t(length(t))],[(xf+deltax_dangerzone) (xf+deltax_dangerzone)],'r')
-axis([0 1.2*t(length(t)) 0 1.2*(xf+deltax_dangerzone)])
+plot([0 t(end)],[xf xf],'m')
+plot([0 t(end)],[(xf+deltax_dangerzone) (xf+deltax_dangerzone)],'r')
+axis([0 1.2*t(end) 0 1.2*(xf+deltax_dangerzone)])
 
 grid on
 grid minor    
@@ -281,7 +281,7 @@ legend('Pod Travel','Target Distance','Danger Zone');
 
 subplot(412)
 plot(t,xdot,'b')
-axis([0 1.2*t(length(t)) 0 1.2*xdot1])
+axis([0 1.2*t(end) 0 1.2*xdot1])
 grid on
 grid minor
 ylabel('Velocity (m/s)')
@@ -318,6 +318,7 @@ end
 
 subplot(414)
 plot(t,brakegap,'b')
+plot(0 ,brakegap,'r')
 axis([0 1.2*t(length(t)) 0 30])
 grid on
 grid minor
@@ -369,12 +370,15 @@ xlabel('Distance (m)')
 subplot(313)
 hold on
 plot(x,Tload_brakes,'b')
-axis([0 1.2*(xf+deltax_dangerzone) 1.1*min(Tload_brakes) 1.1*max(Tload_brakes)])
+plot([0 x(end)], [-3 -3],'r')
+plot([0 x(end)], [3 3],'r')
+axis([0 1.2*(xf+deltax_dangerzone) -3.5 3.5])
+% axis([0 1.2*(xf+deltax_dangerzone) 1.1*min(Tload_brakes) 1.1*max(Tload_brakes)])
 grid on
 grid minor
 ylabel('Brake load (N*m)')
 xlabel('Distance (m)')
-% legend('load along leadscrew');
+legend('torque load on brake stepper motor','holding torque limits on brake stepper motor');
 
 %% Velocity vs Time Graph
 figure(3)
@@ -389,9 +393,9 @@ else
 end
 hold on
 plot(t,x,'b')
-plot([0 t(length(t))],[xf xf],'m')
-plot([0 t(length(t))],[(xf+deltax_dangerzone) (xf+deltax_dangerzone)],'r')
-axis([0 1.2*t(length(t)) 0 1.2*(xf+deltax_dangerzone)])
+plot([0 t(end)],[xf xf],'m')
+plot([0 t(end)],[(xf+deltax_dangerzone) (xf+deltax_dangerzone)],'r')
+axis([0 1.2*t(end) 0 1.2*(xf+deltax_dangerzone)])
 
 grid on
 grid minor    
