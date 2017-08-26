@@ -76,7 +76,7 @@ while t(n) < deltat_pusher      % pusher phase constrained by time
     Fthrust(n) = mpod*gForce_pusher(end)*g;
 
     % Compute kinematics
-    xddot(n) = (Fthrust(n) - Fdrag_net(n))/mpod;
+    xddot(n) = g*gForce_pusher_max;
     xdot(n) = xdot(n-1) + xddot(n)*dt;
     x(n) = x(n-1) + xdot(n-1)*dt + 0.5*xddot(n)*dt^2;
     t(n) = t(n-1) + dt;
@@ -88,6 +88,10 @@ while t(n) < deltat_pusher      % pusher phase constrained by time
 
     % If max pusher distance reached, exit pusher phase
     if x(n) >= deltax_pusher_max
+        break;
+    end
+    % If max pusher distance reached, exit pusher phase
+    if xdot(n) >= vpod_max
         break;
     end
 end
@@ -460,28 +464,28 @@ ylabel('drag contribution (%)')
 legend('aerodrag','brakedrag','hoverdrag','skidrag')
 
 %% Drag Contribution vs. Velocity Graphs
-figure(6)
-if  hover_option == false && ski_option == false
-    title(['Trajectory case no. ' num2str(caseno) ': ' num2str(gForce_pusher(end),2) 'g acceleration for ' num2str(t1,3) 's ' num2str(x1,4) 'm | ' num2str(max(x),4) 'm pod travel | ' num2str(max(xdot),4) 'm/s max velocity'])
-elseif hover_option == true && ski_option == false
-    title(['Trajectory case no. ' num2str(caseno) ': ' num2str(gForce_pusher(end),2) 'g acceleration for ' num2str(t1,3) 's ' num2str(x1,4) 'm | ' num2str(max(x),4) 'm pod travel | ' num2str(max(xdot),4) 'm/s max velocity | ' num2str(max(Fdrag_hover),4) 'N max hover drag'])
-elseif hover_option == false && ski_option == true
-    title(['Trajectory case no. ' num2str(caseno) ': ' num2str(gForce_pusher(end),2) 'g acceleration for ' num2str(t1,3) 's ' num2str(x1,4) 'm | ' num2str(max(x),4) 'm pod travel | ' num2str(max(xdot),4) 'm/s max velocity | ' num2str(max(Fdrag_ski),4) 'N max ski drag'])
-else
-    title(['Trajectory case no. ' num2str(caseno) ': ' num2str(gForce_pusher(end),2) 'g acceleration for ' num2str(t1,3) 's ' num2str(x1,4) 'm | ' num2str(max(x),4) 'm pod travel | ' num2str(max(xdot),4) 'm/s max velocity | ' num2str(max(Fdrag_hover),4) 'N max hover drag | ' num2str(max(Fdrag_ski),4) 'N max ski drag'])
-end
-hold on
-plot(xdot,100*Fdrag_aero./Fdrag_net,'b')
-plot(xdot,100*Fdrag_brake./Fdrag_net,'r')
-if hover_option == true
-    plot(xdot,100*Fdrag_hover./Fdrag_net,'m')
-end
-if ski_option == true
-    plot(xdot,100*Fdrag_ski./Fdrag_net,'c')
-end
-xlabel('velocity (m/s)')
-ylabel('drag contribution (%)')
-legend('aerodrag','brakedrag','hoverdrag','skidrag')
+% figure(6)
+% if  hover_option == false && ski_option == false
+%     title(['Trajectory case no. ' num2str(caseno) ': ' num2str(gForce_pusher(end),2) 'g acceleration for ' num2str(t1,3) 's ' num2str(x1,4) 'm | ' num2str(max(x),4) 'm pod travel | ' num2str(max(xdot),4) 'm/s max velocity'])
+% elseif hover_option == true && ski_option == false
+%     title(['Trajectory case no. ' num2str(caseno) ': ' num2str(gForce_pusher(end),2) 'g acceleration for ' num2str(t1,3) 's ' num2str(x1,4) 'm | ' num2str(max(x),4) 'm pod travel | ' num2str(max(xdot),4) 'm/s max velocity | ' num2str(max(Fdrag_hover),4) 'N max hover drag'])
+% elseif hover_option == false && ski_option == true
+%     title(['Trajectory case no. ' num2str(caseno) ': ' num2str(gForce_pusher(end),2) 'g acceleration for ' num2str(t1,3) 's ' num2str(x1,4) 'm | ' num2str(max(x),4) 'm pod travel | ' num2str(max(xdot),4) 'm/s max velocity | ' num2str(max(Fdrag_ski),4) 'N max ski drag'])
+% else
+%     title(['Trajectory case no. ' num2str(caseno) ': ' num2str(gForce_pusher(end),2) 'g acceleration for ' num2str(t1,3) 's ' num2str(x1,4) 'm | ' num2str(max(x),4) 'm pod travel | ' num2str(max(xdot),4) 'm/s max velocity | ' num2str(max(Fdrag_hover),4) 'N max hover drag | ' num2str(max(Fdrag_ski),4) 'N max ski drag'])
+% end
+% hold on
+% plot(xdot,100*Fdrag_aero./Fdrag_net,'b')
+% plot(xdot,100*Fdrag_brake./Fdrag_net,'r')
+% if hover_option == true
+%     plot(xdot,100*Fdrag_hover./Fdrag_net,'m')
+% end
+% if ski_option == true
+%     plot(xdot,100*Fdrag_ski./Fdrag_net,'c')
+% end
+% xlabel('velocity (m/s)')
+% ylabel('drag contribution (%)')
+% legend('aerodrag','brakedrag','hoverdrag','skidrag')
 
 %% Output Trajectory data to csv
 fprintf('Saving trajectory data to csv...\n')
